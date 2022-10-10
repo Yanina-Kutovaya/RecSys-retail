@@ -19,7 +19,7 @@ def prefilter_items(
     take_n_popular: Optional[int] = None    
     ) -> pd.DataFrame:
 
-    logging.info(f'Prefiltering items...')
+    logging.info('Prefiltering items...')
 
     # 1.Remove items that have not been sold for the last 12 months
     t = max(data['day']) - 365
