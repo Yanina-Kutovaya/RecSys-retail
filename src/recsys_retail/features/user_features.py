@@ -1,4 +1,5 @@
 import logging
+import numpy as np
 import pandas as pd
 
 logger = logging.getLogger(__name__)
@@ -21,9 +22,8 @@ def transform_user_features(user_features: pd.DataFrame)-> pd.DataFrame:
         '50-74K': 62, '75-99K': 87, '100-124K': 112, '125-149K': 137, 
         '150-174K': 162, '175-199K': 187, '200-249K': 225, '250K+':275}, inplace=True
     )
-    user_features['homeowner_desc'].replace(
-        {'Unknown': 0, 'Probable Renter': 0, 'Renter': 0,
-        'Probable Owner': 0, 'Homeowner': 1}, inplace=True
+    user_features['homeowner_desc'] = np.where(
+        user_features['homeowner_desc']=='Homeowner', 1, 0
     )
     user_features['hh_comp_desc'].replace(
         {'Unknown': 0, 'Single Male': 1, 'Single Female': 2,
