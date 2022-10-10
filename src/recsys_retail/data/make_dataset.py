@@ -27,6 +27,7 @@ def load_data(
     item_features = pd.read_csv(item_path)
     item_features.columns = map(str.lower, item_features.columns)
     item_features.rename(columns={'product_id': 'item_id'}, inplace=True)
+    item_features.set_index('item_id', inplace=True)
 
     if user_path is None:
         user_path = USER_FEATURES_URL
