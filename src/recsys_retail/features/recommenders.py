@@ -58,8 +58,8 @@ class MainRecommender:
     def _prepare_dicts(user_item_matrix):
         """Prepares axillary dictionaries"""
 
-        userids = user_item_matrix.index.values
-        itemids = user_item_matrix.columns.values
+        userids = user_item_matrix.columns.values
+        itemids = user_item_matrix.index.values
 
         matrix_userids = np.arange(len(userids))
         matrix_itemids = np.arange(len(itemids))
@@ -82,7 +82,7 @@ class MainRecommender:
         return own_recommender
 
     @staticmethod
-    def fit(user_item_matrix, n_factors=20, regularization=0.001, iterations=15, num_threads=4):
+    def fit(user_item_matrix, n_factors=50, regularization=0.001, iterations=15, num_threads=4):
         """Trains ALS model"""
 
         model = AlternatingLeastSquares(
