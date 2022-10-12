@@ -127,17 +127,17 @@ class MainRecommender:
 
         self._update_dict(user_id=user)
         res = [
-            self.id_to_itemid[rec[0]] for rec in model.recommend(
+            self.id_to_itemid[rec] for rec in model.recommend(
                 userid=self.userid_to_id[user], 
                 user_items=csr_matrix(self.user_item_matrix).tocsr(),
                 N=N,
                 filter_already_liked_items=False,
-                filter_items=[self.itemid_to_id[999999]],
+                #filter_items=[self.itemid_to_id[999999]],
                 recalculate_user=True
-            )
-        ]
+            )[0]
+        ][:N]
         res = self._extend_with_top_popular(res, N=N)
-        assert len(res) == N, f'The number of recommendations != {N}'
+        assert len(res) == N, f'The number of recommendations != {N}, user_id = {user}'
 
         return res
 
