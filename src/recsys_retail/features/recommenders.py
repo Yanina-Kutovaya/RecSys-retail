@@ -47,7 +47,7 @@ class MainRecommender:
         """Prepares user_item_matrix for implicit"""
         user_item_matrix = pd.pivot_table(
             data,
-            index='user_id', columns='item_id', values='quantity',  
+            index='item_id', columns='user_id', values='quantity',  
             aggfunc='count', fill_value=0
         )
         user_item_matrix = user_item_matrix.astype(float)  
