@@ -68,6 +68,9 @@ def transform_user_features(
         prefix = col + ' '
         cols +=  [prefix + cat for cat in oh_categories[i]]    
 
-    dump(user_transformer, open('user_features_transformer_v1.pkl', 'wb'))
+    X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
     
-    return pd.DataFrame(X, index=user_id, columns=cols).reset_index()
+    X.to_parquet('data/04_feature/user_features_transformed.parquet.gzip', compression='gzip')
+    dump(user_transformer, open('data/04_feature/user_features_transformer_v1.pkl', 'wb'))
+    
+    return X
