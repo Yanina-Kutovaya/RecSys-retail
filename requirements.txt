@@ -1,0 +1,4 @@
+numpy==1.23.3
+pandas==1.5.0
+implicit==0.6.1
+category-encoders==2.5.1.post0
