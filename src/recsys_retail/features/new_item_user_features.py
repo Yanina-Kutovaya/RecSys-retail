@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-from recommenders import MainRecommender
 
 logger = logging.getLogger(__name__)
 
