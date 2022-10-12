@@ -7,6 +7,8 @@ from pickle import dump
 
 logger = logging.getLogger(__name__)
 
+__all__ = ['transform_user_features']
+
 ORDINAL_FEATURES = [
     'age_desc', 'income_desc', 'homeowner_desc', 
     'household_size_desc', 'kid_category_desc'
@@ -27,14 +29,18 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-__all__ = ['transform_user_features']
+PATH = 'data/04_feature/'
+USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
+USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.parquet.gzip'
 
 def transform_user_features(
     user_features: pd.DataFrame,
-    ordinal_features=None,
-    onehot_features=None,
-    ord_categories=None,
-    oh_categories=None
+    ordinal_features = None,
+    onehot_features = None,
+    ord_categories = None,
+    oh_categories = None,
+    user_transformer_path = None,
+    user_features_transformed_path = None
     ) -> pd.DataFrame:
 
     logging.info('Transforming user_features...')
@@ -62,6 +68,10 @@ def transform_user_features(
         (oh_encoder, onehot_features)
     )
     X = user_transformer.fit_transform(user_features)
+    if user_transformer_path is None:
+        user_transformer_path = USER_TRANSFORMER_PATH
+    dump(user_transformer, open(user_transformer_path, 'wb'))
+
     user_id = user_features['user_id']
     cols = ordinal_features
     for i, col in enumerate(onehot_features):
@@ -69,8 +79,8 @@ def transform_user_features(
         cols +=  [prefix + cat for cat in oh_categories[i]]    
 
     X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
-    
-    X.to_parquet('data/04_feature/user_features_transformed.parquet.gzip', compression='gzip')
-    dump(user_transformer, open('data/04_feature/user_features_transformer_v1.pkl', 'wb'))
+    if user_features_transformed_path is None:
+        user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH
+    X.to_parquet(user_features_transformed_path, compression='gzip')    
     
     return X
