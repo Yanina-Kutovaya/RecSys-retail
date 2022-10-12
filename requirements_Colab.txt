@@ -1,0 +1,2 @@
+implicit==0.6.1
+category-encoders==2.5.1.post0
