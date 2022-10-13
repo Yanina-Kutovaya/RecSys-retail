@@ -3,9 +3,11 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 
+
 logger = logging.getLogger(__name__)
 
 __all__ = ['prefilter_items']
+
 
 LOWER_PRICE_THRESHOLD = 1
 UPPER_PRICE_THRESHOLD = 30
@@ -13,11 +15,23 @@ TAKE_N_POPULAR = 2500
 
 def prefilter_items(
     data: pd.DataFrame,
-    item_features=None,
+    item_features: pd.DataFrame,
     lower_price_threshold: Optional[int] = None,
     upper_price_threshold: Optional[int] = None, 
     take_n_popular: Optional[int] = None    
     ) -> pd.DataFrame:
+    """ 
+    1.Removes items that have not been sold for the last 12 months
+    2.Removes most popular items (they will be bought anyway).
+    3.Removes most unpopular items (nobody will buy them)
+    4.Removes items from the departments with a limited assortiment
+    5.Removes too cheap items (we will not earn on them)
+    6.Removes too expensive_items. They will be bought irrespective
+      of our recommendations.
+    7.Selects top N popular items
+    8.Introduces fake item_id = 999999. If user has bought an item which
+      is not from top-N, he bought an item 999999.
+    """
 
     logging.info('Prefiltering items...')
 
