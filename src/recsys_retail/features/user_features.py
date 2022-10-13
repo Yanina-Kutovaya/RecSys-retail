@@ -4,10 +4,13 @@ import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 from sklearn.compose import make_column_transformer
 from pickle import dump
+from typing import Optional
+
 
 logger = logging.getLogger(__name__)
 
 __all__ = ['transform_user_features']
+
 
 ORDINAL_FEATURES = [
     'age_desc', 'income_desc', 'homeowner_desc', 
@@ -29,8 +32,10 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-USER_TRANSFORMER_PATH = 'user_features_transformer_v1.pkl'
-USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.csv.zip'
+PATH = '/data/02_intermediate/'
+USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
+USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.csv.zip'
+
 
 def transform_user_features(
     user_features: pd.DataFrame,
@@ -38,10 +43,15 @@ def transform_user_features(
     onehot_features = None,
     ord_categories = None,
     oh_categories = None,
-    user_transformer_path = None,
-    user_features_transformed_path = None
+    user_transformer_path: Optional[str] = None,
+    user_features_transformed_path: Optional[str] = None
     ) -> pd.DataFrame:
 
+    """
+    Encodes categorical features with OrdinalEncoder and OneHotEncoder.
+    
+    """
+    
     logging.info('Transforming user_features...')
 
     if ordinal_features is None:
