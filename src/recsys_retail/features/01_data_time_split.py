@@ -16,6 +16,7 @@ VALID_DATA_LEVEL_2_PATH = PATH + 'data_val_lvl_2.csv.zip'
 
 def time_split(
     data: pd.DataFrame,
+    save_split = True,
     train_data_lvl_1_path: Optional[str] = None,
     valid_data_level_1_path: Optional[str] = None,
     valid_data_level_2_path: Optional[str] = None    
@@ -35,17 +36,18 @@ def time_split(
     data_val_lvl_1 = data[(data['week_no'] >= t0) & (data['week_no'] < t1)]
     data_val_lvl_2 = data[data['week_no'] >= t1]
 
-    os.chdir('../data')
-    if train_data_lvl_1_path is None:
-        train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
-    data_train_lvl_1.to_csv(train_data_lvl_1_path, compression='zip')
+    if save_split:
+        os.chdir('../data')
+        if train_data_lvl_1_path is None:
+            train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
+        data_train_lvl_1.to_csv(train_data_lvl_1_path, compression='zip')
 
-    if valid_data_level_1_path is None:
-        valid_data_level_1_path = VALID_DATA_LEVEL_1_PATH
-    data_val_lvl_1.to_csv(valid_data_level_1_path, compression='zip')
+        if valid_data_level_1_path is None:
+            valid_data_level_1_path = VALID_DATA_LEVEL_1_PATH
+        data_val_lvl_1.to_csv(valid_data_level_1_path, compression='zip')
 
-    if valid_data_level_2_path is None:
-        valid_data_level_2_path = VALID_DATA_LEVEL_2_PATH
-    data_val_lvl_2.to_csv(valid_data_level_2_path, compression='zip')
+        if valid_data_level_2_path is None:
+            valid_data_level_2_path = VALID_DATA_LEVEL_2_PATH
+        data_val_lvl_2.to_csv(valid_data_level_2_path, compression='zip')
 
     return data_train_lvl_1, data_val_lvl_1, data_val_lvl_2
