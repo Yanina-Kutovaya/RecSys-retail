@@ -30,7 +30,7 @@ ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
 USER_TRANSFORMER_PATH = 'user_features_transformer_v1.pkl'
-USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.parquet.gzip'
+USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.csv'
 
 def transform_user_features(
     user_features: pd.DataFrame,
