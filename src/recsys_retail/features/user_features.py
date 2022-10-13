@@ -29,9 +29,8 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-PATH = 'data/04_feature/'
-USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
-USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.parquet.gzip'
+USER_TRANSFORMER_PATH = 'user_features_transformer_v1.pkl'
+USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.parquet.gzip'
 
 def transform_user_features(
     user_features: pd.DataFrame,
@@ -81,6 +80,6 @@ def transform_user_features(
     X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
     if user_features_transformed_path is None:
         user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH
-    X.to_parquet(user_features_transformed_path, compression='gzip')    
+    X.to_csv(user_features_transformed_path)    
     
     return X
