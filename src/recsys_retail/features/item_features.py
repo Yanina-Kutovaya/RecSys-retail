@@ -8,10 +8,13 @@ from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.feature_extraction import text
 from pickle import dump, load
+from typing import Optional
+
 
 logger = logging.getLogger(__name__)
 
 __all__ = ['transform_item_features']
+
 
 ADD_STOP_WORDS = [
     '10', '100', '100 pure', '12', '12 18',
@@ -19,23 +22,28 @@ ADD_STOP_WORDS = [
 ]
 CONCAT_LIST = ['commodity_desc', 'sub_commodity_desc']
 
-FREQUENCY_ENCODER_PATH = 'item_features_frequency_encoder_v1.pkl'
-ITEM_FEATURES_FREQ_ENCODED_PATH = 'item_features_frequency_encoded.csv.zip'
+PATH = '/data/02_intermediate/'
+FREQUENCY_ENCODER_PATH = PATH + 'item_features_frequency_encoder_v1.pkl'
+ITEM_FEATURES_FREQ_ENCODED_PATH = PATH + 'item_features_frequency_encoded.csv.zip'
 
-VECTORIZER_PATH = 'item_features_vectorizer_v1.pkl'
-ITEM_DESC_VECTORIZED_PATH = 'item_desc_vectorized.csv.zip'
+VECTORIZER_PATH = PATH + 'item_features_vectorizer_v1.pkl'
+ITEM_DESC_VECTORIZED_PATH = PATH + 'item_desc_vectorized.csv.zip'
 
-ITEM_FEATURES_TRANSFORMED_PATH = 'item_features_transformed.csv.zip'
-ITEM_FEATURES_FOR_INFERENCE_PATH = 'item_features_for_inference.csv.zip'
+ITEM_FEATURES_TRANSFORMED_PATH = PATH + 'item_features_transformed.csv.zip'
+ITEM_FEATURES_FOR_INFERENCE_PATH = PATH + 'item_features_for_inference.csv.zip'
 
 
 def item_features_frequency_encoder(
     item_features: pd.DataFrame,
-    frequency_encoder_path = None,
-    item_features_freq_encoded_path = None
+    frequency_encoder_path: Optional[str] = None,
+    item_features_freq_encoded_path: Optional[str] = None
     ) -> pd.DataFrame:
+    """
+    Assumes all the features as categorical and replaces categories
+    with their frequencies.
+    """
 
-    logging.info('Encoding item features frequencies...')
+    logging.info('Encoding item features with frequencies...')
 
     item_features.set_index('item_id', inplace=True)
     cols = item_features.columns
@@ -64,9 +72,12 @@ def item_features_descriptions_encoder(
     item_features: pd.DataFrame,
     add_stop_words=None,
     concat_list=None,
-    vectorizer_path=None,
-    item_desc_vectorized_path=None    
+    vectorizer_path: Optional[str] = None,
+    item_desc_vectorized_path: Optional[str] = None   
     )-> pd.DataFrame:
+    """
+    Encodes commodity and sub-commodity descriptions with TF-IDF vectorizer.
+    """
 
     logging.info('Encoding item features descriptions...')    
 
@@ -98,9 +109,12 @@ def item_features_descriptions_encoder(
     
 def fit_transform_item_features(
     item_features: pd.DataFrame,
-    item_features_transformed_path = None
+    item_features_transformed_path: Optional[str] = None
     ) -> pd.DataFrame:
-
+    """
+    Combines frequency encoding and item descriptions encoding 
+    for training of the models.
+    """
     logging.info('Transforming item_features for train dataset...')
 
     df1 = item_features_frequency_encoder(item_features)
@@ -118,9 +132,14 @@ def transform_item_features(
     item_features: pd.DataFrame,
     frequency_encoder_path = None,
     concat_list = None,
-    vectorizer_path = None,    
-    item_features_for_inference_path = None
+    vectorizer_path: Optional[str] = None,    
+    item_features_for_inference_path: Optional[str] = None
     ) -> pd.DataFrame:
+
+    """
+    Combines frequency encoding and item descriptions encoding 
+    for inference.
+    """
 
     logging.info('Transforming item_features for inference...')
 
