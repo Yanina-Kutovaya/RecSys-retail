@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['preprocess_lvl_1_data']
 
-TRAIN_DATA_LEVEL_1_PATH = 'data_train_lvl_1.csv'
+TRAIN_DATA_LEVEL_1_PATH = 'data_train_lvl_1.csv.zip'
 
 
 def get_lvl_1_train_dataset(train_data_lvl_1_path = None) -> pd.DataFrame:
@@ -49,6 +49,6 @@ def get_lvl_1_train_dataset(train_data_lvl_1_path = None) -> pd.DataFrame:
     os.chdir('../03_primary')
     if train_data_lvl_1_path is None:
         train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
-    data_train_lvl_1.to_csv(train_data_lvl_1_path)
-
+    data_train_lvl_1.to_csv(train_data_lvl_1_path, compression='zip')
+   
     return data_train_lvl_1
