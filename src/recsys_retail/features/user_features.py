@@ -32,7 +32,7 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-PATH = '/data/02_intermediate/'
+PATH = 'data/02_intermediate/'
 USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
 USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.csv.zip'
 
@@ -51,7 +51,7 @@ def transform_user_features(
     Encodes categorical features with OrdinalEncoder and OneHotEncoder.
     
     """
-    
+
     logging.info('Transforming user_features...')
 
     if ordinal_features is None:
