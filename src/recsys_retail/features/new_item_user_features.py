@@ -5,10 +5,30 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['generate_user_item_features']
 
+PATH = 'data/04_feature/'
+USER_ITEM_FEATURES_PATH = PATH + 'user_item_features.csv.zip'
 
 def get_user_item_features(
-    recommender, data_train_lvl_1: pd.DataFrame
+    recommender, 
+    data_train_lvl_1: pd.DataFrame,
+    user_item_features_path: Optional[str] = None
     ) -> pd.DataFrame:
+
+    """
+    Geenerates new features from transactions matrix, users and items 
+    embeddings taken from recommender.
+
+    1.Median transaction hour for each user
+    2.Median transaction weekday
+    3.Mean days between purchases
+    4.Mean checks of users baskets
+    5.The number of stores which were selling the item
+    6.The number of unique item bought by the user
+    7.The number of user transactions
+    8.Mean / max / std of the number of unique items in the user basket
+    9.Items embeddings
+    10.Users embeddings
+    """
 
     logging.info('Generating new user-item features...')
 
@@ -80,6 +100,9 @@ def get_user_item_features(
 
 
 def get_embeddings(recommender, X: pd.DataFrame) -> pd.DataFrame:
+    """
+    Generated embeddings from recommender item factors and user factors
+    """
 
     logging.info('Calculating embeddings...')    
 
