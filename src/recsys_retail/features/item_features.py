@@ -22,7 +22,7 @@ ADD_STOP_WORDS = [
 ]
 CONCAT_LIST = ['commodity_desc', 'sub_commodity_desc']
 
-PATH = '/data/02_intermediate/'
+PATH = 'data/02_intermediate/'
 FREQUENCY_ENCODER_PATH = PATH + 'item_features_frequency_encoder_v1.pkl'
 ITEM_FEATURES_FREQ_ENCODED_PATH = PATH + 'item_features_frequency_encoded.csv.zip'
 
