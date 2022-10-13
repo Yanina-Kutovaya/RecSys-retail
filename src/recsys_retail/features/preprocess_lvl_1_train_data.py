@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['preprocess_lvl_1_data']
 
-PATH = 'data/01_raw/'
+PATH = 'data/03_primary/'
 TRAIN_DATA_LEVEL_1_PATH = PATH + 'data_train_lvl_1.csv.zip'
 
 def get_lvl_1_train_dataset(
