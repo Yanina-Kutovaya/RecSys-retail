@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['preprocess_lvl_1_data']
 
-PATH = '/data/01_raw/'
+PATH = 'data/01_raw/'
 TRAIN_DATA_LEVEL_1_PATH = PATH + 'data_train_lvl_1.csv.zip'
 
 def get_lvl_1_train_dataset(
@@ -30,7 +30,7 @@ def get_lvl_1_train_dataset(
     Prepares dataset which combines transactions, user features 
     and item features to be passed to user-item matrix for recommender.
     """
-    
+
     logging.info('Preprocessing level 1 train dataset...')
 
     # Prefilter items
