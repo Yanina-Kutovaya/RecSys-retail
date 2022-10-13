@@ -30,7 +30,7 @@ ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
 USER_TRANSFORMER_PATH = 'user_features_transformer_v1.pkl'
-USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.csv'
+USER_FEATURES_TRANSFORMED_PATH = 'user_features_transformed.csv.zip'
 
 def transform_user_features(
     user_features: pd.DataFrame,
@@ -80,6 +80,6 @@ def transform_user_features(
     X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
     if user_features_transformed_path is None:
         user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH
-    X.to_csv(user_features_transformed_path)    
+    X.to_csv(user_features_transformed_path, compression='zip')    
     
     return X
