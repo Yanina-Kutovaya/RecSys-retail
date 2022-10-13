@@ -20,13 +20,13 @@ ADD_STOP_WORDS = [
 CONCAT_LIST = ['commodity_desc', 'sub_commodity_desc']
 
 FREQUENCY_ENCODER_PATH = 'item_features_frequency_encoder_v1.pkl'
-ITEM_FEATURES_FREQ_ENCODED_PATH = 'item_features_frequency_encoded.csv'
+ITEM_FEATURES_FREQ_ENCODED_PATH = 'item_features_frequency_encoded.csv.zip'
 
 VECTORIZER_PATH = 'item_features_vectorizer_v1.pkl'
-ITEM_DESC_VECTORIZED_PATH = 'item_desc_vectorized.csv'
+ITEM_DESC_VECTORIZED_PATH = 'item_desc_vectorized.csv.zip'
 
-ITEM_FEATURES_TRANSFORMED_PATH = 'item_features_transformed.csv'
-ITEM_FEATURES_FOR_INFERENCE_PATH = 'item_features_for_inference.csv'
+ITEM_FEATURES_TRANSFORMED_PATH = 'item_features_transformed.csv.zip'
+ITEM_FEATURES_FOR_INFERENCE_PATH = 'item_features_for_inference.csv.zip'
 
 
 def item_features_frequency_encoder(
@@ -53,7 +53,7 @@ def item_features_frequency_encoder(
     X = pd.DataFrame(X, index=item_id, columns=cols).reset_index()
     if item_features_freq_encoded_path is None:
         item_features_freq_encoded_path = ITEM_FEATURES_FREQ_ENCODED_PATH
-    X.to_csv(item_features_freq_encoded_path)
+    X.to_csv(item_features_freq_encoded_path, compression='zip')
     
     item_features.reset_index(inplace=True)
 
@@ -91,7 +91,7 @@ def item_features_descriptions_encoder(
     X = pd.DataFrame(X.toarray(), index=item_features['item_id']).reset_index()
     if item_desc_vectorized_path is None:
         item_desc_vectorized_path = ITEM_DESC_VECTORIZED_PATH    
-    X.to_csv(item_desc_vectorized_path)       
+    X.to_csv(item_desc_vectorized_path, compression='zip')       
 
     return X
 
@@ -109,7 +109,7 @@ def fit_transform_item_features(
     X = pd.merge(df1, df2, on='item_id', how='left')    
     if item_features_transformed_path is None:
         item_features_transformed_path = ITEM_FEATURES_TRANSFORMED_PATH
-    X.to_csv(item_features_transformed_path)
+    X.to_csv(item_features_transformed_path, compression='zip')
 
     return X
 
@@ -142,6 +142,6 @@ def transform_item_features(
     X = pd.merge(df1, df2, on='item_id', how='left')
     if item_features_for_inference_path is None:
         item_features_for_inference_path = ITEM_FEATURES_FOR_INFERENCE_PATH
-    X.to_csv(item_features_for_inference_path)
+    X.to_csv(item_features_for_inference_path, compression='zip')
 
     return X
