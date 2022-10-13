@@ -21,11 +21,19 @@ def time_split(
     valid_data_level_1_path: Optional[str] = None,
     valid_data_level_2_path: Optional[str] = None    
     ) -> pd.DataFrame:
+    """ 
+    Train-validation-test time split for two-stage recommender system
+    
+    Train - validation - test schema:
+    -- old purchases -- | -- 6 weeks-- | -- 3 weeks--
+
+    For the 1st level we use older data leaving 9 weeks for validation:
+    6 weeks for the 1st level validation and 3 weeks for the 2nd level.
+    """
 
     logging.info('Splitting data for 2 levels of train-validation...')
 
-    # For the 1st level we use older data leaving 9 weeks for validation:
-    # 6 weeks for the 1st level validation and 3 weeks for the 2nd level.
+    
     val_lvl_1_size_weeks = 6
     val_lvl_2_size_weeks = 3
 
