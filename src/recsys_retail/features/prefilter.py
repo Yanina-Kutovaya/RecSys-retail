@@ -112,6 +112,6 @@ def prefilter_items(
 
     if prefilted_train_data_lvl_1_path is None:
         prefilted_train_data_lvl_1_path = PREFILTERED_TRAIN_DATA_LEVEL_1_PATH
-    data.to_csv(prefilted_train_data_lvl_1_path, compression='zip')
+    data.to_csv(prefilted_train_data_lvl_1_path, index=False, compression='zip')
 
     return data
