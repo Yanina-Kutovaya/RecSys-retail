@@ -14,7 +14,18 @@ class MainRecommender:
         Matrix of interactions user-item
     """
 
-    def __init__(self, data, weighting=True):
+    def __init__(
+        self, data, weighting=True, 
+        n_factors_ALS=20, 
+        regularization_ALS=0.001, 
+        iterations_ALS=15, 
+        num_threads_ALS=4
+        ):
+                
+        self.n_factors = n_factors_ALS
+        self.regularization = regularization_ALS
+        self.iterations = iterations_ALS
+        self.num_threads = num_threads_ALS
 
         # Top purchases of each user
         self.top_purchases = data.groupby(['user_id', 'item_id'])['quantity'].count().reset_index()
@@ -72,6 +83,7 @@ class MainRecommender:
 
         return id_to_itemid, id_to_userid, itemid_to_id, userid_to_id
 
+
     @staticmethod
     def fit_own_recommender(user_item_matrix):
         """Trains ItemItemRecommender, which recommends items from already bought by user"""
@@ -80,18 +92,19 @@ class MainRecommender:
         own_recommender.fit(csr_matrix(user_item_matrix).T.tocsr())
 
         return own_recommender
-
-    @staticmethod
-    def fit(user_item_matrix, n_factors=50, regularization=0.001, iterations=15, num_threads=4):
+    
+    
+    def fit(self, user_item_matrix):
         """Trains ALS model"""
 
         model = AlternatingLeastSquares(
-            factors=n_factors, regularization=regularization,
-            iterations=iterations, num_threads=num_threads
+            factors=self.n_factors, regularization=self.regularization,
+            iterations=self.iterations, num_threads=self.num_threads
         )
         model.fit(csr_matrix(user_item_matrix).T.tocsr())
 
         return model
+    
 
     def _update_dict(self, user_id):
         """Updates dictionaries in case of new user / item"""
@@ -103,6 +116,7 @@ class MainRecommender:
             self.userid_to_id.update({user_id: max_id})
             self.id_to_userid.update({max_id: user_id})
 
+
     def _get_similar_item(self, item_id):
         """Finds item similar to item_id"""
 
@@ -113,6 +127,7 @@ class MainRecommender:
 
         return self.id_to_itemid[top_rec]
 
+
     def _extend_with_top_popular(self, recommendations, N=5):
         """If the number of recommendations is less than N, adds top purchases of all dataset"""
 
@@ -121,6 +136,7 @@ class MainRecommender:
             recommendations = recommendations[:N]
 
         return recommendations
+
 
     def _get_recommendations(self, user, model, N=5):
         """Recommendations from implicit (standard libraries)"""
@@ -141,17 +157,20 @@ class MainRecommender:
 
         return res
 
+
     def get_als_recommendations(self, user, N=5):
         """Recommendations from implicit (standard libraries)"""
 
         self._update_dict(user_id=user)        
         return self._get_recommendations(user, model=self.model, N=N)
 
+
     def get_own_recommendations(self, user, N=5):
         """Recommendations from the items, which the user has already bought"""
 
         self._update_dict(user_id=user)
         return self._get_recommendations(user, model=self.own_recommender, N=N)
+
 
     def get_similar_items_recommendation(self, user, N=5):
         """Recommendations of items similar to top-N bought by the"""
@@ -166,6 +185,7 @@ class MainRecommender:
         assert len(res) == N, f'The number of recommendations != {N}'
 
         return res
+
 
     def get_similar_users_recommendation(self, user, N=5):
         """Рекомендуем топ-N товаров, среди купленных похожими юзерами"""
