@@ -90,6 +90,6 @@ def transform_user_features(
     X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
     if user_features_transformed_path is None:
         user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH
-    X.to_csv(user_features_transformed_path, compression='zip')    
+    X.to_csv(user_features_transformed_path, index=False, compression='zip')    
     
     return X
