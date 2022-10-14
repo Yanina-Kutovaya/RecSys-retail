@@ -2,7 +2,7 @@ import os
 import logging
 import numpy as np
 import pandas as pd
-from typing import Optional
+from typing import Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -20,7 +20,8 @@ def time_split(
     train_data_lvl_1_path: Optional[str] = None,
     valid_data_level_1_path: Optional[str] = None,
     valid_data_level_2_path: Optional[str] = None    
-    ) -> pd.DataFrame:
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    
     """ 
     Train-validation-test time split for two-stage recommender system.
 
