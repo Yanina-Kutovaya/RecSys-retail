@@ -48,14 +48,18 @@ def time_split(
     if save_split:        
         if train_data_lvl_1_path is None:
             train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
-        data_train_lvl_1.to_csv(train_data_lvl_1_path, compression='zip')
-
+        data_train_lvl_1.to_csv(
+            train_data_lvl_1_path, index=False, compression='zip'
+        )
         if valid_data_level_1_path is None:
             valid_data_level_1_path = VALID_DATA_LEVEL_1_PATH
-        data_val_lvl_1.to_csv(valid_data_level_1_path, compression='zip')
-
+        data_val_lvl_1.to_csv(
+            valid_data_level_1_path, index=False, compression='zip'
+        )
         if valid_data_level_2_path is None:
             valid_data_level_2_path = VALID_DATA_LEVEL_2_PATH
-        data_val_lvl_2.to_csv(valid_data_level_2_path, compression='zip')
+        data_val_lvl_2.to_csv(
+            valid_data_level_2_path, index=False, compression='zip'
+        )
 
     return data_train_lvl_1, data_val_lvl_1, data_val_lvl_2
