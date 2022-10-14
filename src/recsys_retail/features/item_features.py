@@ -61,7 +61,7 @@ def item_features_frequency_encoder(
     X = pd.DataFrame(X, index=item_id, columns=cols).reset_index()
     if item_features_freq_encoded_path is None:
         item_features_freq_encoded_path = ITEM_FEATURES_FREQ_ENCODED_PATH
-    X.to_csv(item_features_freq_encoded_path, compression='zip')
+    X.to_csv(item_features_freq_encoded_path, index=False, compression='zip')
     
     item_features.reset_index(inplace=True)
 
@@ -102,7 +102,7 @@ def item_features_descriptions_encoder(
     X = pd.DataFrame(X.toarray(), index=item_features['item_id']).reset_index()
     if item_desc_vectorized_path is None:
         item_desc_vectorized_path = ITEM_DESC_VECTORIZED_PATH    
-    X.to_csv(item_desc_vectorized_path, compression='zip')       
+    X.to_csv(item_desc_vectorized_path, index=False, compression='zip')       
 
     return X
 
@@ -123,7 +123,7 @@ def fit_transform_item_features(
     X = pd.merge(df1, df2, on='item_id', how='left')    
     if item_features_transformed_path is None:
         item_features_transformed_path = ITEM_FEATURES_TRANSFORMED_PATH
-    X.to_csv(item_features_transformed_path, compression='zip')
+    X.to_csv(item_features_transformed_path, index=False, compression='zip')
 
     return X
 
@@ -161,6 +161,6 @@ def transform_item_features(
     X = pd.merge(df1, df2, on='item_id', how='left')
     if item_features_for_inference_path is None:
         item_features_for_inference_path = ITEM_FEATURES_FOR_INFERENCE_PATH
-    X.to_csv(item_features_for_inference_path, compression='zip')
+    X.to_csv(item_features_for_inference_path, index=False, compression='zip')
 
     return X
