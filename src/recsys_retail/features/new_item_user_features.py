@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+from typing import Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -7,6 +8,7 @@ __all__ = ['generate_user_item_features']
 
 PATH = 'data/04_feature/'
 USER_ITEM_FEATURES_PATH = PATH + 'user_item_features.csv.zip'
+
 
 def get_user_item_features(
     recommender, 
@@ -99,7 +101,10 @@ def get_user_item_features(
     return user_item_features
 
 
-def get_embeddings(recommender, X: pd.DataFrame) -> pd.DataFrame:
+def get_embeddings(
+    recommender, 
+    X: pd.DataFrame
+    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Generated embeddings from recommender item factors and user factors
     """
