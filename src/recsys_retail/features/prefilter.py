@@ -14,7 +14,7 @@ UPPER_PRICE_THRESHOLD = 30
 TAKE_N_POPULAR = 2500
 
 PATH = 'data/02_intermediate/'
-PREFILTERED_TRAIN_DATA_LEVEL_1_PATH = PATH + 'data_train_lvl_1.csv.zip'
+PREFILTERED_TRAIN_DATA_LEVEL_1_PATH = PATH + 'data_train_lvl_1_prefiltered.csv.zip'
 
 def prefilter_items(
     data: pd.DataFrame,
