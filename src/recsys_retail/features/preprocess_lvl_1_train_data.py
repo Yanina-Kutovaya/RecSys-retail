@@ -49,6 +49,6 @@ def get_lvl_1_train_dataset(
     # Save results    
     if train_data_lvl_1_path is None:
         train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
-    data_train_lvl_1.to_csv(train_data_lvl_1_path, compression='zip')
+    data_train_lvl_1.to_csv(train_data_lvl_1_path, index=False, compression='zip')
    
     return data_train_lvl_1
