@@ -13,12 +13,16 @@ LOWER_PRICE_THRESHOLD = 1
 UPPER_PRICE_THRESHOLD = 30
 TAKE_N_POPULAR = 2500
 
+PATH = 'data/02_intermediate/'
+PREFILTERED_TRAIN_DATA_LEVEL_1_PATH = PATH + 'data_train_lvl_1.csv.zip'
+
 def prefilter_items(
     data: pd.DataFrame,
     item_features: pd.DataFrame,
     lower_price_threshold: Optional[int] = None,
     upper_price_threshold: Optional[int] = None, 
-    take_n_popular: Optional[int] = None    
+    take_n_popular: Optional[int] = None,
+    prefilted_train_data_lvl_1_path: Optional[str] = None    
     ) -> pd.DataFrame:
     """ 
     1.Removes items that have not been sold for the last 12 months
@@ -105,5 +109,9 @@ def prefilter_items(
     # Introduce fake item_id = 999999.
     # If user has bought an item which is not from top-N, he bought an item 999999.
     data.loc[~data['item_id'].isin(top), 'item_id'] = 999999
-    
+
+    if prefilted_train_data_lvl_1_path is None:
+        prefilted_train_data_lvl_1_path = PREFILTERED_TRAIN_DATA_LEVEL_1_PATH
+    data.to_csv(prefilted_train_data_lvl_1_path, compression='zip')
+
     return data
