@@ -13,7 +13,7 @@ CANDIDATES_PATH = 'data/04_feature/candidates_lvl_2.csv.zip'
 VALID_DATA_LEVEL_1_PATH = 'data/01_raw/data_val_lvl_1.csv.zip'
 ITEM_FEATURES_TRANSFORMED_PATH = 'data/02_intermediate/item_features_transformed.csv.zip'
 USER_FEATURES_TRANSFORMED_PATH = 'data/02_intermediate/user_features_transformed.csv.zip'
-USER_ITEM_FEATURES_PATH = 'data/05_model_input/user_item_features.csv.zip'
+USER_ITEM_FEATURES_PATH = 'data/04_feature/user_item_features.csv.zip'
 N_RECOMENDATIONS = 5
 
 PATH = 'data/05_model_input/'
