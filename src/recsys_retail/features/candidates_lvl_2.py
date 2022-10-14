@@ -28,7 +28,8 @@ def get_candidates(
     """
     
     recommender = MainRecommender(data_train_lvl_1)
-
+    data_train_lvl_2 = data_val_lvl_1
+    
     users_lvl_1 = data_train_lvl_1['user_id'].unique()
     users_lvl_2 = data_train_lvl_2['user_id'].unique().tolist()
     users_lvl_3 = data_val_lvl_2['user_id'].unique()
