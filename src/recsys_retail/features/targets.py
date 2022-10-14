@@ -83,6 +83,6 @@ def get_targets_lvl_2(
 
     if targets_lvl_2_path is None:
         targets_lvl_2_path = TARGET_LVL_2_PATH
-    targets_lvl_2.to_csv(targets_lvl_2_path, compression='zip')
+    targets_lvl_2.to_csv(targets_lvl_2_path, index=False, compression='zip')
 
     return targets_lvl_2
