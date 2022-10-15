@@ -22,7 +22,7 @@ PATH_1 = 'data/02_intermediate/'
 DATA_TRAIN_LVL_1_PATH = PATH_1 + 'data_train_lvl_1_preprocessed.csv.zip'
 
 N_ITEMS = 100
-PATH_2 = 'data/05_model_input'
+PATH_2 = 'data/05_model_input/'
 TRAIN_DATASET_LVL_2_PATH = PATH_2 + 'train_dataset_lvl_2.csv.zip'
 
 
