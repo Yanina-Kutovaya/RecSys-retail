@@ -6,7 +6,7 @@ from src.recsys_retail.data.make_dataset import load_data
 from src.recsys_retail.features.data_time_split import time_split
 from src.recsys_retail.features.preprocess_lvl_1_train_data import get_lvl_1_train_dataset
 from src.recsys_retail.features.candidates_lvl_2 import get_candidates
-from src.recsys_retail.features.new_item_user_features import get_train_dataset_lvl_2
+from src.recsys_retail.features.new_item_user_features import get_user_item_features
 from src.recsys_retail.features.targets import get_targets_lvl_2
 
 
