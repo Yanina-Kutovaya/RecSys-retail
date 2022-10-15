@@ -35,7 +35,7 @@ OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 PATH_1 = 'data/02_intermediate/'
 USER_FEATURES_TRANSFORMED_PATH = PATH_1 + 'user_features_transformed.csv.zip'
 
-PATH_1 = 'data/03_primary/'
+PATH_2 = 'data/03_primary/'
 USER_TRANSFORMER_PATH = PATH_2 + 'user_features_transformer_v1.pkl'
 
 
