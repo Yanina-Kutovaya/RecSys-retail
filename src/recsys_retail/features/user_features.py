@@ -32,9 +32,11 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-PATH = 'data/02_intermediate/'
-USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
-USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.csv.zip'
+PATH_1 = 'data/02_intermediate/'
+USER_FEATURES_TRANSFORMED_PATH = PATH_1 + 'user_features_transformed.csv.zip'
+
+PATH_1 = 'data/03_primary/'
+USER_TRANSFORMER_PATH = PATH_2 + 'user_features_transformer_v1.pkl'
 
 
 def fit_transform_user_features(
