@@ -43,7 +43,7 @@ def data_preprocessing_pipeline(
     data_train_lvl_1 = prefilter_items(data_train_lvl_1, item_features)
 
     # 2. Preprocess user features and merge with transactions data    
-    user_features_transformed = transform_user_features(user_features)
+    user_features_transformed = fit_transform_user_features(user_features)
     data_train_lvl_1 = pd.merge(
         data_train_lvl_1, user_features_transformed, on='user_id', how='left'
     )
