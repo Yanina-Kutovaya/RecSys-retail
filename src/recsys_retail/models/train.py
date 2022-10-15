@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 __all__ = ['preprocess_data']
 
 PATH_1 = 'data/02_intermediate/'
-DATA_TRAIN_LVL_1_PATH = PATH_1 + 'data_train_lvl_1.csv.zip'
+DATA_TRAIN_LVL_1_PATH = PATH_1 + 'data_train_lvl_1_preprocessed.csv.zip'
 
-N_ITEMS = 300
+N_ITEMS = 100
 PATH_2 = 'data/05_model_input'
 TRAIN_DATASET_LVL_2_PATH = PATH_2 + 'train_dataset_lvl_2.csv.zip'
 
@@ -69,8 +69,12 @@ def data_preprocessing_pipeline(
     user_item_features = get_user_item_features(recommender, data_train_lvl_1)       
     
     train_dataset_lvl_2 = get_targets_lvl_2(
-        users_lvl_2, data_train_lvl_2, item_features_transformed, 
-        user_features_transformed, user_item_features
+        users_lvl_2, 
+        data_train_lvl_2, 
+        item_features_transformed, 
+        user_features_transformed, 
+        user_item_features, 
+        n_recommendations=N_ITEMS
     )
 
     logging.info('Saving train dataset level 2...')
