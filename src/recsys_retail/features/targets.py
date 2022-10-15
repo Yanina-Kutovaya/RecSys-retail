@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 __all__ = ['generate_targets']
 
 
-N_RECOMENDATIONS = 5
+N_RECOMENDATIONS = 300
 
 PATH = 'data/05_model_input/'
 TARGET_LVL_2_PATH = PATH + 'targets_lvl_2.csv.zip'
@@ -36,7 +36,7 @@ def get_targets_lvl_2(
 
     df = pd.DataFrame(
         {'user_id': users_lvl_2['user_id'].values.repeat(n_recommendations),
-        'item_id': np.concatenate(users_lvl_2['candidates'].values)
+        'item_id': np.concatenate(users_lvl_2['candidates'].values, axis=None)
         }
     )       
     targets_lvl_2 = data_train_lvl_2[['user_id', 'item_id']].copy()
