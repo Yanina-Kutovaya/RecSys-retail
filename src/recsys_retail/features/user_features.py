@@ -3,7 +3,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
 from sklearn.compose import make_column_transformer
-from pickle import dump
+from pickle import dump, load
 from typing import Optional
 
 
@@ -37,7 +37,7 @@ USER_TRANSFORMER_PATH = PATH + 'user_features_transformer_v1.pkl'
 USER_FEATURES_TRANSFORMED_PATH = PATH + 'user_features_transformed.csv.zip'
 
 
-def transform_user_features(
+def fit_transform_user_features(
     user_features: pd.DataFrame,
     ordinal_features = None,
     onehot_features = None,
@@ -93,3 +93,24 @@ def transform_user_features(
     X.to_csv(user_features_transformed_path, index=False, compression='zip')    
     
     return X
+
+
+    def transform_user_features(
+        user_features: pd.DataFrame,
+        user_transformer_path: Optional[str] = None,
+        user_features_for_inference_path: Optional[str] = None
+        ) -> pd.DataFrame:
+
+        """
+        Transforms item features for inference.
+        """
+
+        logging.info('Transforming user_features for inference...')
+
+        if user_transformer_path is None:
+            user_transformer_path = USER_TRANSFORMER_PATH
+        user_transformer = load(open(user_transformer_path, 'rb'))
+
+        X = user_transformer.transform(user_features)
+        
+        return X
