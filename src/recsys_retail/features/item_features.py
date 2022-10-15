@@ -25,8 +25,8 @@ CONCAT_LIST = ['commodity_desc', 'sub_commodity_desc']
 PATH_1 = 'data/02_intermediate/'
 ITEM_FEATURES_FREQ_ENCODED_PATH = PATH_1 + 'item_features_frequency_encoded.csv.zip'
 ITEM_DESC_VECTORIZED_PATH = PATH_1 + 'item_desc_vectorized.csv.zip'
-ITEM_FEATURES_TRANSFORMED_PATH = PATH + 'item_features_transformed.csv.zip'
-ITEM_FEATURES_FOR_INFERENCE_PATH = PATH + 'item_features_for_inference.csv.zip'
+ITEM_FEATURES_TRANSFORMED_PATH = PATH_1 + 'item_features_transformed.csv.zip'
+ITEM_FEATURES_FOR_INFERENCE_PATH = PATH_1 + 'item_features_for_inference.csv.zip'
 
 PATH_2 = 'data/03_primary/'
 FREQUENCY_ENCODER_PATH = PATH_2 + 'item_features_frequency_encoder_v1.pkl'
