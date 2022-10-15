@@ -3,8 +3,10 @@ import pandas as pd
 
 
 def get_results(
+    data_val_lvl_2: pd.DataFrame,
     train_dataset_lvl_2: pd.DataFrame, 
     raw_predictions: np.array,
+
     ) -> pd.DataFrame:
     """
     Compares recommendations against actual purchases
