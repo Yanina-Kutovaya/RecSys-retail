@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['preprocess_data']
 
-PATH_1 = 'data/03_primary/'
+PATH_1 = 'data/02_intermediate/'
 DATA_TRAIN_LVL_1_PATH = PATH_1 + 'data_train_lvl_1.csv.zip'
 
 N_ITEMS = 300
