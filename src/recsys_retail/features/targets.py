@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 __all__ = ['generate_targets']
 
 
-N_RECOMENDATIONS = 300
+N_ITEMS = 300
 
 PATH = 'data/05_model_input/'
 TARGET_LVL_2_PATH = PATH + 'targets_lvl_2.csv.zip'
@@ -21,7 +21,7 @@ def get_targets_lvl_2(
     item_features_transformed: pd.DataFrame,  
     user_features_transformed: pd.DataFrame,
     user_item_features:pd.DataFrame,     
-    n_recommendations: Optional[int] = None,
+    n_items: Optional[int] = None,
     targets_lvl_2_path: Optional[str] = None 
     ) -> pd.DataFrame:
     """ 
@@ -31,11 +31,11 @@ def get_targets_lvl_2(
     
     logging.info('Generating targets for level 2...')
 
-    if n_recommendations is None:
-        n_recommendations = N_RECOMENDATIONS
+    if n_items is None:
+        n_items = N_ITEMS
 
     df = pd.DataFrame(
-        {'user_id': users_lvl_2['user_id'].values.repeat(n_recommendations),
+        {'user_id': users_lvl_2['user_id'].values.repeat(n_items),
         'item_id': np.concatenate(users_lvl_2['candidates'].values, axis=None)
         }
     )       
