@@ -6,7 +6,7 @@ from typing import Optional
 from src.recsys_retail.data.make_dataset import load_data
 from src.recsys_retail.features.data_time_split import time_split
 from src.recsys_retail.features.prefilter import prefilter_items
-from src.recsys_retail.features.user_features import transform_user_features
+from src.recsys_retail.features.user_features import fit_transform_user_features
 from src.recsys_retail.features.item_features import (
     fit_transform_item_features, transform_item_features
 )
@@ -55,7 +55,7 @@ def data_preprocessing_pipeline(
     logging.info('Saving preprocessed level 1 train dataset...')
 
     if train_data_lvl_1_path is None:
-        train_data_lvl_1_path = TRAIN_DATA_LEVEL_1_PATH
+        train_data_lvl_1_path = DATA_TRAIN_LVL_1_PATH
     data_train_lvl_1.to_csv(train_data_lvl_1_path, index=False, compression='zip')
 
     logging.info('Generating level 2 dataset...')
