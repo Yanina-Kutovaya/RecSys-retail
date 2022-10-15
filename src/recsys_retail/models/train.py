@@ -74,7 +74,7 @@ def data_preprocessing_pipeline(
         item_features_transformed, 
         user_features_transformed, 
         user_item_features, 
-        n_recommendations=N_ITEMS
+        n_items
     )
 
     logging.info('Saving train dataset level 2...')
