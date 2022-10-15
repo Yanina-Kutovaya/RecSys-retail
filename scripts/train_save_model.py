@@ -58,7 +58,7 @@ def main():
         args.data_path, args.item_features_path, args.user_features_path
     )
     logging.info('Preprocessing data...')
-    train_dataset_lvl_2 = get_train_dataset_lvl_2(
+    train_dataset_lvl_2 = train.get_train_dataset_lvl_2(
         data, item_features, user_features
     )
     logging.info('Training the model...')
