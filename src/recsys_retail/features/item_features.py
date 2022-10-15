@@ -137,8 +137,7 @@ def transform_item_features(
     ) -> pd.DataFrame:
 
     """
-    Combines frequency encoding and item descriptions encoding 
-    for inference.
+    Transforms item features for inference.       
     """
 
     logging.info('Transforming item_features for inference...')
