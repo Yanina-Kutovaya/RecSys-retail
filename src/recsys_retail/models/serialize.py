@@ -22,7 +22,9 @@ def load(filename: str, path: str = 'default'):
     filepath = os.path.join(path, filename + '.txt')
 
     logger.info(f'Loading model from {filepath}')
-    return lgb.Booster(filepath)
+    
+    return lgb.Booster(model_file=filepath)
+    
 
 
 def models_path() -> str:
