@@ -1,54 +1,77 @@
 import logging
-import numpy as np
 import pandas as pd
-import lightgbm as lgb
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import roc_auc_score
-from pickle import dump
 from typing import Optional
+
+from src.recsys_retail.data.make_dataset import load_data
+from src.recsys_retail.features.data_time_split import time_split
+from src.recsys_retail.features.preprocess_lvl_1_train_data import get_lvl_1_train_dataset
+from src.recsys_retail.features.candidates_lvl_2 import get_candidates
+from src.recsys_retail.features.targets import get_targets_lvl_2
+
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['build_inference_pipeline']
+__all__ = ['generate_lvl_2_dataset']
 
-PATH = 'models/'
-MODEL_LGB_PATH = PATH + 'LightGBM_v1.pkl'
+N_ITEMS = 300
+ITEM_FEATURES_TRANSFORMED_PATH = 'data/02_intermediate/item_features_transformed.csv.zip'
+USER_FEATURES_TRANSFORMED_PATH = 'data/02_intermediate/user_features_transformed.csv.zip'
+USER_ITEM_FEATURES_PATH = 'data/04_feature/user_item_features.csv.zip'
 
-def run_model_lgb(
-    targets_lvl_2: pd.DataFrame,
-    model_lgb_path: Optional[str] = None
-    ):
+PATH = 'data/05_model_input'
+DATASET_LVL_2_PATH = PATH + 'dataset_lvl_2.csv.zip'
 
-    logging.info('Training the model LightGBM...')
+def get_dataset_lvl_2(
+    data: pd.DataFrame, 
+    item_features: pd.DataFrame, 
+    user_features: pd.DataFrame,
+    n_items: Optional[int] = None,
+    item_features_transformed_path: Optional[str] = None,
+    user_features_transformed_path: Optional[str] = None,
+    user_item_features_path: Optional[str] = None,
+    dataset_lvl_2_path: Optional[str] = None
+    ) -> pd.DataFrame:
 
-    X_train, X_valid, y_train, y_valid = train_test_split(
-        targets_lvl_2.drop('target', axis=1).fillna(0), 
-        targets_lvl_2[['target']], 
-        test_size=0.2,
-        random_state=16, 
-        stratify=targets_lvl_2[['target']]
+    logging.info('Generating level 1 dataset...')
+
+    data_train_lvl_1, data_train_lvl_2, data_val_lvl_2 = time_split(data)
+    data_train_lvl_1 = get_lvl_1_train_dataset(data_train_lvl_1, item_features, user_features)
+
+    logging.info('Generating level 2 dataset...')
+
+    if n_items is None:
+        n_items = N_ITEMS
+    users_lvl_2, recommender = get_candidates(
+        data_train_lvl_1, data_train_lvl_2, data_val_lvl_2, n_items
+    )
+    logging.info('Generating new user-item features...')
+    user_item_features = get_user_item_features(recommender, data_train_lvl_1)
+
+    logging.info(
+        f'Reading item_features_transformed_path from {item_features_transformed_path}...'
+    )
+    if item_features_transformed_path is None:
+        item_features_transformed_path = ITEM_FEATURES_TRANSFORMED_PATH    
+    item_features_transformed = pd.read_csv(
+        item_features_transformed_path, compression='zip'
+    )
+    logging.info(
+        f'Reading user_features_transformed_path from {user_features_transformed_path}...'
+    )
+    if user_features_transformed_path is None:
+        user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH    
+    user_features_transformed = pd.read_csv(
+        user_features_transformed_path, compression='zip'
+    )
+    dataset_lvl_2 = get_targets_lvl_2(
+        users_lvl_2, data_train_lvl_2, item_features_transformed, 
+        user_features_transformed, user_item_features
     )
 
-    dtrain = lgb.Dataset(X_train, y_train)
-    dvalid = lgb.Dataset(X_valid, y_valid)
+    logging.info('Saving level 2 dataset...')
 
-    params_lgb = {"boosting_type": "gbdt",
-                  "objective": "binary", 
-                  "metric": "auc",
-                  "num_boost_round": 10000,
-                  "learning_rate": 0.1,
-                  "class_weight": 'balanced',
-                  "max_depth": 10,
-                  "n_estimators": 5000,
-                  "n_jobs": 6,
-                  "seed": 12} 
+    if dataset_lvl_2_path is None:
+        dataset_lvl_2_path = DATASET_LVL_2_PATH
+    targets_lvl_2.to_csv(dataset_lvl_2_path, index=False, compression='zip')
 
-    model_lgb = lgb.train(
-        params=params_lgb, train_set=dtrain, valid_sets=[dtrain, dvalid],
-        verbose_eval=1000, early_stopping_rounds=30
-    )
-    if model_lgb_path is None:
-        model_lgb_path = MODEL_LGB_PATH
-    dump(model_lgb, open(model_lgb_path, 'wb'))
-
-    return model_lgb
+    return dataset_lvl_2
