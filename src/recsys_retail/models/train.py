@@ -1,8 +1,6 @@
 import logging
 import pandas as pd
-import joblib
 from pickle import dump
-
 from typing import Optional
 
 from src.recsys_retail.data.make_dataset import load_data
@@ -14,6 +12,7 @@ from src.recsys_retail.models.train_recommender import train_save_recommender
 from src.recsys_retail.features.candidates_lvl_2 import get_candidates
 from src.recsys_retail.features.new_item_user_features import get_user_item_features
 from src.recsys_retail.features.targets import get_targets_lvl_2
+
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ def data_preprocessing_pipeline(
     recommender_path: Optional[str] = None,
     train_dataset_lvl_2_path: Optional[str] = None
     ) -> pd.DataFrame:
-    
+
     """
     Prepares dataset from transactions data, item features and user features
     to be used in binary classification models.
@@ -82,7 +81,7 @@ def data_preprocessing_pipeline(
 
     user_item_features = get_user_item_features(recommender, data_train_lvl_1)       
     
-    logging.info('Generating train dataset level 2...')
+    logging.info('Generating train dataset for level 2 model...')
 
     train_dataset_lvl_2 = get_targets_lvl_2(
         users_lvl_2, 
@@ -92,8 +91,7 @@ def data_preprocessing_pipeline(
         user_item_features, 
         n_items
     )
-
-    logging.info('Saving train dataset level 2...')
+    logging.info('Saving train dataset for level 2 model...')
 
     if train_dataset_lvl_2_path is None:
         train_dataset_lvl_2_path = TRAIN_DATASET_LVL_2_PATH
