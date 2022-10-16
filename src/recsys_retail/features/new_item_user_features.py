@@ -17,7 +17,7 @@ def get_user_item_features(
     ) -> pd.DataFrame:
 
     """
-    Geenerates new features from transactions matrix, users and items 
+    Generates new features from transactions matrix, users and items 
     embeddings taken from recommender.
 
     1.Median transaction hour for each user
