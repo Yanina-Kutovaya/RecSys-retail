@@ -1,3 +1,4 @@
+import pandas as pd
 import joblib
 from typing import Optional
 from src.recsys_retail.features.recommenders import MainRecommender
