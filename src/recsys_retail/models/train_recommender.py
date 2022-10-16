@@ -18,7 +18,7 @@ PATH = 'models/'
 RECOMMENDER_PATH = PATH + 'recommender_v1'   
     
     
-def train_save_recommender(data_train_lvl_1: pd.DataFrame, args):
+def train_save_recommender(data_train_lvl_1: pd.DataFrame, args=args):
     """
     Generates recommender which will be used for selecting of 
     long list of items for each user (the 1st stage).
