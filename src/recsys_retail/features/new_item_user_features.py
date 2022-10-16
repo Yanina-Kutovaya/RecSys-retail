@@ -128,7 +128,8 @@ def get_embeddings(
     
     # Users embeddings
     df2 = recommender.model.user_factors
-    ind = list(recommender.id_to_userid.values())
+    n_users = df2.shape[0]
+    ind = list(recommender.id_to_userid.values())[:n_users]
     df2 = pd.DataFrame(df2, index=ind).reset_index()
     df2.columns = ['user_id'] + ['user_factor_' + str(i + 1) for i in range(n_factors)]
 
