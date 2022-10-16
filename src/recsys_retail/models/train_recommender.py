@@ -11,10 +11,19 @@ args = {
     'regularization_ALS': 0.001, 
     'iterations_ALS': 20, 
     'num_threads_ALS': 4
-}   
+}
+PATH = 'models/'
+RECOMMENDER_PATH = PATH + 'recommender_v1'   
     
     
 def train_save_recommender(data_train_lvl_1: pd.DataFrame, args):
+    """
+    Generates recommender which will be used for selecting of 
+    long list of items for each user (the 1st stage).
+    On the 2nd stage this long list will be the bases for the further 
+    short list selection with the binary classification model. 
+
+    """
 
     logging.info('Training recommender...')           
     recommender = MainRecommender(data_train_lvl_1, args)
