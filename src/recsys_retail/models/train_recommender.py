@@ -1,3 +1,4 @@
+import logging
 import pandas as pd
 import joblib
 from typing import Optional
