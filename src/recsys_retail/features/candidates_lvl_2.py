@@ -15,36 +15,34 @@ PATH = 'data/04_feature/'
 CANDIDATES_PATH = PATH + 'candidates_lvl_2.csv.zip'
 
 def get_candidates(
+    recommender,
     data_train_lvl_1: pd.DataFrame,
     data_val_lvl_1: pd.DataFrame, 
-    data_val_lvl_2: pd.DataFrame, 
+    data_val_lvl_2: Optional[pd.DataFrame] = None, 
     n_items: Optional[int] = None,
     candidates_path: Optional[str] = None
     ):
 
     """
     Selects candidates for level 2 with n_items to be recommended
-    for each of the candidate (top-5).        
+    for each of the candidate (e.g: top-100 items).        
     """
     
-    recommender = MainRecommender(data_train_lvl_1)
-    data_train_lvl_2 = data_val_lvl_1
+    users_train = data_train_lvl_1['user_id'].unique()
+    users_valid = data_val_lvl_1['user_id'].unique().tolist()
+    if data_val_lvl_2 is not None:
+        users_test = data_val_lvl_2['user_id'].unique()
+        add_to_valid = list(set(users_test) - (set(users_valid)))
+        if add_to_valid:
+            users_valid += add_to_valid
 
-    users_lvl_1 = data_train_lvl_1['user_id'].unique()
-    users_lvl_2 = data_train_lvl_2['user_id'].unique().tolist()
-    users_lvl_3 = data_val_lvl_2['user_id'].unique()
-
-    add_to_lvl_2 = list(set(users_lvl_3) - (set(users_lvl_2)))
-    if add_to_lvl_2:
-        users_lvl_2 += add_to_lvl_2
-
-    current_users = list(set(users_lvl_2) & set(users_lvl_1))    
-    new_users = list(set(users_lvl_2) - set(users_lvl_1))
+    current_users = list(set(users_valid) & set(users_train))    
+    new_users = list(set(users_valid) - set(users_train))
 
     if n_items is None:
         n_items = N_ITEMS
 
-    df = pd.DataFrame(users_lvl_2, columns=['user_id'])
+    df = pd.DataFrame(users_valid, columns=['user_id'])
     cond_1 = df['user_id'].isin(current_users)
     df.loc[cond_1, 'candidates'] = df.loc[cond_1, 'user_id'].apply(
         lambda x: recommender.get_own_recommendations(x, n_items)
@@ -52,10 +50,10 @@ def get_candidates(
     if new_users:
         cond_2 = df['user_id'].isin(new_users)
         df.loc[cond_2, 'candidates'] = df.loc[cond_2, 'user_id'].apply(
-                lambda x: recommender.overall_top_purchases[:n_items]
+            lambda x: recommender.overall_top_purchases[:n_items]
         )
     if candidates_path is None:
         candidates_path = CANDIDATES_PATH
     df.to_csv(candidates_path, index=False, compression='zip')
 
-    return df, recommender
+    return df
