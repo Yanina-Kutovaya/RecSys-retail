@@ -8,19 +8,12 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['train_save_recommender']
 
-args = {
-    'n_factors_ALS': 50,
-    'regularization_ALS': 0.001, 
-    'iterations_ALS': 20, 
-    'num_threads_ALS': 4
-}
 PATH = 'models/'
 RECOMMENDER_PATH = PATH + 'recommender_v1'   
     
     
 def train_save_recommender(
-    data_train_lvl_1: pd.DataFrame, 
-    args=args,
+    data_train_lvl_1: pd.DataFrame,
     recommender_path: Optional[str] = None
     ):
     """
@@ -32,7 +25,13 @@ def train_save_recommender(
     """
 
     logging.info('Training recommender...')           
-    recommender = MainRecommender(data_train_lvl_1, args)
+    recommender = MainRecommender(
+        data_train_lvl_1, 
+        n_factors_ALS=50, 
+        regularization_ALS=0.001,
+        iterations_ALS=20,
+        num_threads_ALS=4 
+    )
 
     logging.info('Saving recommender...')            
     if recommender_path is None:
