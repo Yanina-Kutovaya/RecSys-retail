@@ -188,20 +188,17 @@ class MainRecommender:
 
 
     def get_similar_users_recommendation(self, user, N=5):
-        """Рекомендуем топ-N товаров, среди купленных похожими юзерами"""
+        """Recommend top-N items among the ones bought by the most similar user"""
 
-        res = []
-
-        # Find top-N similar users
-        similar_users = self.model.similar_users(self.userid_to_id[user], N=N+1)[0].tolist()        
+        # Find the most similar user (N=2) and
+        # eliminate the current user from request
+        similar_user = self.model.similar_users(
+            self.userid_to_id[user], N=2
+        )[0].tolist()[1]
         
-        # Eliminate the current user from request
-        similar_users = similar_users[1:]   
+        res = self.get_own_recommendations(similar_user, N)
 
-        for user in similar_users:
-            res.extend(self.get_own_recommendations(user, N=1))
-
-        res = self._extend_with_top_popular(res, N=N)
+        res = self._extend_with_top_popular(res, N)
         assert len(res) == N, f'The number of recommendations != {N}'
 
         return res
