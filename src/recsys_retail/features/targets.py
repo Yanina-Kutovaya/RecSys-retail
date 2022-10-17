@@ -13,9 +13,7 @@ N_ITEMS = 300
 
 def get_targets_lvl_2(
     users_lvl_2: pd.DataFrame, 
-    data_train_lvl_2: pd.DataFrame,
-    item_features_transformed: pd.DataFrame,  
-    user_features_transformed: pd.DataFrame,
+    data_train_lvl_2: pd.DataFrame,    
     user_item_features:pd.DataFrame,     
     n_items: Optional[int] = None 
     ) -> pd.DataFrame:
@@ -39,12 +37,6 @@ def get_targets_lvl_2(
     targets_lvl_2 = df.merge(targets_lvl_2, on=['user_id', 'item_id'], how='left')
     targets_lvl_2['target'].fillna(0, inplace= True)    
     
-    targets_lvl_2 = targets_lvl_2.merge(
-        item_features_transformed, on='item_id', how='left'
-    )    
-    targets_lvl_2 = targets_lvl_2.merge(
-        user_features_transformed, on='user_id', how='left'
-    )
     targets_lvl_2 = targets_lvl_2.merge(
         user_item_features, on=['user_id', 'item_id'], how='left'
     ).drop_duplicates()
