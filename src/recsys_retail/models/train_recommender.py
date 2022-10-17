@@ -27,9 +27,9 @@ def train_save_recommender(
     logging.info('Training recommender...')           
     recommender = MainRecommender(
         data_train_lvl_1, 
-        n_factors_ALS=100, 
+        n_factors_ALS=50, 
         regularization_ALS=0.001,
-        iterations_ALS=25,
+        iterations_ALS=15,
         num_threads_ALS=4 
     )
 
