@@ -81,9 +81,9 @@ def train_store(dataset: pd.DataFrame, filename: str) -> NoReturn:
                   "objective": "binary", 
                   "metric": "auc",
                   "num_boost_round": 10000,
-                  "learning_rate": 0.01,
+                  "learning_rate": 0.005,
                   "class_weight": 'balanced',
-                  "max_depth": 10,
+                  "max_depth": 15,
                   "n_estimators": 5000,
                   "n_jobs": 6,
                   "seed": 12}    
