@@ -193,8 +193,7 @@ class MainRecommender:
         res = []
 
         # Find top-N similar users
-        similar_users = self.model.similar_users(self.userid_to_id[user], N=N+1)
-        similar_users = [rec[0] for rec in similar_users]
+        similar_users = self.model.similar_users(self.userid_to_id[user], N=N+1)[0].tolist()        
         
         # Eliminate the current user from request
         similar_users = similar_users[1:]   
