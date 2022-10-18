@@ -95,24 +95,3 @@ def fit_transform_user_features(
     X.to_csv(user_features_transformed_path, index=False, compression='zip')    
     
     return X
-
-
-    def transform_user_features(
-        user_features: pd.DataFrame,
-        user_transformer_path: Optional[str] = None,
-        user_features_for_inference_path: Optional[str] = None
-        ) -> pd.DataFrame:
-
-        """
-        Transforms item features for inference.
-        """
-
-        logging.info('Transforming user_features for inference...')
-
-        if user_transformer_path is None:
-            user_transformer_path = USER_TRANSFORMER_PATH
-        user_transformer = load(open(user_transformer_path, 'rb'))
-
-        X = user_transformer.transform(user_features)
-        
-        return X
