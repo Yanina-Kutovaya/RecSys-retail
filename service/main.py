@@ -1,4 +1,4 @@
-"""FastAPI Recommender systen retail model inference"""
+"""FastAPI RecSys-retail model inference"""
 
 import sys
 import os
