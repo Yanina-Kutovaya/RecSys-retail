@@ -17,9 +17,9 @@ def train_save_recommender(
     recommender_path: Optional[str] = None
     ):
     """
-    Generates recommender which will be used for selecting of 
+    Generates recommender which will be used for selecting of a
     long list of items for each user (the 1st stage).
-    On the 2nd stage this long list will be the bases for the further 
+    On the 2nd stage this long list will be the basis for further 
     short list selection with the binary classification model. 
 
     """
