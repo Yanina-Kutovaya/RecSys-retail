@@ -65,7 +65,7 @@ def predict(user_id: int, transaction: Transaction):
         df = preprocess(data)
         predictions = Model.classifier.predict(df)
         results = get_results(data, df, predictions)
-        recommendations = results.loc[results['user_id']==user_id, 'recommendations'].values
+        recommendations = results.loc[results['user_id']==user_id, 'recommendations'].values[0].tolist()
         
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
