@@ -3,3 +3,5 @@ pandas==1.5.1
 implicit==0.6.1
 category_encoders==2.5.1
 lightgbm==3.3.3
+fastapi==0.85.1
+starlette_exporter==0.14.0
