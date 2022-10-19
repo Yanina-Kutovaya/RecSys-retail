@@ -14,8 +14,8 @@ RUN chown -R recsys-retail models
 USER recsys-retail
 
 CMD ["./scripts/train_save_model.py",\
- "-d", "https://storage.yandexcloud.net/recsys-retail-input/train.csv.zip",\
- "-d", "https://storage.yandexcloud.net/recsys-retail-input/item_features.csv",\
- "-d", "https://storage.yandexcloud.net/recsys-retail-input/user_features.csv", \
+ "-d1", "https://storage.yandexcloud.net/recsys-retail-input/train.csv.zip",\
+ "-d2", "https://storage.yandexcloud.net/recsys-retail-input/item_features.csv",\
+ "-d3", "https://storage.yandexcloud.net/recsys-retail-input/user_features.csv", \
  "-o", "LightGBM_v1", \
 "-v"]
