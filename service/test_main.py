@@ -1,3 +1,4 @@
+import logging
 import sys
 import os
 sys.path.append(os.getcwd())
@@ -10,8 +11,8 @@ from src.recsys_retail.models.train import data_preprocessing_pipeline
 
 from main import app, Model 
 
-import findspark
-findspark.init() 
+
+logger = logging.getLogger(__name__)
 
 client = TestClient(app)
 
@@ -20,6 +21,7 @@ def test_healthcheck():
     response = client.get("/")
     assert response.status_code == 200
     assert response.json()["status"] == "Green"
+    logger.info(f'status_code = 200, status = "Green"') 
 
 
 def test_predict():
@@ -44,5 +46,6 @@ def test_predict():
     response = client.post('/predict?user_id=1340', json=transaction)
     assert response.status_code == 200
     
-    assert response.json()['user_id'] == 1340    
+    assert response.json()['user_id'] == 1340
+
     print(f'recommendations = {response.json()["recommendations"]}')
