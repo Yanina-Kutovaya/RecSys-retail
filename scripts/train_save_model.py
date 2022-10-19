@@ -23,21 +23,21 @@ def main():
         '-d',
         '--data_path',
         required=False,
-        default=None,
+        default='https://storage.yandexcloud.net/recsys-retail-input/train.csv.zip',
         help='transactions dataset store path',
     )
     argparser.add_argument(
         '-d',
         '--item_features_path',
         required=False,
-        default=None,
+        default='https://storage.yandexcloud.net/recsys-retail-input/item_features.csv',
         help='item features dataset store path',
     )
     argparser.add_argument(
         '-d',
         '--user_features_path',
         required=False,
-        default=None,
+        default='https://storage.yandexcloud.net/recsys-retail-input/user_features.csv',
         help='user features dataset store path',
     )
     argparser.add_argument(
