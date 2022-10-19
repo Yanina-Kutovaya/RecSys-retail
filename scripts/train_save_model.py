@@ -2,6 +2,10 @@
 """Train and save model for RecSys-retail"""
 
 import sys
+import os
+sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(),'..'))
+
 import logging
 import argparse
 import pandas as pd
@@ -10,6 +14,7 @@ from typing import NoReturn, Optional
 
 from src.recsys_retail.data.make_dataset import load_data
 from src.recsys_retail.data.validation import train_test_split
+from src.recsys_retail.features.targets import get_targets_lvl_2
 from src.recsys_retail.models import train
 from src.recsys_retail.models.serialize import store
 
@@ -20,21 +25,21 @@ logger = logging.getLogger()
 def main():
     argparser = argparse.ArgumentParser(description=__doc__)
     argparser.add_argument(
-        '-d',
+        '-d1',
         '--data_path',
         required=False,
         default='https://storage.yandexcloud.net/recsys-retail-input/train.csv.zip',
         help='transactions dataset store path',
     )
     argparser.add_argument(
-        '-d',
+        '-d2',
         '--item_features_path',
         required=False,
         default='https://storage.yandexcloud.net/recsys-retail-input/item_features.csv',
         help='item features dataset store path',
     )
     argparser.add_argument(
-        '-d',
+        '-d3',
         '--user_features_path',
         required=False,
         default='https://storage.yandexcloud.net/recsys-retail-input/user_features.csv',
