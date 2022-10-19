@@ -1,0 +1,9 @@
+/notebook
+/reports
+/tests
+/include
+*.md
+.git
+.gitignore
+.venv/
+requirements_Colab.txt
