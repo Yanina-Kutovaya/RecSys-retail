@@ -68,7 +68,7 @@ def main():
 def train_store(dataset: pd.DataFrame, filename: str) -> NoReturn:
     """
     Trains and stores LightGBM model.
-    Extention .txt will be added at saving the model.
+    Extention .txt will be added at saving of the model.
     """
     
     X_train, X_valid, y_train, y_valid = train_test_split(dataset)
