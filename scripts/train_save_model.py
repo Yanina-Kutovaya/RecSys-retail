@@ -14,7 +14,6 @@ from typing import NoReturn, Optional
 
 from src.recsys_retail.data.make_dataset import load_data
 from src.recsys_retail.data.validation import train_test_split
-from src.recsys_retail.features.targets import get_targets_lvl_2
 from src.recsys_retail.models import train
 from src.recsys_retail.models.serialize import store
 
@@ -63,7 +62,7 @@ def main():
         args.data_path, args.item_features_path, args.user_features_path
     )
     logging.info('Preprocessing data...')
-    train_dataset_lvl_2 = train.get_train_dataset_lvl_2(
+    train_dataset_lvl_2 = train.data_preprocessing_pipeline(
         data, item_features, user_features
     )
     logging.info('Training the model...')
