@@ -30,6 +30,7 @@ def data_preprocessing_pipeline(
     data: pd.DataFrame, 
     item_features: pd.DataFrame, 
     user_features: pd.DataFrame,
+    data_train_lvl_1_path: Optional[str] = None,
     n_items: Optional[int] = None,
     recommender_path: Optional[str] = None,
     train_dataset_lvl_2_path: Optional[str] = None
@@ -64,9 +65,9 @@ def data_preprocessing_pipeline(
 
     logging.info('Saving preprocessed level 1 train dataset...')
 
-    if train_data_lvl_1_path is None:
-        train_data_lvl_1_path = DATA_TRAIN_LVL_1_PATH
-    data_train_lvl_1.to_csv(train_data_lvl_1_path, index=False, compression='zip')
+    if data_train_lvl_1_path is None:
+        data_train_lvl_1_path = DATA_TRAIN_LVL_1_PATH
+    data_train_lvl_1.to_csv(data_train_lvl_1_path, index=False, compression='zip')
 
     logging.info('Selecting users for level 2 dataset...')
 
