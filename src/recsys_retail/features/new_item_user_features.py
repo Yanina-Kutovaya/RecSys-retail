@@ -109,14 +109,14 @@ def get_embeddings(
     logging.info('Calculating embeddings...')    
 
      # Items embeddings    
-    df1 = recommender.model.item_factors
+    df1 = recommender.model.item_factors.to_numpy()
     n_factors = recommender.model.factors
     ind = list(recommender.id_to_itemid.values())
     df1 = pd.DataFrame(df1, index=ind).reset_index()
     df1.columns = ['item_id'] + ['factor_' + str(i + 1) for i in range(n_factors)]
     
     # Users embeddings
-    df2 = recommender.model.user_factors
+    df2 = recommender.model.user_factors.to_numpy()
     n_users = df2.shape[0]
     ind = list(recommender.id_to_userid.values())[:n_users]
     df2 = pd.DataFrame(df2, index=ind).reset_index()
