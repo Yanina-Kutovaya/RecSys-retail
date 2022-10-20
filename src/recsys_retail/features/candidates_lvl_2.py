@@ -9,19 +9,16 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['getting_candidates_for_level_2']
 
+N_ITEMS = 100
 
-N_ITEMS = 5
-PATH = 'data/04_feature/'
-CANDIDATES_PATH = PATH + 'candidates_lvl_2.csv.zip'
 
 def get_candidates(
     recommender,
     data_train_lvl_1: pd.DataFrame,
     data_val_lvl_1: pd.DataFrame, 
     data_val_lvl_2: Optional[pd.DataFrame] = None, 
-    n_items: Optional[int] = None,
-    candidates_path: Optional[str] = None
-    ):
+    n_items: Optional[int] = None    
+    ) -> pd.DataFrame:
 
     """
     Selects candidates for level 2 with n_items to be recommended
@@ -39,6 +36,8 @@ def get_candidates(
     current_users = list(set(users_valid) & set(users_train))    
     new_users = list(set(users_valid) - set(users_train))
 
+    logging.info('Generating preference list for each user...')
+
     if n_items is None:
         n_items = N_ITEMS
 
@@ -52,8 +51,6 @@ def get_candidates(
         df.loc[cond_2, 'candidates'] = df.loc[cond_2, 'user_id'].apply(
             lambda x: recommender.overall_top_purchases[:n_items]
         )
-    if candidates_path is None:
-        candidates_path = CANDIDATES_PATH
-    df.to_csv(candidates_path, index=False, compression='zip')
+    users_lvl_2 = df
 
-    return df
+    return users_lvl_2
