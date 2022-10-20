@@ -32,21 +32,13 @@ HH_COMP =['Single Male', 'Single Female', '2 Adults No Kids',
 ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
 OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
 
-PATH_1 = 'data/02_intermediate/'
-USER_FEATURES_TRANSFORMED_PATH = PATH_1 + 'user_features_transformed.csv.zip'
-
-PATH_2 = 'data/03_primary/'
-USER_TRANSFORMER_PATH = PATH_2 + 'user_features_transformer_v1.pkl'
-
 
 def fit_transform_user_features(
     user_features: pd.DataFrame,
     ordinal_features = None,
     onehot_features = None,
     ord_categories = None,
-    oh_categories = None,
-    user_transformer_path: Optional[str] = None,
-    user_features_transformed_path: Optional[str] = None
+    oh_categories = None
     ) -> pd.DataFrame:
 
     """
@@ -78,10 +70,7 @@ def fit_transform_user_features(
         (ord_encoder, ordinal_features),
         (oh_encoder, onehot_features)
     )
-    X = user_transformer.fit_transform(user_features)
-    if user_transformer_path is None:
-        user_transformer_path = USER_TRANSFORMER_PATH
-    dump(user_transformer, open(user_transformer_path, 'wb'))
+    X = user_transformer.fit_transform(user_features)   
 
     user_id = user_features['user_id']
     cols = ordinal_features
@@ -89,9 +78,8 @@ def fit_transform_user_features(
         prefix = col + ' '
         cols +=  [prefix + cat for cat in oh_categories[i]]    
 
-    X = pd.DataFrame(X, index=user_id, columns=cols).reset_index()
-    if user_features_transformed_path is None:
-        user_features_transformed_path = USER_FEATURES_TRANSFORMED_PATH
-    X.to_csv(user_features_transformed_path, index=False, compression='zip')    
+    user_features_transformed = pd.DataFrame(
+        X, index=user_id, columns=cols
+    ).reset_index()       
     
-    return X
+    return user_features_transformed
