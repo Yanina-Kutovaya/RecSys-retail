@@ -6,14 +6,11 @@ logger = logging.getLogger(__name__)
 
 __all__ = ['generate_user_item_features']
 
-PATH = 'data/04_feature/'
-USER_ITEM_FEATURES_PATH = PATH + 'user_item_features.csv.zip'
-
 
 def get_user_item_features(
     recommender, 
     data_train_lvl_1: pd.DataFrame,
-    user_item_features_path: Optional[str] = None
+    
     ) -> pd.DataFrame:
 
     """
@@ -97,14 +94,6 @@ def get_user_item_features(
     df1, df2 = get_embeddings(recommender, X)
     user_item_features = user_item_features.merge(df1, on=['item_id'])
     user_item_features = user_item_features.merge(df2, on=['user_id'])
-
-    logging.info('Saving new user-item features...')
-    
-    if user_item_features_path is None:
-        user_item_features_path = USER_ITEM_FEATURES_PATH
-    user_item_features.to_csv(
-        user_item_features_path, index=False, compression='zip'
-    )
     
     return user_item_features
 
