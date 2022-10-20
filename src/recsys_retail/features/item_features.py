@@ -22,21 +22,9 @@ ADD_STOP_WORDS = [
 ]
 CONCAT_LIST = ['commodity_desc', 'sub_commodity_desc']
 
-PATH_1 = 'data/02_intermediate/'
-ITEM_FEATURES_FREQ_ENCODED_PATH = PATH_1 + 'item_features_frequency_encoded.csv.zip'
-ITEM_DESC_VECTORIZED_PATH = PATH_1 + 'item_desc_vectorized.csv.zip'
-ITEM_FEATURES_TRANSFORMED_PATH = PATH_1 + 'item_features_transformed.csv.zip'
-ITEM_FEATURES_FOR_INFERENCE_PATH = PATH_1 + 'item_features_for_inference.csv.zip'
-
-PATH_2 = 'data/03_primary/'
-FREQUENCY_ENCODER_PATH = PATH_2 + 'item_features_frequency_encoder_v1.pkl'
-VECTORIZER_PATH = PATH_2 + 'item_features_vectorizer_v1.pkl'
-
 
 def item_features_frequency_encoder(
-    item_features: pd.DataFrame,
-    frequency_encoder_path: Optional[str] = None,
-    item_features_freq_encoded_path: Optional[str] = None
+    item_features: pd.DataFrame    
     ) -> pd.DataFrame:
     """
     Assumes all the features as categorical and replaces categories
@@ -54,26 +42,20 @@ def item_features_frequency_encoder(
         MinMaxScaler()
     )
     X = frequency_encoder.fit_transform(item_features)
-    if frequency_encoder_path is None:
-        frequency_encoder_path = FREQUENCY_ENCODER_PATH
-    dump(frequency_encoder, open(frequency_encoder_path, 'wb'))
-
-    X = pd.DataFrame(X, index=item_id, columns=cols).reset_index()
-    if item_features_freq_encoded_path is None:
-        item_features_freq_encoded_path = ITEM_FEATURES_FREQ_ENCODED_PATH
-    X.to_csv(item_features_freq_encoded_path, index=False, compression='zip')
+    item_features_frequency_encoded = pd.DataFrame(
+        X, index=item_id, columns=cols
+    ).reset_index()    
     
     item_features.reset_index(inplace=True)
 
-    return X
+    return frequency_encoder, item_features_frequency_encoded
 
 
 def item_features_descriptions_encoder(
     item_features: pd.DataFrame,
     add_stop_words=None,
     concat_list=None,
-    vectorizer_path: Optional[str] = None,
-    item_desc_vectorized_path: Optional[str] = None   
+      
     )-> pd.DataFrame:
     """
     Encodes commodity and sub-commodity descriptions with TF-IDF vectorizer.
@@ -95,21 +77,16 @@ def item_features_descriptions_encoder(
         max_features=500, stop_words=my_stop_words
     )
     X = vectorizer.fit_transform(item_features['item_desc'])
-    if vectorizer_path is None:
-        vectorizer_path = VECTORIZER_PATH
-    dump(vectorizer, open(vectorizer_path, 'wb')) 
+    item_desc_vectorized = pd.DataFrame(
+        X.toarray(), index=item_features['item_id']
+    ).reset_index()           
 
-    X = pd.DataFrame(X.toarray(), index=item_features['item_id']).reset_index()
-    if item_desc_vectorized_path is None:
-        item_desc_vectorized_path = ITEM_DESC_VECTORIZED_PATH    
-    X.to_csv(item_desc_vectorized_path, index=False, compression='zip')       
-
-    return X
+    return item_desc_vectorized
 
     
 def fit_transform_item_features(
     item_features: pd.DataFrame,
-    item_features_transformed_path: Optional[str] = None
+    vectorize_desc = False
     ) -> pd.DataFrame:
     """
     Combines frequency encoding and item descriptions encoding 
@@ -118,48 +95,11 @@ def fit_transform_item_features(
     logging.info('Transforming item_features for train dataset...')
 
     df1 = item_features_frequency_encoder(item_features)
-    df2 = item_features_descriptions_encoder(item_features)
 
-    X = pd.merge(df1, df2, on='item_id', how='left')    
-    if item_features_transformed_path is None:
-        item_features_transformed_path = ITEM_FEATURES_TRANSFORMED_PATH
-    X.to_csv(item_features_transformed_path, index=False, compression='zip')
+    if vectorize_desc:
+        df2 = item_features_descriptions_encoder(item_features)
+        item_features_transformed = pd.merge(df1, df2, on='item_id', how='left')
+    else:
+        item_features_transformed = df1
 
-    return X
-
-
-def transform_item_features(
-    item_features: pd.DataFrame,
-    frequency_encoder_path = None,
-    concat_list = None,
-    vectorizer_path: Optional[str] = None,    
-    item_features_for_inference_path: Optional[str] = None
-    ) -> pd.DataFrame:
-
-    """
-    Transforms item features for inference.       
-    """
-
-    logging.info('Transforming item_features for inference...')
-
-    if frequency_encoder_path is None:
-        frequency_encoder_path = FREQUENCY_ENCODER_PATH
-    frequency_encoder = load(open(frequency_encoder_path, 'rb'))
-    df1 = frequency_encoder.transform(item_features)
-
-    if concat_list is None:
-        concat_list = CONCAT_LIST
-    item_features.loc[:, 'item_desc'] = item_features.loc[:, concat_list].apply(
-        lambda x: ' '.join(x).replace("/", " ").replace("-", " "), axis=1
-    )
-    if vectorizer_path is None:
-        vectorizer_path = VECTORIZER_PATH
-    vectorizer = load(open(vectorizer_path, 'rb'))
-    df2 = vectorizer.transform(item_features['item_desc'])
-
-    X = pd.merge(df1, df2, on='item_id', how='left')
-    if item_features_for_inference_path is None:
-        item_features_for_inference_path = ITEM_FEATURES_FOR_INFERENCE_PATH
-    X.to_csv(item_features_for_inference_path, index=False, compression='zip')
-
-    return X
+    return item_features_transformed 
