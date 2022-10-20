@@ -1,2 +1,4 @@
 implicit==0.6.1
 category-encoders==2.5.1.post0
+fastapi==0.85.1
+starlette_exporter==0.14.0
