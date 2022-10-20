@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+import joblib
 from pickle import dump
 from typing import Optional
 
@@ -8,32 +9,37 @@ from src.recsys_retail.features.data_time_split import time_split
 from src.recsys_retail.features.prefilter import prefilter_items
 from src.recsys_retail.features.user_features import fit_transform_user_features
 from src.recsys_retail.features.item_features import fit_transform_item_features
-from src.recsys_retail.models.train_recommender import train_save_recommender
+from src.recsys_retail.features.recommenders import MainRecommender
 from src.recsys_retail.features.candidates_lvl_2 import get_candidates
 from src.recsys_retail.features.new_item_user_features import get_user_item_features
 from src.recsys_retail.features.targets import get_targets_lvl_2
-
+from src.recsys_retail.models.save_artifacts import (
+    save_time_split,
+    save_prefiltered_data,        
+    save_item_featutes,
+    save_user_features,
+    save_preprocessed_lvl_1_train_dataset,
+    save_recommender,
+    save_candidates,
+    save_user_item_features,
+    save_train_dataset_lvl_2   
+)
 
 logger = logging.getLogger(__name__)
 
 __all__ = ['preprocess_data']
 
-PATH_1 = 'data/02_intermediate/'
-DATA_TRAIN_LVL_1_PATH = PATH_1 + 'data_train_lvl_1_preprocessed.csv.zip'
-
+N_FACTORS_ALS = 50
 N_ITEMS = 100
-PATH_2 = 'data/05_model_input/'
-TRAIN_DATASET_LVL_2_PATH = PATH_2 + 'train_dataset_lvl_2.csv.zip'
 
 
 def data_preprocessing_pipeline(
     data: pd.DataFrame, 
     item_features: pd.DataFrame, 
     user_features: pd.DataFrame,
-    data_train_lvl_1_path: Optional[str] = None,
+    n_factors_ALS: Optional[int] = None,
     n_items: Optional[int] = None,
-    recommender_path: Optional[str] = None,
-    train_dataset_lvl_2_path: Optional[str] = None
+    save_artifacts = False
     ) -> pd.DataFrame:
 
     """
@@ -61,26 +67,31 @@ def data_preprocessing_pipeline(
     item_features_transformed = fit_transform_item_features(item_features)
     data_train_lvl_1 = pd.merge(
         data_train_lvl_1, item_features_transformed, on='item_id', how='left'
+    )  
+    logging.info('Training recommender...')
+    
+    if n_factors_ALS is None:
+        n_factors_ALS = N_FACTORS_ALS 
+
+    recommender = MainRecommender(
+        data_train_lvl_1, 
+        n_factors_ALS=n_factors_ALS, 
+        regularization_ALS=0.001,
+        iterations_ALS=15,
+        num_threads_ALS=4
     )
-
-    logging.info('Saving preprocessed level 1 train dataset...')
-
-    if data_train_lvl_1_path is None:
-        data_train_lvl_1_path = DATA_TRAIN_LVL_1_PATH
-    data_train_lvl_1.to_csv(data_train_lvl_1_path, index=False, compression='zip')
 
     logging.info('Selecting users for level 2 dataset...')
 
-    recommender = train_save_recommender(data_train_lvl_1)
-
     if n_items is None:
         n_items = N_ITEMS
+
     users_lvl_2 = get_candidates(
         recommender, data_train_lvl_1, data_train_lvl_2, data_val_lvl_2, n_items
     )
-    logging.info('Generating new user-item features...') 
+    logging.info('Generating new user-item features for level 2 model...') 
 
-    user_item_features = get_user_item_features(recommender, data_train_lvl_1)       
+    user_item_features = get_user_item_features(recommender, data_train_lvl_1)
     
     logging.info('Generating train dataset for level 2 model...')
 
@@ -92,12 +103,16 @@ def data_preprocessing_pipeline(
         user_item_features, 
         n_items
     )
-    logging.info('Saving train dataset for level 2 model...')
 
-    if train_dataset_lvl_2_path is None:
-        train_dataset_lvl_2_path = TRAIN_DATASET_LVL_2_PATH
-    train_dataset_lvl_2.to_csv(
-        train_dataset_lvl_2_path, index=False, compression='zip'
-    )
+    if save_artifacts:
+        save_time_split(data_train_lvl_1, data_train_lvl_2, data_val_lvl_2)
+        save_prefiltered_data(data)        
+        save_item_featutes(item_features_transformed)
+        save_user_features(user_features_transformed)
+        save_preprocessed_lvl_1_train_dataset(data_train_lvl_1)
+        save_recommender(recommender)
+        save_candidates(users_lvl_2)
+        save_user_item_features(user_item_features)
+        save_train_dataset_lvl_2(train_dataset_lvl_2)
 
     return train_dataset_lvl_2
