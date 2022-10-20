@@ -48,7 +48,7 @@ def item_features_frequency_encoder(
     
     item_features.reset_index(inplace=True)
 
-    return frequency_encoder, item_features_frequency_encoded
+    return item_features_frequency_encoded
 
 
 def item_features_descriptions_encoder(
