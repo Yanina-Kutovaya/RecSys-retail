@@ -39,7 +39,8 @@ def data_preprocessing_pipeline(
     user_features: pd.DataFrame,
     n_factors_ALS: Optional[int] = None,
     n_items: Optional[int] = None,
-    save_artifacts = False
+    save_artifacts = False,
+    save_artifacts_yc = True
     ) -> pd.DataFrame:
 
     """
@@ -113,6 +114,6 @@ def data_preprocessing_pipeline(
         save_recommender(recommender)
         save_candidates(users_lvl_2)
         save_user_item_features(user_item_features)
-        save_train_dataset_lvl_2(train_dataset_lvl_2)
+        save_train_dataset_lvl_2(train_dataset_lvl_2)    
 
     return train_dataset_lvl_2
