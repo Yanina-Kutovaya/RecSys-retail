@@ -1,6 +1,5 @@
 import logging
 import pandas as pd
-import joblib
 from pickle import dump
 from typing import Optional
 
@@ -87,7 +86,7 @@ def data_preprocessing_pipeline(
         n_items = N_ITEMS
 
     users_lvl_2 = get_candidates(
-        recommender, data_train, data_valid, n_items
+        recommender, data_train, data_valid, n_items=n_items
     )
     logging.info('Generating new user-item features for level 2 model...') 
 
