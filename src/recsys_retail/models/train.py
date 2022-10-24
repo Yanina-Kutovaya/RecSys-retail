@@ -53,7 +53,7 @@ def data_preprocessing_pipeline(
     """
 
     logging.info('Splitting dataset for level 1, level 2 preprocessing...')
-    data_train_lvl_1, data_train_lvl_2, data_val_lvl_2 = time_split(data)
+    data_train_lvl_1, data_train_lvl_2, data_val_lvl_2 = time_split_2(data)
 
     logging.info('Prefiltering transactions data...')
     data = prefilter_items(data, item_features)
