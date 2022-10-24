@@ -9,16 +9,17 @@ logger = logging.getLogger()
 YC_BACKET = 's3a://recsys-retail/'
 
 FOLDER_1 = 'data/01_raw/'
-TRAIN_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_1 + 'data_train.csv.zip'
-VALID_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_1 + 'data_valid.csv.zip'
-VALID_DATA_LEVEL_2_PATH = YC_BACKET + FOLDER_1 + 'data_test.csv.zip'
+PREFILTERED_DATA_PATH = YC_BACKET + FOLDER_1 + 'data_prefiltered.csv.zip'
 
 FOLDER_2 = 'data/02_intermediate/'
-PREFILTERED_TRAIN_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_2 + 'data_train_lvl_1_prefiltered.csv.zip'
-ITEM_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_2 + 'item_features_transformed.csv.zip'
-USER_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_2 + 'user_features_transformed.csv.zip'
+TRAIN_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_2 + 'data_train.csv.zip'
+VALID_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_2 + 'data_valid.csv.zip'
+VALID_DATA_LEVEL_2_PATH = YC_BACKET + FOLDER_2 + 'data_test.csv.zip'
+
 
 FOLDER_3 = 'data/03_primary/'
+ITEM_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_3 + 'item_features_transformed.csv.zip'
+USER_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_3 + 'user_features_transformed.csv.zip'
 DATA_TRAIN_LVL_1_PATH = YC_BACKET + FOLDER_3 + 'data_train_lvl_1_preprocessed.csv.zip'
 
 FOLDER_4 = 'data/04_feature/'
@@ -30,6 +31,18 @@ TRAIN_DATASET_LVL_2_PATH = YC_BACKET + FOLDER_5 + 'train_dataset_lvl_2.csv.zip'
 
 FOLDER_6 = 'models/'
 RECOMMENDER_PATH = YC_BACKET + FOLDER_6 + 'recommender_v1'
+
+
+def save_prefiltered_data(
+    data: pd.DataFrame,
+    prefilted_data_path: Optional[str] = None
+    ) -> NoReturn:
+
+    logging.info('Saving prefiltered data...') 
+
+    if prefilted_data_path is None:
+        prefilted_data_path = PREFILTERED_DATA_PATH
+    data.to_csv(prefilted_data_path, index=False, compression='zip')
 
 
 def save_time_split(
@@ -60,17 +73,6 @@ def save_time_split(
             valid_data_level_2_path, index=False, compression='zip'
         )
 
-
-def save_prefiltered_data(
-    data: pd.DataFrame,
-    prefilted_train_data_lvl_1_path: Optional[str] = None
-    ) -> NoReturn:
-
-    logging.info('Saving prefiltered data...') 
-
-    if prefilted_train_data_lvl_1_path is None:
-        prefilted_train_data_lvl_1_path = PREFILTERED_TRAIN_DATA_LEVEL_1_PATH
-    data.to_csv(prefilted_train_data_lvl_1_path, index=False, compression='zip')
 
 
 def save_item_featutes(
