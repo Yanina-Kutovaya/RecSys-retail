@@ -5,7 +5,7 @@ from pickle import dump
 from typing import Optional
 
 from src.recsys_retail.data.make_dataset import load_data
-from src.recsys_retail.features.data_time_split import time_split
+from src.recsys_retail.features.data_time_split import time_split_2
 from src.recsys_retail.features.prefilter import prefilter_items
 from src.recsys_retail.features.user_features import fit_transform_user_features
 from src.recsys_retail.features.item_features import fit_transform_item_features
