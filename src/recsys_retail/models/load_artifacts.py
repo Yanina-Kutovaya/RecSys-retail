@@ -28,7 +28,7 @@ def load_inference_artifacts(
 
     if prefiltered_data_path is None:
         prefiltered_data_path = path + PREFILTERED_DATA_PATH
-    prefiltered_data = pd.read_csv(prefiltered_data_path)
+    prefiltered_data = pd.read_parquet(prefiltered_data_path)
 
     if recommender_path is None:
         recommender_path = path + RECOMMENDER_PATH
@@ -36,15 +36,15 @@ def load_inference_artifacts(
 
     if user_features_transformed_path is None:
         user_features_transformed_path = path + USER_FEATURES_TRANSFORMED_PATH
-    user_features_transformed = pd.read_csv(user_features_transformed_path)
+    user_features_transformed = pd.read_parquet(user_features_transformed_path)
 
     if item_features_transformed_path is None:
         item_features_transformed_path = path + ITEM_FEATURES_TRANSFORMED_PATH
-    item_features_transformed = pd.read_csv(item_features_transformed_path)
+    item_features_transformed = pd.read_parquet(item_features_transformed_path)
 
     if user_item_features_path is None:
         user_item_features_path = path + USER_ITEM_FEATURES_PATH
-    user_item_features = pd.read_csv(user_item_features_path)
+    user_item_features = pd.read_parquet(user_item_features_path)
 
-    return (recommender, user_features_transformed, 
-            item_features_transformed, user_item_features) 
+    return (prefiltered_data, recommender, user_features_transformed, 
+    item_features_transformed, user_item_features) 
