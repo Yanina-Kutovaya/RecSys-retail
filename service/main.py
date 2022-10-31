@@ -49,9 +49,7 @@ def predict(user_id: int, transaction: Transaction):
         raise HTTPException(status_code=503, detail='No model loaded')
     try:        
         df = preprocess(transaction)
-        predictions = Model.classifier.predict(
-            df.drop('target', axis=1).fillna(0)
-        )
+        predictions = Model.classifier.predict(df)
         results = get_recommendations(df, predictions)        
         recs = results.loc[0, :].to_json()                
     except Exception as e:
