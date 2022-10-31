@@ -7,31 +7,31 @@ __all__ = ['save_artifacts']
 
 logger = logging.getLogger()
 
-YC_BACKET = 's3a://recsys-retail/'
+PATH = '../'
 
 FOLDER_1 = 'data/01_raw/'
-PREFILTERED_DATA_PATH = YC_BACKET + FOLDER_1 + 'data_prefiltered.csv.zip'
+PREFILTERED_DATA_PATH = PATH + FOLDER_1 + 'data_prefiltered.csv.zip'
 
 FOLDER_2 = 'data/02_intermediate/'
-TRAIN_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_2 + 'data_train.csv.zip'
-VALID_DATA_LEVEL_1_PATH = YC_BACKET + FOLDER_2 + 'data_valid.csv.zip'
-VALID_DATA_LEVEL_2_PATH = YC_BACKET + FOLDER_2 + 'data_test.csv.zip'
+TRAIN_DATA_LEVEL_1_PATH = PATH + FOLDER_2 + 'data_train.csv.zip'
+VALID_DATA_LEVEL_1_PATH = PATH + FOLDER_2 + 'data_valid.csv.zip'
+VALID_DATA_LEVEL_2_PATH = PATH + FOLDER_2 + 'data_test.csv.zip'
 
 
 FOLDER_3 = 'data/03_primary/'
-ITEM_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_3 + 'item_features_transformed.csv.zip'
-USER_FEATURES_TRANSFORMED_PATH = YC_BACKET + FOLDER_3 + 'user_features_transformed.csv.zip'
-DATA_TRAIN_LVL_1_PATH = YC_BACKET + FOLDER_3 + 'data_train_lvl_1_preprocessed.csv.zip'
+ITEM_FEATURES_TRANSFORMED_PATH = PATH + FOLDER_3 + 'item_features_transformed.csv.zip'
+USER_FEATURES_TRANSFORMED_PATH = PATH + FOLDER_3 + 'user_features_transformed.csv.zip'
+DATA_TRAIN_LVL_1_PATH = PATH + FOLDER_3 + 'data_train_lvl_1_preprocessed.csv.zip'
 
 FOLDER_4 = 'data/04_feature/'
-CANDIDATES_PATH = YC_BACKET + FOLDER_4 + 'candidates_lvl_2.csv.zip'
-USER_ITEM_FEATURES_PATH = YC_BACKET + FOLDER_4 + 'user_item_features.csv.zip'
+CANDIDATES_PATH = PATH + FOLDER_4 + 'candidates_lvl_2.csv.zip'
+USER_ITEM_FEATURES_PATH = PATH + FOLDER_4 + 'user_item_features.csv.zip'
 
 FOLDER_5 = 'data/05_model_input/'
-TRAIN_DATASET_LVL_2_PATH = YC_BACKET + FOLDER_5 + 'train_dataset_lvl_2.csv.zip'
+TRAIN_DATASET_LVL_2_PATH = PATH + FOLDER_5 + 'train_dataset_lvl_2.csv.zip'
 
 FOLDER_6 = 'models/'
-RECOMMENDER_PATH = YC_BACKET + FOLDER_6 + 'recommender_v1'
+RECOMMENDER_PATH = PATH + FOLDER_6 + 'recommender_v1'
 
 
 def save_prefiltered_data(
