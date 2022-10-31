@@ -11,7 +11,6 @@ from typing import Optional
 
 from fastapi import FastAPI, HTTPException
 from starlette_exporter import PrometheusMiddleware, handle_metrics
-from pydantic import BaseModel
 
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.models.inference_tools import preprocess
@@ -28,11 +27,7 @@ MODEL = os.getenv("MODEL", default='LightGBM_v1')
 class Model:
     classifier = None
 
-
-class Transaction(BaseModel):
-    user_id: int     
-
-
+ 
 @app.on_event('startup')
 def load_model():
     Model.classifier = load(MODEL)
@@ -44,14 +39,14 @@ def read_healthcheck():
 
 
 @app.post('/predict')
-def predict(user_id: int, transaction: Transaction):
+def predict(user_id: int):
     if Model.classifier is None:
         raise HTTPException(status_code=503, detail='No model loaded')
     try:        
-        df = preprocess(transaction)
+        df = preprocess(user_id)
         predictions = Model.classifier.predict(df)
         results = get_recommendations(df, predictions)        
-        recs = {results['user_id'][0]: results['recommendations'][0].tolist()}                
+        recs = {results['user_id'][0]: results['recommendations'][0].tolist()}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
         
