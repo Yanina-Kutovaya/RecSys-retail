@@ -51,7 +51,7 @@ def predict(user_id: int, transaction: Transaction):
         df = preprocess(transaction)
         predictions = Model.classifier.predict(df)
         results = get_recommendations(df, predictions)        
-        recs = results.loc[0, :].to_json()                
+        recs = {results['user_id'][0]: results['recommendations'][0].tolist()}                
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
         
