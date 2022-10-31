@@ -16,7 +16,7 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
 
     if not user_list:
         user_ids = [user_ids]
-    df = pd.DataFrame(user_ids, index=range(len(user_id)), columns=['user_id'])
+    df = pd.DataFrame(user_ids, index=range(len(user_ids)), columns=['user_id'])
 
     users_inference = get_candidates(
         recommender, prefiltered_data, df, n_items=N_ITEMS
