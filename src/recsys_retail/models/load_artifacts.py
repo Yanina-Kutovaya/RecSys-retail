@@ -5,11 +5,11 @@ from typing import Optional, Tuple
 
 PATH = '../'
 
-PREFILTERED_DATA_PATH = 'data/01_raw/data_prefiltered.csv.zip'
+PREFILTERED_DATA_PATH = 'data/01_raw/data_prefiltered.parquet.gzip'
 RECOMMENDER_PATH = 'models/recommender_v1'
-USER_FEATURES_TRANSFORMED_PATH = 'data/03_primary/user_features_transformed.csv.zip'
-ITEM_FEATURES_TRANSFORMED_PATH = 'data/03_primary/item_features_transformed.csv.zip'
-USER_ITEM_FEATURES_PATH = 'data/04_feature/user_item_features.csv.zip'
+USER_FEATURES_TRANSFORMED_PATH = 'data/03_primary/user_features_transformed.parquet.gzip'
+ITEM_FEATURES_TRANSFORMED_PATH = 'data/03_primary/item_features_transformed.parquet.gzip'
+USER_ITEM_FEATURES_PATH = 'data/04_feature/user_item_features.parquet.gzip'
 
 def load_inference_artifacts(
     path: Optional[str] = None,
