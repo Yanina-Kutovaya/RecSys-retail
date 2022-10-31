@@ -53,28 +53,33 @@ def predict(user_id: int, user: User):
     if Model.classifier is None:
         raise HTTPException(status_code=503, detail='No model loaded')
     try:
-        user_id = jsonable_encoder(user)['user_id']       
-        df = preprocess(user_id)
+        id_ = jsonable_encoder(user)['user_id']       
+        df = preprocess(id_)
         predictions = Model.classifier.predict(df)
-        results = get_recommendations(df, predictions)        
-        recs = {results['user_id'][0]: results['recommendations'][0].tolist()}
+        results = get_recommendations(df, predictions)
+        recs = results['recommendations'][0].tolist()
+        recs_dict = {id_: recs}      
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
         
-    return {'user_id': user_id, 'recommendations': recs}
+    return {'user_id': id_}, recs_dict
 
 
 @app.post('/predict_user_list')
-def predict(user_ids: list, users: Users):
+def predict_user_list(batch_id: int, users: Users):
     if Model.classifier is None:
         raise HTTPException(status_code=503, detail='No model loaded')
     try:
-        user_ids = jsonable_encoder(users)['user_ids']        
-        df = preprocess(user_ids, user_list=True)
+        ids_ = jsonable_encoder(users)['user_ids']       
+        df = preprocess(ids_, user_list=True)
         predictions = Model.classifier.predict(df)
-        results = get_recommendations(df, predictions)        
-        recs = {results['user_id']: results['recommendations'].tolist()}
+        results = get_recommendations(df, predictions).set_index('user_id')        
+        recs = results.loc[:, 'recommendations']
+        recs_dict = {}
+        for id in ids_:
+          recs_dict[id] = recs[id].tolist()
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
         
-    return {'user_ids': user_ids, 'recommendations': recs}
+    return {'user_ids': ids_}, recs_dict
