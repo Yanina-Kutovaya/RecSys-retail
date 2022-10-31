@@ -27,6 +27,6 @@ def preprocess(transaction: dict) -> pd.DataFrame:
         n_items=N_ITEMS
     )
 
-    return train_dataset_lvl_2
+    return train_dataset_lvl_2.drop('target', axis=1).fillna(0)
 
         
