@@ -14,8 +14,8 @@ from starlette_exporter import PrometheusMiddleware, handle_metrics
 from pydantic import BaseModel
 
 from src.recsys_retail.models.serialize import load
-from src.recsys_retail.models.inference_data import preprocess
-from src.recsys_retail.metrics import get_results
+from src.recsys_retail.models.inference_tools import preprocess
+from src.recsys_retail.metrics import get_recommendations
 
 
 app = FastAPI()
@@ -30,18 +30,7 @@ class Model:
 
 
 class Transaction(BaseModel):
-    user_id: int
-    basket_id: int
-    day: int
-    item_id: int	
-    quantity: int	
-    sales_value: float	
-    store_id: int	
-    retail_disc: float	
-    trans_time: int	
-    week_no: int	
-    coupon_disc: Optional[float] = None	
-    coupon_match_disc: Optional[float] = None 
+    user_id: int     
 
 
 @app.on_event('startup')
@@ -56,17 +45,14 @@ def read_healthcheck():
 
 @app.post('/predict')
 def predict(user_id: int, transaction: Transaction):
-    data = pd.DataFrame([transaction.dict()])
-    data.fillna(value=np.nan, inplace=True, downcast=False)   
-
     if Model.classifier is None:
         raise HTTPException(status_code=503, detail='No model loaded')
     try:        
-        df = preprocess(data)
+        df = preprocess(transaction)
         predictions = Model.classifier.predict(df)
-        results = get_results(data, df, predictions)
-        recommendations = results.loc[results['user_id']==user_id, 'recommendations'].values[0].tolist()
-        
+        results = get_recommendations(df, predictions)        
+        recs = result.loc[0, :].to_json()                
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-    return {'user_id': user_id, 'recommendations': recommendations}
+        
+    return {'user_id': user_id, 'recommendations': recs}
