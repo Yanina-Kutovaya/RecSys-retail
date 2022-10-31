@@ -53,7 +53,7 @@ def predict(user_id: int, transaction: Transaction):
             df.drop('target', axis=1).fillna(0)
         )
         results = get_recommendations(df, predictions)        
-        recs = result.loc[0, :].to_json()                
+        recs = results.loc[0, :].to_json()                
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
         
