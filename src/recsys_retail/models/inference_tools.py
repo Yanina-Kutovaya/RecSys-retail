@@ -6,17 +6,20 @@ from src.recsys_retail.features.targets import get_targets_lvl_2
 N_ITEMS = 100
 
 
-def preprocess(transaction: dict) -> pd.DataFrame:
+def preprocess(user_id) -> pd.DataFrame:
     """
-    Preprocessed user_id (transaction) for inference 
+    Preprocesses user_id  for inference 
     
     """
     (prefiltered_data, recommender, user_features_transformed, 
     item_features_transformed, user_item_features) = load_inference_artifacts()
 
-    transaction = pd.DataFrame(transaction, index=[0])
+    if not type(user_id) == list:
+        user_id = [user_id]
+    df = pd.DataFrame(user_id, index=range(len(user_id)), columns=['user_id'])
+        
     users_inference = get_candidates(
-        recommender, prefiltered_data, transaction, n_items=N_ITEMS
+        recommender, prefiltered_data, df, n_items=N_ITEMS
     )
     train_dataset_lvl_2 = get_targets_lvl_2(
         users_inference, 
