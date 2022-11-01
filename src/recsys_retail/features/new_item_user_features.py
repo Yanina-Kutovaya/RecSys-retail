@@ -25,7 +25,8 @@ def get_user_item_features(
     5.The number of stores which were selling the item
     6.The number of unique item bought by the user
     7.The number of user transactions
-    8.Mean / max / std of the number of unique items in the user basket    
+    8.Mean / max / std of the number of unique items in the user basket
+    9.Embeddings    
     """
 
     logging.info('Generating new user-item features...')
@@ -88,14 +89,16 @@ def get_user_item_features(
     df3 = df.groupby('user_id')['item_id'].std().reset_index()
     df3.columns = ['user_id', 'std_n_items_basket']
     user_item_features = user_item_features.merge(df3, on=['user_id'])
-    
+
+    # 9 Embeddings
+    df1, df2 = get_embeddings(recommender)
+    user_item_features = user_item_features.merge(df1, on=['item_id'])
+    user_item_features = user_item_features.merge(df2, on=['user_id'])
+
     return user_item_features
 
 
-def get_embeddings(
-    recommender, 
-    X: pd.DataFrame
-    ) -> Tuple[pd.DataFrame, pd.DataFrame]:
+def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
     Generates embeddings from recommender item factors and user factors
     and merges them with the data for model training.
@@ -121,8 +124,4 @@ def get_embeddings(
     df2 = pd.DataFrame(df2, index=ind).reset_index()
     df2.columns = ['user_id'] + ['user_factor_' + str(i + 1) for i in range(n_factors)]
 
-     # Merge    
-    X = X.merge(df1, on=['item_id'])
-    X = X.merge(df2, on=['user_id'])
-
-    return X
+    return df1, df2
