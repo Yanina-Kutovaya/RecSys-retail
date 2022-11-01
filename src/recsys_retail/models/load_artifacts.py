@@ -28,7 +28,7 @@ def load_inference_artifacts(
 
     if data_valid_path is None:
         data_valid_path = path + DATA_VALID_PATH
-    data_valid = pd.read_parquet(prefiltered_data_path)
+    data_valid = pd.read_parquet(data_valid_path)
 
     if recommender_path is None:
         recommender_path = path + RECOMMENDER_PATH
