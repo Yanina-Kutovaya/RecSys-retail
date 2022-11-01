@@ -5,7 +5,7 @@ from typing import Optional, Tuple
 
 PATH = '../'
 
-PREFILTERED_DATA_PATH = 'data/01_raw/data_prefiltered.parquet.gzip'
+DATA_VALID_PATH = 'data/02_intermediate/data_valid.parquet.gzip'
 RECOMMENDER_PATH = 'models/recommender_v1'
 USER_FEATURES_TRANSFORMED_PATH = 'data/03_primary/user_features_transformed.parquet.gzip'
 ITEM_FEATURES_TRANSFORMED_PATH = 'data/03_primary/item_features_transformed.parquet.gzip'
@@ -13,7 +13,7 @@ USER_ITEM_FEATURES_PATH = 'data/04_feature/user_item_features.parquet.gzip'
 
 def load_inference_artifacts(
     path: Optional[str] = None,
-    prefiltered_data_path: Optional[str] = None,    
+    data_valid_path: Optional[str] = None,    
     recommender_path: Optional[str] = None,
     user_features_transformed_path: Optional[str] = None,
     item_features_transformed_path: Optional[str] = None,
@@ -26,9 +26,9 @@ def load_inference_artifacts(
     if path is None:
         path = PATH
 
-    if prefiltered_data_path is None:
-        prefiltered_data_path = path + PREFILTERED_DATA_PATH
-    prefiltered_data = pd.read_parquet(prefiltered_data_path)
+    if data_valid_path is None:
+        data_valid_path = path + DATA_VALID_PATH
+    data_valid = pd.read_parquet(prefiltered_data_path)
 
     if recommender_path is None:
         recommender_path = path + RECOMMENDER_PATH
@@ -46,5 +46,5 @@ def load_inference_artifacts(
         user_item_features_path = path + USER_ITEM_FEATURES_PATH
     user_item_features = pd.read_parquet(user_item_features_path)
 
-    return (prefiltered_data, recommender, user_features_transformed, 
+    return (data_valid, recommender, user_features_transformed, 
     item_features_transformed, user_item_features) 
