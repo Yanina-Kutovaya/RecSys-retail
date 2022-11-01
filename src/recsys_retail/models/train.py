@@ -11,7 +11,9 @@ from src.recsys_retail.features.user_features import fit_transform_user_features
 from src.recsys_retail.features.item_features import fit_transform_item_features
 from src.recsys_retail.features.recommenders import MainRecommender
 from src.recsys_retail.features.candidates_lvl_2 import get_candidates
-from src.recsys_retail.features.new_item_user_features import get_user_item_features
+from src.recsys_retail.features.new_item_user_features import (
+    get_user_item_features, get_embeddings
+)
 from src.recsys_retail.features.targets import get_targets_lvl_2
 from src.recsys_retail.models.save_artifacts import (
     save_time_split,
@@ -103,7 +105,9 @@ def data_preprocessing_pipeline(
         user_item_features, 
         n_items
     )
-
+    train_dataset_lvl_2 = get_embeddings(
+    recommender, train_dataset_lvl_2
+    )
     if save_artifacts:
         save_prefiltered_data(data)
         save_time_split(data_train, data_valid)                
