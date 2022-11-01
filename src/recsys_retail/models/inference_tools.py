@@ -11,7 +11,7 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
     Preprocesses user_id  for inference 
     
     """
-    (prefiltered_data, recommender, user_features_transformed, 
+    (data_valid, recommender, user_features_transformed, 
     item_features_transformed, user_item_features) = load_inference_artifacts()
 
     if not user_list:
@@ -23,7 +23,7 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
     )
     train_dataset_lvl_2 = get_targets_lvl_2(
         users_inference, 
-        prefiltered_data,
+        data_valid,
         item_features_transformed, 
         user_features_transformed,     
         user_item_features, 
