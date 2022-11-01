@@ -20,7 +20,7 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
     df = pd.DataFrame(user_ids, index=range(len(user_ids)), columns=['user_id'])
 
     users_inference = get_candidates(
-        recommender, prefiltered_data, df, n_items=N_ITEMS
+        recommender, data_valid, df, n_items=N_ITEMS
     )
     train_dataset_lvl_2 = get_targets_lvl_2(
         users_inference, 
