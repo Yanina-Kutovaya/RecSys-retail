@@ -100,8 +100,7 @@ def get_user_item_features(
 
 def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Generates embeddings from recommender item factors and user factors
-    and merges them with the data for model training.
+    Generates embeddings from recommender item factors and user factors.
     """
 
     logging.info('Calculating embeddings...')    
