@@ -6,9 +6,9 @@ COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
-RUN pip install --no-cache-dir -e .recsys-retail
+RUN pip install --no-cache-dir -e .
 
-RUN useradd --user-group --shell /bin/false   
+RUN useradd --user-group --shell /bin/false recsys-retail  
 USER recsys-retail
 
 EXPOSE 8000
@@ -16,4 +16,3 @@ EXPOSE 8000
 ENV MODEL "LightGBM_v1"
 
 CMD ["bash", "start.sh"]
-
