@@ -1,6 +1,7 @@
 # Data and model folders
 /data/
 /models/
+/include/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
