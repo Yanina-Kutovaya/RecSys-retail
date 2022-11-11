@@ -1,5 +1,5 @@
 # First stage - train model
-FROM python:3.8.11-slim AS trainer
+FROM python:3.10.8-slim-buster AS trainer
 
 WORKDIR /usr/src/app
 
@@ -16,7 +16,7 @@ RUN ./scripts/train_save_model.py,\
  -o, LightGBM_v1, -v
 
 # Second stage - create service and get model from previous stage
-FROM python:3.8.11-slim
+FROM python:3.10.8-slim-buster
 
 WORKDIR /usr/src/app
 
