@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  recsys-retail:
+    image: kutovaiayp/recsys-retail:service_v1
+    expose:
+      - 8000
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fastapi.rule=Host('recsys.retail.com')"
+      - "traefik.http.routers.fastapi.tls=true"
+      - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
+
+  traefik:
+    build: docker/traefik
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+
