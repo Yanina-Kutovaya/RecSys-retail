@@ -7,7 +7,7 @@ services:
       - 8000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host('localhost')"
+      - "traefik.http.routers.fastapi.rule=Host(`localhost`)"
 
   traefik:
     image: traefik:v2.9
