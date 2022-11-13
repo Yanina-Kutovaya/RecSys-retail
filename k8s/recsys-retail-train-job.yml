@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: recsys-retail-train
+spec:
+  template:
+    spec:
+      containers:
+      - name: recsys-retail-train
+        image: kutovaiayp/recsys-retail:train_v1
+        command: ["./scripts/train_save_model.py", "-m", "make_baseline_model", "-o", "baseline.v1", "-v"]
+      restartPolicy: Never

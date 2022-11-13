@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: recsys-retail-service
+spec:
+  selector:
+    app: recsys-retail
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8000
