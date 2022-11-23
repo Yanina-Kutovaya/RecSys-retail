@@ -108,7 +108,7 @@ def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Items embeddings    
     df1 = recommender.model.item_factors
     if not type(df1) is np.ndarray:
-        df1.to_numpy()
+        df1 = df1.to_numpy()
     n_factors = df1.shape[1]
     ind = list(recommender.id_to_itemid.values())
     df1 = pd.DataFrame(df1, index=ind).reset_index()
@@ -117,7 +117,7 @@ def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     # Users embeddings
     df2 = recommender.model.user_factors
     if not type(df2) is np.ndarray:
-        df2.to_numpy()
+        df2 = df2.to_numpy()
     n_users = df2.shape[0]
     ind = list(recommender.id_to_userid.values())[:n_users]
     df2 = pd.DataFrame(df2, index=ind).reset_index()
