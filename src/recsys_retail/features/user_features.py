@@ -73,7 +73,7 @@ def fit_transform_user_features(
     X = user_transformer.fit_transform(user_features)   
 
     user_id = user_features['user_id']
-    cols = ordinal_features
+    cols = ordinal_features.copy()
     for i, col in enumerate(onehot_features):
         prefix = col + ' '
         cols +=  [prefix + cat for cat in oh_categories[i]]    
