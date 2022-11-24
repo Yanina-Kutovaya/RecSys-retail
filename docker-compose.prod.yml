@@ -7,7 +7,7 @@ services:
       - 8000
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.fastapi.rule=Host('recsys.retail.com')"
+      - "traefik.http.routers.fastapi.rule=Host(`sczl.ru`)"
       - "traefik.http.routers.fastapi.tls=true"
       - "traefik.http.routers.fastapi.tls.certresolver=letsencrypt"
 
