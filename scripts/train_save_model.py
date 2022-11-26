@@ -7,10 +7,10 @@ import pandas as pd
 import lightgbm as lgb
 from typing import NoReturn, Optional
 
-from src.recsys_retail.data.make_dataset import load_data
-from src.recsys_retail.data.validation import train_test_split
-from src.recsys_retail.models import train
-from src.recsys_retail.models.serialize import store
+from recsys_retail.data.make_dataset import load_data
+from recsys_retail.data.validation import train_test_split
+from recsys_retail.models import train
+from recsys_retail.models.serialize import store
 
 
 logger = logging.getLogger()
