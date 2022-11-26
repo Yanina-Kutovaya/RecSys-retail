@@ -60,7 +60,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          file: docker/recsys-retail/Dockerfile
+          file: ./docker/recsys_retail/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/recsys-retail:service_v1
 
