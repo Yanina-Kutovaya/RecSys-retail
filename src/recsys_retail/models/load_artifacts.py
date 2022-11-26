@@ -3,7 +3,7 @@ import joblib
 import pandas as pd
 from typing import Optional, Tuple
 
-PATH = "../"
+PATH = ""
 
 DATA_VALID_PATH = "data/02_intermediate/data_valid.parquet.gzip"
 RECOMMENDER_PATH = "models/recommender_v1"
