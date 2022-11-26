@@ -1,3 +1,9 @@
+import sys
+import os
+
+sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), "src", "recsys_retail"))
+
 import pandas as pd
 from .load_artifacts import load_inference_artifacts
 from features.candidates_lvl_2 import get_candidates
