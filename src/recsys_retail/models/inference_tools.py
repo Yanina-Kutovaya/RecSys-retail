@@ -1,5 +1,5 @@
 import pandas as pd
-from load_artifacts import load_inference_artifacts
+from .load_artifacts import load_inference_artifacts
 from features.candidates_lvl_2 import get_candidates
 from features.targets import get_targets_lvl_2
 

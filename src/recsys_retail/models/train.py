@@ -19,7 +19,7 @@ from features.recommenders import MainRecommender
 from features.candidates_lvl_2 import get_candidates
 from features.new_item_user_features import get_user_item_features
 from features.targets import get_targets_lvl_2
-from save_artifacts import (
+from .save_artifacts import (
     save_time_split,
     save_prefiltered_data,
     save_item_featutes,
