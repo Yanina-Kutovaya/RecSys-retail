@@ -2,6 +2,11 @@
 """Train and save model for RecSys-retail"""
 
 import sys
+import os
+
+sys.path.append(os.getcwd())
+sys.path.append(os.path.join(os.getcwd(), ".."))
+
 import logging
 import argparse
 import pandas as pd
