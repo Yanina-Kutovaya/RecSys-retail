@@ -7,7 +7,7 @@ __all__ = ["save_artifacts"]
 
 logger = logging.getLogger()
 
-PATH = "../"
+PATH = ""
 
 FOLDER_1 = "data/01_raw/"
 PREFILTERED_DATA_PATH = FOLDER_1 + "data_prefiltered.parquet.gzip"
