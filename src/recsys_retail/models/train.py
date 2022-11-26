@@ -4,16 +4,16 @@ import pandas as pd
 from pickle import dump
 from typing import Optional
 
-from src.recsys_retail.data.make_dataset import load_data
-from src.recsys_retail.features.data_time_split import time_split_2
-from src.recsys_retail.features.prefilter import prefilter_items
-from src.recsys_retail.features.user_features import fit_transform_user_features
-from src.recsys_retail.features.item_features import fit_transform_item_features
-from src.recsys_retail.features.recommenders import MainRecommender
-from src.recsys_retail.features.candidates_lvl_2 import get_candidates
-from src.recsys_retail.features.new_item_user_features import get_user_item_features
-from src.recsys_retail.features.targets import get_targets_lvl_2
-from src.recsys_retail.models.save_artifacts import (
+from data.make_dataset import load_data
+from features.data_time_split import time_split_2
+from features.prefilter import prefilter_items
+from features.user_features import fit_transform_user_features
+from features.item_features import fit_transform_item_features
+from features.recommenders import MainRecommender
+from features.candidates_lvl_2 import get_candidates
+from features.new_item_user_features import get_user_item_features
+from features.targets import get_targets_lvl_2
+from save_artifacts import (
     save_time_split,
     save_prefiltered_data,
     save_item_featutes,

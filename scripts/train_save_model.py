@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 """Train and save model for RecSys-retail"""
 
+import sys
 import logging
 import argparse
 import pandas as pd
 import lightgbm as lgb
-from typing import NoReturn, Optional
+from typing import Optional
 
-from recsys_retail.data.make_dataset import load_data
-from recsys_retail.data.validation import train_test_split
-from recsys_retail.models import train
-from recsys_retail.models.serialize import store
+from src.recsys_retail.data.make_dataset import load_data
+from src.recsys_retail.data.validation import train_test_split
+from src.recsys_retail.models import train
+from src.recsys_retail.models.serialize import store
 
 
 logger = logging.getLogger()
@@ -66,7 +67,7 @@ def main():
     train_store(train_dataset_lvl_2, args.output)
 
 
-def train_store(dataset: pd.DataFrame, filename: str) -> NoReturn:
+def train_store(dataset: pd.DataFrame, filename: str):
     """
     Trains and stores LightGBM model.
     Extention .txt will be added at saving of the model.

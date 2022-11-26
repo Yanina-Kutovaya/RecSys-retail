@@ -1,7 +1,7 @@
 import pandas as pd
-from src.recsys_retail.models.load_artifacts import load_inference_artifacts
-from src.recsys_retail.features.candidates_lvl_2 import get_candidates
-from src.recsys_retail.features.targets import get_targets_lvl_2
+from load_artifacts import load_inference_artifacts
+from features.candidates_lvl_2 import get_candidates
+from features.targets import get_targets_lvl_2
 
 N_ITEMS = 100
 

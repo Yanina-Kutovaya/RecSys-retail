@@ -1,7 +1,7 @@
 import logging
 import joblib
 import pandas as pd
-from typing import NoReturn, Optional
+from typing import Optional
 
 __all__ = ["save_artifacts"]
 
@@ -37,7 +37,7 @@ def save_prefiltered_data(
     data: pd.DataFrame,
     path: Optional[str] = None,
     prefilted_data_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving prefiltered data...")
 
@@ -57,7 +57,7 @@ def save_time_split(
     train_data_lvl_1_path: Optional[str] = None,
     valid_data_level_1_path: Optional[str] = None,
     valid_data_level_2_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving time splitted data...")
 
@@ -80,7 +80,7 @@ def save_item_featutes(
     item_features_transformed: pd.DataFrame,
     path: Optional[str] = None,
     item_features_transformed_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving item features...")
 
@@ -98,7 +98,7 @@ def save_user_features(
     user_features_transformed: pd.DataFrame,
     path: Optional[str] = None,
     user_features_transformed_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving user features...")
 
@@ -116,7 +116,7 @@ def save_preprocessed_lvl_1_train_dataset(
     data_train_lvl_1: pd.DataFrame,
     path: Optional[str] = None,
     data_train_lvl_1_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving preprocessed level 1 train dataset...")
 
@@ -130,7 +130,7 @@ def save_preprocessed_lvl_1_train_dataset(
 
 def save_recommender(
     recommender, path: Optional[str] = None, recommender_path: Optional[str] = None
-) -> NoReturn:
+):
 
     logging.info("Saving recommender...")
 
@@ -146,7 +146,7 @@ def save_candidates(
     users_lvl_2: pd.DataFrame,
     path: Optional[str] = None,
     candidates_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving candidates for level 2 model...")
 
@@ -162,7 +162,7 @@ def save_user_item_features(
     user_item_features: pd.DataFrame,
     path: Optional[str] = None,
     user_item_features_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving new user-item features...")
 
@@ -178,7 +178,7 @@ def save_train_dataset_lvl_2(
     train_dataset_lvl_2: pd.DataFrame,
     path: Optional[str] = None,
     train_dataset_lvl_2_path: Optional[str] = None,
-) -> NoReturn:
+):
 
     logging.info("Saving train dataset for level 2 model...")
 

@@ -3,7 +3,7 @@ import pandas as pd
 
 
 def get_recommendations(
-    train_dataset_lvl_2: pd.DataFrame, raw_predictions: np.array, k: int = 5
+    train_dataset_lvl_2: pd.DataFrame, raw_predictions, k: int = 5
 ) -> pd.DataFrame:
     """
     Transforms model predictions to recommendations
@@ -26,7 +26,7 @@ def get_recommendations(
 def get_results(
     data_val_lvl_2: pd.DataFrame,
     train_dataset_lvl_2: pd.DataFrame,
-    raw_predictions: np.array,
+    raw_predictions,
     k: int = 5,
 ) -> pd.DataFrame:
     """
@@ -91,7 +91,7 @@ def adjust_results_for_metrics(results: pd.DataFrame, k: int = 5) -> pd.DataFram
     return results
 
 
-def precision_at_k(recommended_list: list, bought_list: list, k: int = 5) -> np.float:
+def precision_at_k(recommended_list: list, bought_list: list, k: int = 5):
     """
     Calculates precision@k
 
@@ -100,13 +100,7 @@ def precision_at_k(recommended_list: list, bought_list: list, k: int = 5) -> np.
     k - the number of items for calculation of precision@k
     """
 
-    bought_list = np.array(bought_list)
-    recommended_list = np.array(recommended_list)
-
     if k < len(recommended_list):
         recommended_list = recommended_list[:k]
 
-    flags = np.isin(bought_list, recommended_list)
-    precision = flags.sum() / len(recommended_list)
-
-    return precision
+    return len(set(bought_list) & set(recommended_list)) / len(recommended_list)

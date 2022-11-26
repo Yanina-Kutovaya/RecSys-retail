@@ -2,7 +2,7 @@ import logging
 import numpy as np
 import pandas as pd
 from typing import Optional
-from src.recsys_retail.features.recommenders import MainRecommender
+from recommenders import MainRecommender
 
 
 logger = logging.getLogger(__name__)
