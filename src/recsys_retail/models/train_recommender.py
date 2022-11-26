@@ -6,34 +6,33 @@ from src.recsys_retail.features.recommenders import MainRecommender
 
 logger = logging.getLogger(__name__)
 
-__all__ = ['train_save_recommender']
+__all__ = ["train_save_recommender"]
 
-PATH = 'models/'
-RECOMMENDER_PATH = PATH + 'recommender_v1'   
-    
-    
+PATH = "models/"
+RECOMMENDER_PATH = PATH + "recommender_v1"
+
+
 def train_save_recommender(
-    data_train_lvl_1: pd.DataFrame,
-    recommender_path: Optional[str] = None
-    ):
+    data_train_lvl_1: pd.DataFrame, recommender_path: Optional[str] = None
+):
     """
     Generates recommender which will be used for selecting of a
     long list of items for each user (the 1st stage).
-    On the 2nd stage this long list will be the basis for further 
-    short list selection with the binary classification model. 
+    On the 2nd stage this long list will be the basis for further
+    short list selection with the binary classification model.
 
     """
 
-    logging.info('Training recommender...')           
+    logging.info("Training recommender...")
     recommender = MainRecommender(
-        data_train_lvl_1, 
-        n_factors_ALS=50, 
+        data_train_lvl_1,
+        n_factors_ALS=50,
         regularization_ALS=0.001,
         iterations_ALS=15,
-        num_threads_ALS=4 
+        num_threads_ALS=4,
     )
 
-    logging.info('Saving recommender...')            
+    logging.info("Saving recommender...")
     if recommender_path is None:
         recommender_path = RECOMMENDER_PATH
     joblib.dump(recommender, recommender_path, 3)
