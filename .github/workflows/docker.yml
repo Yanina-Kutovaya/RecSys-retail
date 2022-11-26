@@ -29,7 +29,8 @@ jobs:
       - name: Upload model artifact        
         uses: actions/upload-artifact@v3
         with:
-          name: LightGBM_v1          
+          name: LightGBM_v1 
+          path: LightGBM_v1.txt         
           retention-days: 5
 
   build:
