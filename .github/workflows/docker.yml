@@ -24,13 +24,11 @@ jobs:
       - name: Train model
         run: scripts/train_save_model.py -o LightGBM_v1 -v
 
-      - name: Check Out Repo v2
-        uses: actions/checkout@v2
       - name: Upload model artifact        
         uses: actions/upload-artifact@v3
         with:
           name: LightGBM_v1 
-          path: LightGBM_v1.txt         
+          path: models/LightGBM_v1.txt         
           retention-days: 5
 
   build:
@@ -38,8 +36,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Check Out Repo v2
-        uses: actions/checkout@v2      
+      - name: Check Out Repo v3
+        uses: actions/checkout@v3      
       - name: Download model artifact
         uses: actions/download-artifact@v3
         with:
@@ -51,8 +49,6 @@ jobs:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
 
-      - name: Check Out Repo v3
-        uses: actions/checkout@v3
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
