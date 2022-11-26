@@ -6,3 +6,9 @@ lightgbm==3.3.3
 fastapi==0.86.0
 uvicorn==0.19.0
 starlette_exporter==0.14.0
+
+pytest==6.2.4
+pytest-cov==2.12.1
+black==21.7b0
+pylint==2.9.3
+mypy==0.910
