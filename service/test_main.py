@@ -8,7 +8,7 @@ import logging
 import pandas as pd
 from fastapi.testclient import TestClient
 
-from main import app, Model
+from .main import app, Model
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.data.make_dataset import load_data
 from src.recsys_retail.models.train import data_preprocessing_pipeline
