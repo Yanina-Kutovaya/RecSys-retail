@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
           pip install -e .
       - name: Train model
-        run: scripts/train_save_model.py -m make_baseline_model -o LightGBM_v1 -v
+        run: scripts/train_save_model.py -o LightGBM_v1 -v
 
       - name: Check Out Repo v2
         uses: actions/checkout@v2
