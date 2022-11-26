@@ -13,3 +13,6 @@ pytest-cov==3.0.0
 black==22.3.0
 pylint==2.15.6
 mypy==0.991
+
+fastparquet==2022.11.0
+pyarrow==1.23.4
