@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Train and save model for RecSys-retail"""
 
 import sys
