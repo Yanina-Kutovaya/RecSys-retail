@@ -86,7 +86,7 @@ def train_store(dataset: pd.DataFrame, filename: str):
     model_cb = CatBoostClassifier(
         learning_rate=0.005, early_stopping_rounds=20, eval_metric="AUC", random_seed=42
     )
-    model.fit(train_data, eval_set=eval_data, verbose=50)
+    model_cb.fit(train_data, eval_set=eval_data, verbose=50)
     store(model_cb, filename)
 
 
