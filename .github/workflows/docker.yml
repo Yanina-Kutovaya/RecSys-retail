@@ -18,9 +18,7 @@ jobs:
           python-version: '3.10'
       - name: Install dependencies
         run: |
-          sudo apt-get update && apt-get install -y --no-install-recommends apt-utils
-          sudo apt-get -y install curl
-          sudo apt-get install libgomp1        
+          sudo apt-get install libgomp1     
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install -e .        
