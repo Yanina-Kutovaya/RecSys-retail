@@ -56,7 +56,7 @@ def predict(user_id: int, user: User):
     try:
         id_ = jsonable_encoder(user)["user_id"]
         df = preprocess(id_)
-        predictions = Model.classifier.predict(df)
+        predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1])
         recs = results["recommendations"][0].tolist()
         recs_dict = {id_: recs}
@@ -73,7 +73,7 @@ def predict_user_list(batch_id: int, users: Users):
     try:
         ids_ = jsonable_encoder(users)["user_ids"]
         df = preprocess(ids_, user_list=True)
-        predictions = Model.classifier.predict(df)
+        predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1]).set_index("user_id")
         recs = results.loc[:, "recommendations"]
         recs_dict = {}
