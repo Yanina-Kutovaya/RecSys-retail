@@ -13,6 +13,6 @@ USER recsys-retail
 
 EXPOSE 8000
 
-ENV MODEL "LightGBM_v1"
+ENV MODEL "baseline_v1"
 
 CMD ["bash", "start.sh"]

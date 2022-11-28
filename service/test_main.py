@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 client = TestClient(app)
 
-MODEL = os.getenv("MODEL", default="LightGBM_v1")
+MODEL = os.getenv("MODEL", default="baseline_v1")
 
 
 def test_healthcheck():
@@ -34,7 +34,7 @@ def test_predict():
     train_dataset_lvl_2 = data_preprocessing_pipeline(
         data, item_features, user_features
     )
-    train_store(train_dataset_lvl_2, "LightGBM_v1")
+    train_store(train_dataset_lvl_2, "baseline_v1")
     Model.classifier = load(MODEL)
 
     user = {"user_id": 1340}

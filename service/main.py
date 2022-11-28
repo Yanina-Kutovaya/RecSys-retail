@@ -24,7 +24,7 @@ app = FastAPI()
 app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
-MODEL = os.getenv("MODEL", default="LightGBM_v1")
+MODEL = os.getenv("MODEL", default="baseline_v1")
 
 
 class Model:
@@ -57,7 +57,7 @@ def predict(user_id: int, user: User):
         id_ = jsonable_encoder(user)["user_id"]
         df = preprocess(id_)
         predictions = Model.classifier.predict(df)
-        results = get_recommendations(df, predictions)
+        results = get_recommendations(df, predictions[:, 1])
         recs = results["recommendations"][0].tolist()
         recs_dict = {id_: recs}
     except Exception as e:
@@ -74,7 +74,7 @@ def predict_user_list(batch_id: int, users: Users):
         ids_ = jsonable_encoder(users)["user_ids"]
         df = preprocess(ids_, user_list=True)
         predictions = Model.classifier.predict(df)
-        results = get_recommendations(df, predictions).set_index("user_id")
+        results = get_recommendations(df, predictions[:, 1]).set_index("user_id")
         recs = results.loc[:, "recommendations"]
         recs_dict = {}
         for id in ids_:

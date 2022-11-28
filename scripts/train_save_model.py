@@ -10,7 +10,7 @@ sys.path.append(os.path.join(os.getcwd(), ".."))
 import logging
 import argparse
 import pandas as pd
-import lightgbm as lgb
+from catboost import CatBoostClassifier, Pool
 from typing import Optional
 
 from src.recsys_retail.data.make_dataset import load_data
@@ -49,7 +49,7 @@ def main():
         "-o",
         "--output",
         required=True,
-        help="filename to store model; extention .txt will be added at saving the model",
+        help="filename to store model",
     )
     argparser.add_argument(
         "-v", "--verbose", help="increase output verbosity", action="store_true"
@@ -74,37 +74,20 @@ def main():
 
 def train_store(dataset: pd.DataFrame, filename: str):
     """
-    Trains and stores LightGBM model.
-    Extention .txt will be added at saving of the model.
+    Trains and stores CatBoost model.
     """
 
     X_train, X_valid, y_train, y_valid = train_test_split(dataset)
-    dtrain = lgb.Dataset(X_train, y_train)
-    dvalid = lgb.Dataset(X_valid, y_valid)
+    train_data = Pool(X_train, y_train)
+    eval_data = Pool(X_valid, y_valid)
 
     logging.info(f"Training the model on {len(X_train)}  items...")
 
-    params_lgb = {
-        "boosting_type": "gbdt",
-        "objective": "binary",
-        "metric": "auc",
-        "num_boost_round": 10000,
-        "learning_rate": 0.005,
-        "num_leaves": 100,
-        "max_depth": 15,
-        "n_estimators": 5000,
-        "n_jobs": 6,
-        "seed": 12,
-    }
-
-    model_lgb = lgb.train(
-        params=params_lgb,
-        train_set=dtrain,
-        valid_sets=[dtrain, dvalid],
-        verbose_eval=1000,
-        early_stopping_rounds=30,
+    model_cb = CatBoostClassifier(
+        learning_rate=0.005, early_stopping_rounds=20, eval_metric="AUC", random_seed=42
     )
-    store(model_lgb, filename)
+    model.fit(train_data, eval_set=eval_data, verbose=50)
+    store(model_cb, filename)
 
 
 if __name__ == "__main__":
