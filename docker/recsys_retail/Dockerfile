@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN pip install --no-cache-dir -e .
 
-RUN useradd --user-group --shell /bin/false recsys-retail  
+RUN useradd --user-group --shell /bin/false recsys-retail
 USER recsys-retail
 
 EXPOSE 8000
