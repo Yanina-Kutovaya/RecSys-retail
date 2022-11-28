@@ -1,4 +1,4 @@
-/notebook
+/notebooks
 /reports
 /tests
 /include
@@ -7,3 +7,9 @@
 .gitignore
 .venv/
 requirements_Colab.txt
+
+**/.*
+docker-compose.dev.yml
+docker-compose.prod.yml
+docker/recsys_retail_train
+docker/traefik
