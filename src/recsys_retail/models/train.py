@@ -45,7 +45,7 @@ def data_preprocessing_pipeline(
     user_features: pd.DataFrame,
     n_factors_ALS: Optional[int] = None,
     n_items: Optional[int] = None,
-    save_artifacts=True,
+    save_artifacts=False,
 ) -> pd.DataFrame:
 
     """
