@@ -14,23 +14,21 @@ PREFILTERED_DATA_PATH = FOLDER_1 + "data_prefiltered.parquet.gzip"
 
 FOLDER_2 = "data/02_intermediate/"
 TRAIN_DATA_LEVEL_1_PATH = FOLDER_2 + "data_train.parquet.gzip"
-VALID_DATA_LEVEL_1_PATH = FOLDER_2 + "data_valid.parquet.gzip"
 VALID_DATA_LEVEL_2_PATH = FOLDER_2 + "data_test.parquet.gzip"
 
 FOLDER_3 = "data/03_primary/"
-ITEM_FEATURES_TRANSFORMED_PATH = FOLDER_3 + "item_features_transformed.parquet.gzip"
-USER_FEATURES_TRANSFORMED_PATH = FOLDER_3 + "user_features_transformed.parquet.gzip"
 DATA_TRAIN_LVL_1_PATH = FOLDER_3 + "data_train_lvl_1_preprocessed.parquet.gzip"
+CANDIDATES_PATH = FOLDER_3 + "candidates_lvl_2.parquet.gzip"
 
 FOLDER_4 = "data/04_feature/"
-CANDIDATES_PATH = FOLDER_4 + "candidates_lvl_2.parquet.gzip"
+VALID_DATA_LEVEL_1_PATH = FOLDER_4 + "data_valid.parquet.gzip"
+RECOMMENDER_PATH = FOLDER_4 + "recommender_v1"
+ITEM_FEATURES_TRANSFORMED_PATH = FOLDER_4 + "item_features_transformed.parquet.gzip"
+USER_FEATURES_TRANSFORMED_PATH = FOLDER_4 + "user_features_transformed.parquet.gzip"
 USER_ITEM_FEATURES_PATH = FOLDER_4 + "user_item_features.parquet.gzip"
 
 FOLDER_5 = "data/05_model_input/"
 TRAIN_DATASET_LVL_2_PATH = FOLDER_5 + "train_dataset_lvl_2.parquet.gzip"
-
-FOLDER_6 = "models/"
-RECOMMENDER_PATH = FOLDER_6 + "recommender_v1"
 
 
 def save_prefiltered_data(
