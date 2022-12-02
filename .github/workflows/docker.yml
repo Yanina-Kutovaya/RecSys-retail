@@ -29,7 +29,10 @@ jobs:
         with:
           name: baseline_v1 
           path: models/baseline_v1         
-          retention-days: 5      
+          retention-days: 5
+
+      - name: Upload features for inference        
+        uses: actions/upload-artifact@v3
         with:
           name: features-for-inference
           path: data/04_feature          
@@ -47,6 +50,10 @@ jobs:
         with:
           name: baseline_v1
           path: models/
+
+      - name: Download features for inference
+        uses: actions/download-artifact@v3
+        with:
           name: features-for-inference
           path: data/04_feature/          
 
