@@ -13,3 +13,4 @@ docker-compose.dev.yml
 docker-compose.prod.yml
 docker/recsys_retail_train
 docker/traefik
+scripts/inference_demo.py
