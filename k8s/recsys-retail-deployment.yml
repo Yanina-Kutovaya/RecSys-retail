@@ -5,15 +5,12 @@ metadata:
   labels:
     app: recsys-retail
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: recsys-retail
   template:
-    metadata:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "8000"
+    metadata:      
       labels:
         app: recsys-retail
     spec:

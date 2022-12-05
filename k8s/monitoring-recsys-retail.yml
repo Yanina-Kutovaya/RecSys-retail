@@ -1,13 +1,21 @@
 apiVersion: monitoring.coreos.com/v1
-kind: Prometheus
+kind: ServiceMonitor
 metadata:
-  name: prometheus
+  namespace: monitoring
+  labels:
+    release: prometheus
+  name: recsys-retail  
 spec:
-  serviceAccountName: prometheus
-  podMonitorSelector:
+  endpoints:
+  - path: /metrics
+    port: recsys-retail
+    scheme: http
+    interval: 60s
+
+  jobLabel: recsys-retail
+  namespaceSelector:
+    matchNames:
+    - default
+  selector:
     matchLabels:
-      app: recsys-retail
-  resources:
-    requests:
-      memory: 400Mi
-  enableAdminAPI: false
+      app:recsys-retail
