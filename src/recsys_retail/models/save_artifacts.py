@@ -21,8 +21,9 @@ DATA_TRAIN_LVL_1_PATH = FOLDER_3 + "data_train_lvl_1_preprocessed.parquet.gzip"
 CANDIDATES_PATH = FOLDER_3 + "candidates_lvl_2.parquet.gzip"
 
 FOLDER_4 = "data/04_feature/"
+CURRENT_USER_LIST_PATH = FOLDER_4 + "current_user_list.joblib"
 VALID_DATA_LEVEL_1_PATH = FOLDER_4 + "data_valid.parquet.gzip"
-RECOMMENDER_PATH = FOLDER_4 + "recommender_v1"
+RECOMMENDER_PATH = FOLDER_4 + "recommender_v1.joblib"
 ITEM_FEATURES_TRANSFORMED_PATH = FOLDER_4 + "item_features_transformed.parquet.gzip"
 USER_FEATURES_TRANSFORMED_PATH = FOLDER_4 + "user_features_transformed.parquet.gzip"
 USER_ITEM_FEATURES_PATH = FOLDER_4 + "user_item_features.parquet.gzip"
@@ -45,6 +46,23 @@ def save_prefiltered_data(
     if prefilted_data_path is None:
         prefilted_data_path = path + PREFILTERED_DATA_PATH
     data.to_parquet(prefilted_data_path, compression="gzip")
+
+
+def save_current_user_list(
+    current_user_list: list,
+    path: Optional[str] = None,
+    current_user_list_path: Optional[str] = None,
+):
+
+    logging.info("Saving current user list...")
+
+    if path is None:
+        path = PATH
+
+    if current_user_list_path is None:
+        current_user_list_path = path + CURRENT_USER_LIST_PATH
+
+    joblib.dump(current_user_list, current_user_list_path, 3)
 
 
 def save_time_split(

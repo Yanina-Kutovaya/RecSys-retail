@@ -13,6 +13,7 @@ from typing import Optional
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
 from starlette_exporter import PrometheusMiddleware, handle_metrics
+from prometheus_client import Counter
 from pydantic import BaseModel
 
 from src.recsys_retail.models.serialize import load
@@ -25,6 +26,8 @@ app.add_middleware(PrometheusMiddleware)
 app.add_route("/metrics", handle_metrics)
 
 MODEL = os.getenv("MODEL", default="baseline_v1")
+
+NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 
 
 class Model:
@@ -55,7 +58,9 @@ def predict(user_id: int, user: User):
         raise HTTPException(status_code=503, detail="No model loaded")
     try:
         id_ = jsonable_encoder(user)["user_id"]
-        df = preprocess(id_)
+        df, new_users_number = preprocess(id_)
+        if new_users_number:
+            NEW_CLIENTS_COUNTER.inc()
         predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1])
         recs = results["recommendations"][0].tolist()
@@ -72,7 +77,9 @@ def predict_user_list(batch_id: int, users: Users):
         raise HTTPException(status_code=503, detail="No model loaded")
     try:
         ids_ = jsonable_encoder(users)["user_ids"]
-        df = preprocess(ids_, user_list=True)
+        df, new_users_number = preprocess(ids_, user_list=True)
+        if new_users_number:
+            NEW_CLIENTS_COUNTER.inc(new_users_number)
         predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1]).set_index("user_id")
         recs = results.loc[:, "recommendations"]
