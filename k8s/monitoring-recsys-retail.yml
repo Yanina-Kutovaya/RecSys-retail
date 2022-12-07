@@ -18,4 +18,4 @@ spec:
     - recsys
   selector:
     matchLabels:
-      app:recsys-retail
+      app: recsys-retail
