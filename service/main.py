@@ -27,6 +27,7 @@ app.add_route("/metrics", handle_metrics)
 
 MODEL = os.getenv("MODEL", default="baseline_v1")
 
+RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 
 
@@ -65,6 +66,7 @@ def predict(user_id: int, user: User):
         results = get_recommendations(df, predictions[:, 1])
         recs = results["recommendations"][0].tolist()
         recs_dict = {id_: recs}
+        RECOMMENDATIONS_COUNTER.inc()
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -86,7 +88,7 @@ def predict_user_list(batch_id: int, users: Users):
         recs_dict = {}
         for id in ids_:
             recs_dict[id] = recs[id].tolist()
-
+        RECOMMENDATIONS_COUNTER.inc(len(ids_))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
