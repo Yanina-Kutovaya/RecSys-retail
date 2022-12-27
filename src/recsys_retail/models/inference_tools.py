@@ -28,7 +28,7 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
 
     if not user_list:
         user_ids = [user_ids]
-    new_users_number = len(set(user_ids) - set(current_user_list))
+    new_users = list(set(user_ids) - set(current_user_list))
     df = pd.DataFrame(user_ids, index=range(len(user_ids)), columns=["user_id"])
 
     users_inference = get_candidates(recommender, data_valid, df, n_items=N_ITEMS)
@@ -41,4 +41,4 @@ def preprocess(user_ids, user_list=False) -> pd.DataFrame:
         n_items=N_ITEMS,
     )
 
-    return train_dataset_lvl_2.drop("target", axis=1).fillna(0), new_users_number
+    return train_dataset_lvl_2.drop("target", axis=1).fillna(0), new_users

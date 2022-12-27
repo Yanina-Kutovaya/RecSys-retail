@@ -6,6 +6,7 @@ import os
 sys.path.append(os.getcwd())
 sys.path.append(os.path.join(os.getcwd(), ".."))
 
+import logging
 import pandas as pd
 import numpy as np
 from typing import Optional
@@ -19,6 +20,10 @@ from pydantic import BaseModel
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.models.inference_tools import preprocess
 from src.recsys_retail.metrics import get_recommendations
+
+
+logger = logging.getLogger()
+logging.basicConfig(level=logging.INFO)
 
 
 app = FastAPI()
@@ -59,14 +64,17 @@ def predict(user_id: int, user: User):
         raise HTTPException(status_code=503, detail="No model loaded")
     try:
         id_ = jsonable_encoder(user)["user_id"]
-        df, new_users_number = preprocess(id_)
-        if new_users_number:
+        df, new_user = preprocess(id_)
+        if new_user:
             NEW_CLIENTS_COUNTER.inc()
+            logging.info(f" The new user: {new_user}")
+
         predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1])
         recs = results["recommendations"][0].tolist()
         recs_dict = {id_: recs}
         RECOMMENDATIONS_COUNTER.inc()
+        logging.info(f"User {id_}: {recs}")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -79,15 +87,20 @@ def predict_user_list(batch_id: int, users: Users):
         raise HTTPException(status_code=503, detail="No model loaded")
     try:
         ids_ = jsonable_encoder(users)["user_ids"]
-        df, new_users_number = preprocess(ids_, user_list=True)
-        if new_users_number:
+        df, new_users = preprocess(ids_, user_list=True)
+        if new_users:
+            new_users_number = len(new_users)
             NEW_CLIENTS_COUNTER.inc(new_users_number)
+            logging.info(f" {new_users_number} new users: {new_users}")
+
         predictions = Model.classifier.predict_proba(df)
         results = get_recommendations(df, predictions[:, 1]).set_index("user_id")
-        recs = results.loc[:, "recommendations"]
+        recs_ = results.loc[:, "recommendations"]
         recs_dict = {}
         for id in ids_:
-            recs_dict[id] = recs[id].tolist()
+            recs = recs_[id].tolist()
+            recs_dict[id] = recs
+            logging.info(f"User {id}: {recs}")
         RECOMMENDATIONS_COUNTER.inc(len(ids_))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

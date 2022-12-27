@@ -71,7 +71,7 @@ def main():
         user_list = df[int(args.day)].tolist()
     else:
         user_list = df[int(args.day)][: int(args.n_users)].tolist()
-    logging.info(f"Selected {len(user_list)} users from {len(df[int(args.day)])}")    
+    logging.info(f"Selected {len(user_list)} users from {len(df[int(args.day)])}")
 
     if int(args.batch_id):
         get_batch_recommendations(user_list, args)
@@ -80,15 +80,16 @@ def main():
 
 
 def get_batch_recommendations(user_list, args):
-    day_recs = pd.DataFrame(columns=["day", "batch_id", "recommendations"])    
-    request_str = (f"http://{args.host}:8000/predict_user_list?batch_id={int(args.batch_id)}")
-    r = requests.post(request_str, json={"user_ids": user_list})    
+    day_recs = pd.DataFrame(columns=["day", "batch_id", "recommendations"])
+    request_str = (
+        f"http://{args.host}:8000/predict_user_list?batch_id={int(args.batch_id)}"
+    )
+    r = requests.post(request_str, json={"user_ids": user_list})
     for user_id in user_list:
         recs = r.json()[1][str(user_id)]
         day_recs.loc[user_id, "day"] = int(args.day)
         day_recs.loc[user_id, "batch_id"] = int(args.batch_id)
         day_recs.loc[user_id, "recommendations"] = recs
-        logging.info(f"User {user_id}: {recs}")
     day_recs.index.name = "user_id"
     day_recs.to_csv(args.output)
 
@@ -97,12 +98,11 @@ def get_individual_recommendations(user_list, args):
     day_recs = pd.DataFrame(columns=["day", "batch_id", "recommendations"])
     for user_id in user_list:
         request_str = f"http://{args.host}:8000/predict?user_id={user_id}"
-        r = requests.post(request_str, json={"user_id": str(user_id)})        
+        r = requests.post(request_str, json={"user_id": str(user_id)})
         recs = r.json()[1][str(user_id)]
         day_recs.loc[user_id, "day"] = int(args.day)
         day_recs.loc[user_id, "batch_id"] = int(args.batch_id)
         day_recs.loc[user_id, "recommendations"] = recs
-        logging.info(f"User {user_id}: {recs}")
     day_recs.index.name = "user_id"
     day_recs.to_csv(args.output)
 
