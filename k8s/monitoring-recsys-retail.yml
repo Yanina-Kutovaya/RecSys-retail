@@ -3,7 +3,7 @@ kind: ServiceMonitor
 metadata:
   namespace: monitoring
   labels:
-    release: prometheus
+    release: main
   name: recsys-retail  
 spec:
   endpoints:
