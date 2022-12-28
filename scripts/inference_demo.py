@@ -90,6 +90,7 @@ def get_batch_recommendations(user_list, args):
         day_recs.loc[user_id, "day"] = int(args.day)
         day_recs.loc[user_id, "batch_id"] = int(args.batch_id)
         day_recs.loc[user_id, "recommendations"] = recs
+        logging.info(f" User {user_id}: {recs}")
     day_recs.index.name = "user_id"
     day_recs.to_csv(args.output)
 
@@ -103,6 +104,7 @@ def get_individual_recommendations(user_list, args):
         day_recs.loc[user_id, "day"] = int(args.day)
         day_recs.loc[user_id, "batch_id"] = int(args.batch_id)
         day_recs.loc[user_id, "recommendations"] = recs
+        logging.info(f" User {user_id}: {recs}")
     day_recs.index.name = "user_id"
     day_recs.to_csv(args.output)
 
