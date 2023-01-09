@@ -2,10 +2,10 @@
 
 The goal of the project is to develop a recommender system which would on-line recommend 5 products to the user based on the information available about users and products. 
 
-# Metrics: Precision@5
+## Metrics: Precision@5
 
-# Model 
-## Pre-filter items
+## Model 
+### Pre-filter items
 The business goals are to promote sales and generate profit for the company.
 To meet business goals, we’ll not include into dataset:
 
@@ -22,7 +22,7 @@ Here is a link to prefilter_items function:
 https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/prefilter.py 
 
 
-## Two-stage recommender system
+### Two-stage recommender system
 Transaction data is broken into 3 parts: 
 
 -- old purchases -- | -- 6 weeks-- | -- 3 weeks–
@@ -51,5 +51,5 @@ Binary classification are are used to generate 5 recommendations and calculate P
 
 Here is a link to get_recommendations and precision_at_k functions: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/metrics.py 
 
-## Inference
+### Inference
 FastAPI model is used for inference. Here is a link to the code: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/service/main.py 
