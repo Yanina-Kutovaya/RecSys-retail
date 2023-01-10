@@ -23,6 +23,7 @@ Preprocess user and item features
 ------------------------------------
 
 - fit_transform_user_features function: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/user_features.py
+
 - fit_transform_item_features function: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/item_features.py 
 
 
