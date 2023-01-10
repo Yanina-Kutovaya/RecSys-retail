@@ -22,7 +22,7 @@ Github actions CI/CD
 - Unit tests with pytest: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/tests/test_data_validation.py
 - Integration tests with pytest: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/service/test_main.py  
  
-**Docker containerization and its publishing in the registry** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/docker.yml
+**Docker containerization and its publishing in the registry:** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/docker.yml
  
 
 Microservice  deployment 
@@ -34,13 +34,10 @@ Microservice  deployment
 - recsys_retail - to build two types of containers for microservice
 - traefik - to use reverse proxy server Traefik for microservice
 
-**Docker-compose**
+**Docker-compose:**
 
-- To deploy a microservice in development stage: 
-    - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.dev.yml 
-
-- To deploy a microservice in production stage:
-    - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.prod.yml 
+- to deploy a microservice in development stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.dev.yml 
+- to deploy a microservice in production stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.prod.yml 
  
  
 **Kubernetes** 
@@ -50,7 +47,7 @@ Prerequisites:
 - install Helm: 
     - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
-- installing the NGINX Ingress Controller with a Let's Encrypt® certificates manager
+- install the NGINX Ingress Controller with a Let's Encrypt® certificates manager
     - helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     - helm repo update
     - kubectl create namespace nginx
@@ -66,20 +63,20 @@ Prerequisites:
 
 k8s manifests: https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/k8s
 
-- To run a single job - model training:
+- to run a single job - model training:
     - recsys-retail-train-job.yml
 
-- To deploy a microservice in k8s in namespace recsys:
+- to deploy a microservice in k8s in namespace recsys:
     - recsys-retail-deployment.yml 
     - recsys-retail-service.yml
     - recsys-retail-ingress.yml 
     - prom_rbac.yml
     - production-issuer.yml
 
-- To set up monitoring system with Prometheus and Grafana in namespace monitoring:
+- to set up monitoring system with Prometheus and Grafana in namespace monitoring:
     - monitoring-recsys-retail.yml
 
-- To set up monitoring system with Beat, Elasticsearch and Kibana:
+- to set up monitoring system with Beat, Elasticsearch and Kibana:
     - beats.yml
     - elastic.yml
     - kibana.yml

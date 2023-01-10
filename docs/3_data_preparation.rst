@@ -23,7 +23,7 @@ Two-stage recommender system
 -----------------------------
 Transaction data is broken into 3 parts: 
 
--- old purchases -- | -- 6 weeks-- | -- 3 weeks–
+-- old purchases -- | -- 6 weeks -- | -- 3 weeks --
 
 **MainRecommender** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/recommenders.py
 
@@ -31,7 +31,8 @@ On the First stage, we utilize -- old purchases -- together with user and item d
 using Alternating Least Square (ALS) matrix factorization in collaborative filtering. 
 Later, MainRecommender selects top N (100-200) items for each user.
 
-**Dataset for the Second stage** 
+
+**Dataset for the Second stage model** 
 
 On the Second stage, we work with -- 6 weeks-- | -- 3 weeks -- data as train - valid datasets, 
 get_user_item_features function generates new features and adds to them users and items embeddings from MainRecommender: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/new_item_user_features.py
@@ -43,6 +44,7 @@ For new users MainRecommender proposes N items from overall top purchases.
 
 Selected users, items and new features are used by get_targets_lvl_2 function to generate dataset for the Second stage binary classification model: 
 https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/targets.py
+
 
 **Binary classification model**
   
