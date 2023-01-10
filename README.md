@@ -9,7 +9,7 @@ The success criteria is metrics Precision@5 applied to a predetermined set of pr
 
 * [Data extraction](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/1_data_extraction.rst)  
 * [Data analysis (EDA)](https://colab.research.google.com/drive/1_P_ltsZS6oQu73g9UJPwOMcZRGl2rhbm?usp=sharing) 
-* [Data preparation and model training](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/3_data preparation.rst)
+* [Data preparation and model training](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/3_data_preparation.rst)
 * [Model evaluation](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/4_model_evaluation.rst) 
 * [Model validation](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/5_model_validation.rst)
 * [Model serving](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/6_model_serving.rst) 
