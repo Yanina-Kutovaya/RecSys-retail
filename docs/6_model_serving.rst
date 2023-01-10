@@ -8,35 +8,34 @@ The validated model is deployed to a target environment to serve predictions.
 This deployment is a microservice with a REST API to serve online predictions.
 
 REST API for the model on python could be found here:
+
 - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/service/main.py
 
 
 Github actions CI/CD
 ---------------------
 
-**Testing:** 
-https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/python.yml
+**Testing:** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/python.yml
 
 - Check PEP8 compliance with Black
 - Static code analysis with mypy
-- Unit tests with pytest 
-    - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/tests/test_data_validation.py
-- Integration tests with pytest 
-    - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/service/test_main.py  
+- Unit tests with pytest: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/tests/test_data_validation.py
+- Integration tests with pytest: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/service/test_main.py  
  
-**Docker containerization and its publishing in the registry** 
-https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/docker.yml
+**Docker containerization and its publishing in the registry** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/docker.yml
  
 
 Microservice  deployment 
 ------------------------
 
 **Docker:** https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/docker
+
 - recsys_retail_train - to build a container just for training of the model
 - recsys_retail - to build two types of containers for microservice
 - traefik - to use reverse proxy server Traefik for microservice
 
 **Docker-compose**
+
 - To deploy a microservice in development stage: 
     - https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.dev.yml 
 
@@ -45,7 +44,9 @@ Microservice  deployment
  
  
 **Kubernetes** 
+
 Prerequisites:
+
 - install Helm: 
     - curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
