@@ -2,6 +2,7 @@
 /reports
 /tests
 /include
+/docs
 *.md
 .git
 .gitignore
