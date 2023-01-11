@@ -2,5 +2,5 @@
     remote = yc_s3
     autostage = true
 ['remote "yc_s3"']
-    url = s3://recsys-retail-input
+    url = s3://recsys-retail-data
     endpointurl = https://storage.yandexcloud.net
