@@ -68,5 +68,5 @@ The function load_inference_artifacts uploads artifacts into preprocess function
 
 **Binary classification model**
   
-The model is trained and saved by train_store function: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/scripts/train_save_model.py
-
+The model is trained and saved by train_store function: 
+https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/scripts/train_save_model.py

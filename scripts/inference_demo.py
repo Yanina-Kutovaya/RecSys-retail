@@ -17,7 +17,7 @@ def main():
         "-d",
         "--data_path",
         required=False,
-        default="https://storage.yandexcloud.net/recsys-retail-input/test.csv",
+        default="data/test.csv",
         help="test transactions dataset store path",
     )
     argparser.add_argument(

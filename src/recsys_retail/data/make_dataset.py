@@ -6,13 +6,11 @@ logger = logging.getLogger(__name__)
 
 __all__ = ["load_train_dataset"]
 
-TRAIN_URL = "https://storage.yandexcloud.net/recsys-retail-input/train.csv.zip"
-ITEM_FEATURES_URL = (
-    "https://storage.yandexcloud.net/recsys-retail-input/item_features.csv"
-)
-USER_FEATURES_URL = (
-    "https://storage.yandexcloud.net/recsys-retail-input/user_features.csv"
-)
+PATH = "data/"
+
+TRAIN_PATH = PATH + "train.csv"
+ITEM_FEATURES_PATH = PATH + "item_features.csv"
+USER_FEATURES_PATH = PATH + "user_features.csv"
 
 
 def load_data(
@@ -22,19 +20,19 @@ def load_data(
 ) -> pd.DataFrame:
 
     if data_path is None:
-        data_path = TRAIN_URL
+        data_path = TRAIN_PATH
     logging.info(f"Reading dataset from {data_path}...")
     data = pd.read_csv(data_path)
 
     if item_path is None:
-        item_path = ITEM_FEATURES_URL
+        item_path = ITEM_FEATURES_PATH
     logging.info(f"Reading item_features from {item_path}...")
     item_features = pd.read_csv(item_path)
     item_features.columns = map(str.lower, item_features.columns)
     item_features.rename(columns={"product_id": "item_id"}, inplace=True)
 
     if user_path is None:
-        user_path = USER_FEATURES_URL
+        user_path = USER_FEATURES_PATH
     logging.info(f"Reading user_features from {user_path}...")
     user_features = pd.read_csv(user_path)
     user_features.columns = map(str.lower, user_features.columns)
