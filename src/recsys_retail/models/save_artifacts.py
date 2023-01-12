@@ -10,7 +10,7 @@ logger = logging.getLogger()
 PATH = ""
 
 FOLDER_2 = "data/02_intermediate/"
-PREFILTERED_DATA_PATH = FOLDER_1 + "data_prefiltered.parquet.gzip"
+PREFILTERED_DATA_PATH = FOLDER_2 + "data_prefiltered.parquet.gzip"
 TRAIN_DATA_LEVEL_1_PATH = FOLDER_2 + "data_train.parquet.gzip"
 VALID_DATA_LEVEL_2_PATH = FOLDER_2 + "data_test.parquet.gzip"
 
