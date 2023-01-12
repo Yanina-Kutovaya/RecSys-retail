@@ -28,21 +28,21 @@ def main():
         "-d1",
         "--data_path",
         required=False,
-        default="data/train.csv",
+        default="data/01_raw/train.csv",
         help="transactions dataset store path",
     )
     argparser.add_argument(
         "-d2",
         "--item_features_path",
         required=False,
-        default="data/item_features.csv",
+        default="data/01_raw/item_features.csv",
         help="item features dataset store path",
     )
     argparser.add_argument(
         "-d3",
         "--user_features_path",
         required=False,
-        default="data/user_features.csv",
+        default="data/01_raw/user_features.csv",
         help="user features dataset store path",
     )
     argparser.add_argument(

@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 __all__ = ["load_train_dataset"]
 
-PATH = "data/"
+PATH = "data/01_raw/"
 
 TRAIN_PATH = PATH + "train.csv"
 ITEM_FEATURES_PATH = PATH + "item_features.csv"

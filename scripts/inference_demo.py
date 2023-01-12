@@ -17,7 +17,7 @@ def main():
         "-d",
         "--data_path",
         required=False,
-        default="data/test.csv",
+        default="data/01_raw/test.csv",
         help="test transactions dataset store path",
     )
     argparser.add_argument(
