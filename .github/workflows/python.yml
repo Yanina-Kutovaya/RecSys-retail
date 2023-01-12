@@ -28,7 +28,7 @@ jobs:
         run: |
           pytest --cov=src tests
       - name: Integration tests with pytest
-          env:
+        env:
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}      
         run: |
