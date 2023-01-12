@@ -2,7 +2,6 @@
 /reports
 /tests
 /include
-/input
 /docs
 *.md
 .git
