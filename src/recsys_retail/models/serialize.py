@@ -15,10 +15,14 @@ def store(model_cb, filename: str, path: str = "default"):
 
     logger.info(f"Dumpung model into {filepath}")
     model_cb.save_model(filepath)
-    
+
     session = boto3.session.Session()
-    s3 = session.client(service_name='s3', endpoint_url='https://storage.yandexcloud.net')
-    s3.upload_file(filepath, 'recsys-retail-model-registry', 'current_model/' + filename) 
+    s3 = session.client(
+        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+    )
+    s3.upload_file(
+        filepath, "recsys-retail-model-registry", "current_model/" + filename
+    )
 
 
 def load(filename: str, path: str = "default"):
