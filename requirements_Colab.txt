@@ -5,4 +5,4 @@ catboost==1.1.1
 fastapi==0.85.1
 starlette_exporter==0.14.0
 dvc[s3]==2.41.1
-boto3>=1.25.0
+boto3>=1.24.0
