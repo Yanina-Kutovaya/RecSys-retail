@@ -2,6 +2,7 @@ implicit==0.6.1
 category-encoders==2.5.1.post0
 lightgbm==3.3.3
 catboost==1.1.1
+boto3>=1.24.0
 fastapi==0.85.1
 starlette_exporter==0.14.0
 dvc[s3]==2.41.1
