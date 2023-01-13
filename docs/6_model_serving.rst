@@ -24,7 +24,7 @@ Github actions CI/CD
  
 **Docker containerization and its publishing in the registry:** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/.github/workflows/docker.yml
  
- - Trained model which will be deployed in production is saved in Model registry in Yandex Object Storage for futher A/B tests.
+- Trained model which will be deployed in production is saved in Model registry in Yandex Object Storage for futher A/B tests.
  
 
 Microservice  deployment 
