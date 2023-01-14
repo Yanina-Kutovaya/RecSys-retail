@@ -1,28 +1,52 @@
-from datetime import timedelta
 from airflow import DAG
-from airflow.operators.bash import BashOperator
-from airflow.utils.dates import days_ago
+from datetime import datetime, timedelta
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.operators.dummy_operator import DummyOperator
 
 
 default_args = {
     "owner": "airflow",
     "depends_on_past": False,
-    "email": ["kutovaiayp@yanex.ru"],
+    "start_date": datetime.utcnow(),
+    "email": ["airflow@example.com"],
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 2,
+    "retries": 1,
     "retry_delay": timedelta(minutes=5),
 }
-with DAG(
-    "test_dag",
-    default_args=default_args,
-    description="Installation DAG",
-    schedule="@once",
-    start_date=days_ago(2),
-) as dag:
-    t1 = BashOperator(
-        task_id="test_git",
-        bash_command='echo "Hello world!" > hello_world.txt',
-    )
 
-    t1
+dag = DAG(
+    "kubernetes_sample",
+    default_args=default_args,
+    schedule_interval=timedelta(minutes=10),
+)
+
+
+start = DummyOperator(task_id="run_this_first", dag=dag)
+
+passing = KubernetesPodOperator(
+    namespace="default",
+    image="Python:3.10",
+    cmds=["Python", "-c"],
+    arguments=["print('hello world')"],
+    labels={"foo": "bar"},
+    name="passing-test",
+    task_id="passing-task",
+    get_logs=True,
+    dag=dag,
+)
+
+failing = KubernetesPodOperator(
+    namespace="default",
+    image="ubuntu:2204",
+    cmds=["Python", "-c"],
+    arguments=["print('hello world')"],
+    labels={"foo": "bar"},
+    name="fail",
+    task_id="failing-task",
+    get_logs=True,
+    dag=dag,
+)
+
+passing.set_upstream(start)
+failing.set_upstream(start)
