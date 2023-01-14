@@ -24,18 +24,25 @@ jobs:
           pip install -r requirements.txt
           pip install -e . 
 
-      - name: Train model
-        uses: chrislennon/action-aws-cli@v1.1
+      - name: Train model        
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}          
         run: |
           dvc pull
-          scripts/train_save_model.py -o baseline_v1 -v  
+          scripts/train_save_model.py -o baseline_v1 -v           
+
+      - name: Save features in Feature store
+        uses: chrislennon/action-aws-cli@v1.1
+        run: |
           aws s3 cp --recurvive data/02_intermediate/ s3://recsys-retail-feature-store/02_intermediate/
           aws s3 cp --recurvive data/03_primary/ s3://recsys-retail-feature-store/03_primary/    
           aws s3 cp --recurvive data/04_feature/ s3://recsys-retail-feature-store/04_feature/ 
           aws s3 cp --recurvive data/05_model_input/ s3://recsys-retail-feature-store/05_model_input/
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_S3_ENDPOINT: 'https://storage.yandexcloud.net'
 
       - name: Upload model artifact        
         uses: actions/upload-artifact@v3
