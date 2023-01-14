@@ -6,3 +6,4 @@ boto3>=1.24.0
 fastapi==0.85.1
 starlette_exporter==0.14.0
 dvc[s3]==2.41.1
+awscli>=1.26.0
