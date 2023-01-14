@@ -30,21 +30,23 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}          
         run: |
           dvc pull
-          scripts/train_save_model.py -o baseline_v1 -v           
-
+          scripts/train_save_model.py -o baseline_v1 -v
+          
       - name: Save features in Feature store
-        uses: imehedi/actions-awscli-v2@latest
-        with:
-          args: |
-            aws s3 cp --recurvive data/02_intermediate/ s3://recsys-retail-feature-store/02_intermediate/
-            aws s3 cp --recurvive data/03_primary/ s3://recsys-retail-feature-store/03_primary/    
-            aws s3 cp --recurvive data/04_feature/ s3://recsys-retail-feature-store/04_feature/ 
-            aws s3 cp --recurvive data/05_model_input/ s3://recsys-retail-feature-store/05_model_input/
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
-          AWS_S3_ENDPOINT: 'https://storage.yandexcloud.net'
-
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}          
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+          unzip -q /tmp/awscliv2.zip -d /tmp
+          rm /tmp/awscliv2.zip
+          sudo /tmp/aws/install --update
+          rm -rf /tmp/aws/ 
+          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recurvive data/02_intermediate/ s3://recsys-retail-feature-store/02_intermediate/
+          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recurvive data/03_primary/ s3://recsys-retail-feature-store/03_primary/    
+          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recurvive data/04_feature/ s3://recsys-retail-feature-store/04_feature/ 
+          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recurvive data/05_model_input/ s3://recsys-retail-feature-store/05_model_input/         
+      
       - name: Upload model artifact        
         uses: actions/upload-artifact@v3
         with:
