@@ -33,7 +33,7 @@ jobs:
           scripts/train_save_model.py -o baseline_v1 -v           
 
       - name: Save features in Feature store
-        uses: hannut91/aws-cli@v1.18.43
+        uses: imehedi/actions-awscli-v2@latest
         with:
           args: |
             aws s3 cp --recurvive data/02_intermediate/ s3://recsys-retail-feature-store/02_intermediate/
