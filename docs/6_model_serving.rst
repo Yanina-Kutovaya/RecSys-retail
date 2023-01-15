@@ -1,6 +1,7 @@
 Model serving
 ==============
 
+
 REST API
 ---------
 
@@ -26,6 +27,7 @@ Github actions CI/CD
  
 - Trained model which will be deployed in production is saved in Model registry in Yandex Object Storage (YC S3) for further use in A/B tests.
 - Features generated on all the intermediate steps are stored in Feature store in YC S3 for further re-use and model analysis.
+
 
 Microservice  deployment 
 ------------------------
