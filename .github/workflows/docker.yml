@@ -24,19 +24,14 @@ jobs:
           pip install -r requirements.txt
           pip install -e . 
 
-      - name: Train model and save artifacts in YC s3 storage     
+      - name: Train model and save artifacts in Yandex Object Storage     
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}          
         run: |
           dvc pull
           scripts/train_save_model.py -o baseline_v1 -v
-          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive models/ s3://recsys-retail-model-registry/current_model/
-          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive data/02_intermediate/ s3://recsys-retail-feature-store/02_intermediate/
-          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive data/03_primary/ s3://recsys-retail-feature-store/03_primary/    
-          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive data/04_feature/ s3://recsys-retail-feature-store/04_feature/ 
-          aws --endpoint-url=https://storage.yandexcloud.net s3 cp --recursive data/05_model_input/ s3://recsys-retail-feature-store/05_model_input/         
-      
+          
       - name: Upload model artifact        
         uses: actions/upload-artifact@v3
         with:

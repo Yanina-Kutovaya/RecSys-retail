@@ -9,6 +9,7 @@ import numpy as np
 import pandas as pd
 from pickle import dump
 from typing import Optional
+import boto3
 
 from data.make_dataset import load_data
 from features.data_time_split import time_split_2
@@ -38,6 +39,10 @@ __all__ = ["preprocess_data"]
 
 N_FACTORS_ALS = 50
 N_ITEMS = 100
+
+PATH = "data/"
+FOLDERS = ["02_intermediate/", "03_primary/", "04_feature/", "05_model_input/"]
+FEATURE_STORE = "recsys-retail-feature-store"
 
 
 def data_preprocessing_pipeline(
@@ -124,4 +129,18 @@ def data_preprocessing_pipeline(
         save_user_item_features(user_item_features)
         save_train_dataset_lvl_2(train_dataset_lvl_2)
 
+        save_to_YC_s3()
+
     return train_dataset_lvl_2
+
+
+def save_to_YC_s3():
+    session = boto3.session.Session()
+    s3 = session.client(
+        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+    )
+    for folder in FOLDERS:
+        files = os.listdir(PATH + folder)
+        for f in files:
+            if f != ".gitkeep":
+                s3.upload_file(PATH + folder + f, FEATURE_STORE, folder + f)
