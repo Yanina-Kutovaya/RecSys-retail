@@ -71,7 +71,7 @@ def data_preprocessing_pipeline(
 
     logging.info("Generating current user list...")
     current_user_list = data["user_id"].unique().tolist()
-    
+
     logging.info("Transforming transactions data...")
     transformed_data = transform_transactions_data(data)
 
