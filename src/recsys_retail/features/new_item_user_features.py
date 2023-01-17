@@ -17,15 +17,6 @@ def get_user_item_features(
     Generates new features from transactions matrix, users and items
     embeddings taken from recommender.
 
-    1.Median transaction hour for each user
-    2.Median transaction weekday
-    3.Mean days between purchases
-    4.Mean checks of users baskets
-    5.The number of stores which were selling the item
-    6.The number of unique item bought by the user
-    7.The number of user transactions
-    8.Mean / max / std of the number of unique items in the user basket
-    9.Embeddings
     """
 
     logging.info("Generating new user-item features...")
@@ -33,63 +24,37 @@ def get_user_item_features(
     X = data_train_lvl_1.copy()
     user_item_features = X[["user_id", "item_id"]]
 
-    # 1.Transaction hour
-    X["hour"] = X["trans_time"] // 100
-    df = X.groupby(["user_id", "item_id"])["hour"].median().reset_index()
-    df.columns = ["user_id", "item_id", "median_sales_hour"]
-    user_item_features = user_item_features.merge(df, on=["user_id", "item_id"])
-
-    # 2.Transaction weekday
-    X["weekday"] = X["day"] % 7
-    df = X.groupby(["user_id", "item_id"])["weekday"].median().reset_index()
-    df.columns = ["user_id", "item_id", "median_weekday"]
-    user_item_features = user_item_features.merge(df, on=["user_id", "item_id"])
-
-    # 3.Mean days between purchases
-    df = X.groupby("user_id")["day"].nunique().reset_index()
+    df = pd.DataFrame()
+    df["median_trans_time"] = X.groupby(["user_id", "item_id"])["trans_time"].median()
+    df["median_trans_weekday"] = X.groupby(["user_id", "item_id"])["weekday"].median()
+    user_item_features = pd.merge(
+        user_item_features, df, on=["user_id", "item_id"], how="left"
+    )
+    df = pd.DataFrame()
     df["mean_visits_interval"] = (
         X.groupby("user_id")["day"].max() - X.groupby("user_id")["day"].min()
-    ) / df["day"]
-    user_item_features = user_item_features.merge(
-        df[["user_id", "mean_visits_interval"]], on=["user_id"]
+    ) / X.groupby("user_id")["day"].nunique()
+
+    df["n_baskets_trans_time_min"] = (
+        X.groupby(["user_id", "trans_time"])["n_baskets_trans_time"]
+        .count()
+        .groupby(["user_id"])
+        .min()
     )
+    df["n_baskets_trans_time_max"] = (
+        X.groupby(["user_id", "trans_time"])["n_baskets_trans_time"]
+        .count()
+        .groupby(["user_id"])
+        .max()
+    )
+    df["n_baskets_trans_time_var"] = (
+        X.groupby(["user_id", "trans_time"])["n_baskets_trans_time"]
+        .count()
+        .groupby(["user_id"])
+        .std()
+    )
+    user_item_features = pd.merge(user_item_features, df, on=["user_id"], how="left")
 
-    # 4.Mean check of user basket
-    df = X.groupby(["user_id", "basket_id"])["sales_value"].sum().reset_index()
-    df = df.groupby("user_id")["sales_value"].mean().reset_index()
-    df.columns = ["user_id", "mean_check"]
-    user_item_features = user_item_features.merge(df, on=["user_id"])
-
-    # 5.The number of stores which were selling the item
-    df = X.groupby(["item_id"])["store_id"].nunique().reset_index()
-    df.columns = ["item_id", "n_stores"]
-    user_item_features = user_item_features.merge(df, on=["item_id"])
-
-    # 6.The number of unique item bought by the user
-    df = X.groupby(["user_id"])["item_id"].nunique().reset_index()
-    df.columns = ["user_id", "n_items"]
-    user_item_features = user_item_features.merge(df, on=["user_id"])
-
-    # 7.The number of user transactions
-    df = X.groupby(["user_id"])["item_id"].count().reset_index()
-    df.columns = ["user_id", "n_transactions"]
-    user_item_features = user_item_features.merge(df, on=["user_id"])
-
-    # 8.Mean / max / std of the number of unique items in the user basket
-    df = X.groupby(["user_id", "basket_id"])["item_id"].nunique().reset_index()
-    df1 = df.groupby("user_id")["item_id"].mean().reset_index()
-    df1.columns = ["user_id", "mean_n_items_basket"]
-    user_item_features = user_item_features.merge(df1, on=["user_id"])
-
-    df2 = df.groupby("user_id")["item_id"].max().reset_index()
-    df2.columns = ["user_id", "max_n_items_basket"]
-    user_item_features = user_item_features.merge(df2, on=["user_id"])
-
-    df3 = df.groupby("user_id")["item_id"].std().reset_index()
-    df3.columns = ["user_id", "std_n_items_basket"]
-    user_item_features = user_item_features.merge(df3, on=["user_id"])
-
-    # 9 Embeddings
     df1, df2 = get_embeddings(recommender)
     user_item_features = user_item_features.merge(df1, on=["item_id"])
     user_item_features = user_item_features.merge(df2, on=["user_id"])
@@ -99,12 +64,11 @@ def get_user_item_features(
 
 def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Generates embeddings from recommender item factors and user factors.
+    Generates embeddings from recommender item and user factors.
     """
 
-    logging.info("Calculating embeddings...")
+    logging.info("Calculating item embeddings...")
 
-    # Items embeddings
     df1 = recommender.model.item_factors
     if not type(df1) is np.ndarray:
         df1 = df1.to_numpy()
@@ -113,7 +77,8 @@ def get_embeddings(recommender) -> Tuple[pd.DataFrame, pd.DataFrame]:
     df1 = pd.DataFrame(df1, index=ind).reset_index()
     df1.columns = ["item_id"] + ["factor_" + str(i + 1) for i in range(n_factors)]
 
-    # Users embeddings
+    logging.info("Calculating user embeddings...")
+
     df2 = recommender.model.user_factors
     if not type(df2) is np.ndarray:
         df2 = df2.to_numpy()
