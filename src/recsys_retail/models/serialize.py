@@ -14,7 +14,7 @@ def store(model_lgb, filename: str, path: str = "default"):
         path = models_path()
     filepath = os.path.join(path, filename + ".joblib")
 
-    logger.info(f"Dumpung model into {filepath}")       
+    logger.info(f"Dumpung model into {filepath}")
     joblib.dump(model_lgb, filepath)
 
     session = boto3.session.Session()
@@ -34,7 +34,6 @@ def load(filename: str, path: str = "default"):
     logger.info(f"Loading model from {filepath}")
 
     return joblib.load(filepath)
-    
 
 
 def models_path() -> str:
