@@ -113,10 +113,10 @@ def encode_users(
     logging.info("Calculating median transactions time for pair user-item...")
 
     df = pd.DataFrame()
-    df["median_trans_hour_user-item"] = X.groupby(["user_id", "item_id"])[
+    df["median_trans_hour_user-item"] = data.groupby(["user_id", "item_id"])[
         "hour"
     ].median()
-    df["median_trans_weekday_user-item"] = X.groupby(["user_id", "item_id"])[
+    df["median_trans_weekday_user-item"] = data.groupby(["user_id", "item_id"])[
         "weekday"
     ].median()
     data = pd.merge(data, df, on=["user_id", "item_id"], how="left")
