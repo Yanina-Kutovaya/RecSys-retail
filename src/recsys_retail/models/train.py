@@ -71,7 +71,7 @@ def data_preprocessing_pipeline(
     current_user_list = data["user_id"].unique().tolist()
 
     logging.info("Splitting data on train and validation datasets...")
-    data_train, data_valid = time_split_2(transformed_data)
+    data_train, data_valid = time_split_2(data)
 
     logging.info("Preprocessing train dataset...")
 
