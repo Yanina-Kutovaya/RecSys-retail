@@ -82,7 +82,7 @@ def encode_users(
     )
     df["mean_visits_interval_user"] = (
         data.groupby("user_id")["day"].max() - data.groupby("user_id")["day"].min()
-    ) / df["day"]
+    ) / data.groupby("user_id")["day"].count()
 
     df["mean_basket_value_user"] = (
         data.groupby(["user_id", "basket_id"])["sales_value"]
