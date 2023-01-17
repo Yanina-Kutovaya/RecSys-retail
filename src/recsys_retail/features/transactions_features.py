@@ -26,7 +26,6 @@ def transform_transactions_data(
 
     ignore_cols = [
         "basket_id",
-        "quantity",
         "store_id",
         "retail_disc",
         "coupon_disc",
