@@ -87,25 +87,25 @@ def encode_users(
     df["mean_basket_value_user"] = (
         data.groupby(["user_id", "basket_id"])["sales_value"]
         .sum()
-        .groupby("user_id")["sales_value"]
+        .groupby("user_id")
         .mean()
     )
     df["n_items_baskets_mean_user"] = (
         data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
-        .groupby(["user_id"])["item_id"]
+        .groupby(["user_id"])
         .mean()
     )
     df["n_items_baskets_max_user"] = (
         data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
-        .groupby(["user_id"])["item_id"]
+        .groupby(["user_id"])
         .max()
     )
     df["n_items_baskets_std_user"] = (
         data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
-        .groupby(["user_id"])["item_id"]
+        .groupby(["user_id"])
         .std()
     )
     data = pd.merge(data, df, on="user_id", how="left")
