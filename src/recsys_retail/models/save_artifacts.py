@@ -11,6 +11,7 @@ PATH = ""
 
 FOLDER_2 = "data/02_intermediate/"
 PREFILTERED_DATA_PATH = FOLDER_2 + "data_prefiltered.parquet.gzip"
+TRANSFORMED_DATA_PATH = FOLDER_2 + "data_transformed.parquet.gzip"
 TRAIN_DATA_LEVEL_1_PATH = FOLDER_2 + "data_train.parquet.gzip"
 VALID_DATA_LEVEL_2_PATH = FOLDER_2 + "data_test.parquet.gzip"
 
@@ -44,6 +45,22 @@ def save_prefiltered_data(
     if prefilted_data_path is None:
         prefilted_data_path = path + PREFILTERED_DATA_PATH
     data.to_parquet(prefilted_data_path, compression="gzip")
+
+
+def save_transformed_transactions_data(
+    data: pd.DataFrame,
+    path: Optional[str] = None,
+    transformed_data_path: Optional[str] = None,
+):
+
+    logging.info("Saving transformed transactions data...")
+
+    if path is None:
+        path = PATH
+
+    if transformed_data_path is None:
+        transformed_data_path = path + TRANSFORMED_DATA_PATH
+    data.to_parquet(transformed_data_path, compression="gzip")
 
 
 def save_current_user_list(
