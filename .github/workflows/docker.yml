@@ -36,7 +36,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: baseline_v1 
-          path: models/baseline_v1.txt         
+          path: models/baseline_v1.joblib         
           retention-days: 5
 
       - name: Upload features for inference        
