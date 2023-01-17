@@ -14,7 +14,6 @@ import boto3
 from data.make_dataset import load_data
 from features.data_time_split import time_split_2
 from features.prefilter import prefilter_items
-from features.transactions_features import transform_transactions_data
 from features.user_features import fit_transform_user_features
 from features.item_features import fit_transform_item_features
 from features.recommenders import MainRecommender
@@ -24,7 +23,6 @@ from features.targets import get_targets_lvl_2
 from .save_artifacts import (
     save_time_split,
     save_prefiltered_data,
-    save_transformed_transactions_data,
     save_current_user_list,
     save_item_featutes,
     save_user_features,
@@ -71,9 +69,6 @@ def data_preprocessing_pipeline(
 
     logging.info("Generating current user list...")
     current_user_list = data["user_id"].unique().tolist()
-
-    logging.info("Transforming transactions data...")
-    transformed_data = transform_transactions_data(data)
 
     logging.info("Splitting data on train and validation datasets...")
     data_train, data_valid = time_split_2(transformed_data)
@@ -124,7 +119,6 @@ def data_preprocessing_pipeline(
 
     if save_artifacts:
         save_prefiltered_data(data)
-        save_transformed_transactions_data(transformed_data)
         save_current_user_list(current_user_list)
         save_time_split(data_train, data_valid)
         save_item_featutes(item_features_transformed)
