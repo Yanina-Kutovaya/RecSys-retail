@@ -81,29 +81,29 @@ def encode_users(
         .count()
     )
     df["mean_visits_interval_user"] = (
-        X.groupby("user_id")["day"].max() - X.groupby("user_id")["day"].min()
+        data.groupby("user_id")["day"].max() - data.groupby("user_id")["day"].min()
     ) / df["day"]
 
     df["mean_basket_value_user"] = (
-        X.groupby(["user_id", "basket_id"])["sales_value"]
+        data.groupby(["user_id", "basket_id"])["sales_value"]
         .sum()
         .groupby("user_id")["sales_value"]
         .mean()
     )
     df["n_items_baskets_mean_user"] = (
-        X.groupby(["user_id", "basket_id"])["item_id"]
+        data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
         .groupby(["user_id"])["item_id"]
         .mean()
     )
     df["n_items_baskets_max_user"] = (
-        X.groupby(["user_id", "basket_id"])["item_id"]
+        data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
         .groupby(["user_id"])["item_id"]
         .max()
     )
     df["n_items_baskets_std_user"] = (
-        X.groupby(["user_id", "basket_id"])["item_id"]
+        data.groupby(["user_id", "basket_id"])["item_id"]
         .count()
         .groupby(["user_id"])["item_id"]
         .std()
