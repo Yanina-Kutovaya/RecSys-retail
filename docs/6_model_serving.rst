@@ -32,21 +32,8 @@ Github actions CI/CD
 Microservice  deployment 
 ------------------------
 
-**Docker:** https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/docker
+The application is deployed on Kubernetes cluster. Docker и Docker Compose deployment is also available.
 
-- recsys_retail_train - to build a container just for training of the model without model serving
-- recsys_retail - to build two types of containers for microservice:
-    - container for model serving where the model is trained outside of the container
-    - container where on the first stage the model is trained, the second stage is model serving
-
-- traefik - to use a reverse proxy server Traefik for microservice
-
-**Docker-compose:**
-
-- to deploy a microservice in development stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.dev.yml 
-- to deploy a microservice in production stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.prod.yml 
- 
- 
 **Kubernetes** 
 
 Prerequisites:
@@ -83,7 +70,17 @@ k8s manifests: https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/k8s
 - to set up monitoring system with Prometheus and Grafana in namespace monitoring:
     - monitoring-recsys-retail.yml
 
-- to set up monitoring system with Beat, Elasticsearch and Kibana:
-    - beats.yml
-    - elastic.yml
-    - kibana.yml
+
+**Docker:** https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/docker
+
+- recsys_retail_train - to build a container just for training of the model without model serving
+- recsys_retail - to build two types of containers for microservice:
+    - container for model serving where the model is trained outside of the container
+    - container where on the first stage the model is trained, the second stage is model serving
+
+- traefik - to use a reverse proxy server Traefik for microservice
+
+**Docker-compose:**
+
+- to deploy a microservice in development stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.dev.yml 
+- to deploy a microservice in production stage: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docker-compose.prod.yml 

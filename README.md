@@ -13,4 +13,4 @@ The success criteria is metrics Precision@5 applied to a predetermined set of pr
 * [Model evaluation](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/4_model_evaluation.rst) 
 * [Model validation](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/5_model_validation.rst)
 * [Model serving](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/6_model_serving.rst) 
-* [Model monitoring](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/7_model_monitoring.rst)
+* [Monitoring](https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/docs/7_model_monitoring.rst)
