@@ -26,7 +26,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 RUN pip install --no-cache-dir -e .
 
-COPY --from=trainer /usr/src/app/models/baseline_v1 ./models/
+COPY --from=trainer /usr/src/app/models/baseline_v1.txt ./models/
 
 RUN useradd --user-group --shell /bin/false recsys-retail  
 USER recsys-retail

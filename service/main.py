@@ -69,8 +69,8 @@ def predict(user_id: int, user: User):
             NEW_CLIENTS_COUNTER.inc()
             logging.info(f" The new user: {new_user}")
 
-        predictions = Model.classifier.predict_proba(df)
-        results = get_recommendations(df, predictions[:, 1])
+        predictions = Model.classifier.predict(df)
+        results = get_recommendations(df, predictions)
         recs = results["recommendations"][0].tolist()
         recs_dict = {id_: recs}
         RECOMMENDATIONS_COUNTER.inc()
@@ -93,8 +93,8 @@ def predict_user_list(batch_id: int, users: Users):
             NEW_CLIENTS_COUNTER.inc(new_users_number)
             logging.info(f" {new_users_number} new users: {new_users}")
 
-        predictions = Model.classifier.predict_proba(df)
-        results = get_recommendations(df, predictions[:, 1]).set_index("user_id")
+        predictions = Model.classifier.predict(df)
+        results = get_recommendations(df, predictions).set_index("user_id")
         recs_ = results.loc[:, "recommendations"]
         recs_dict = {}
         for id in ids_:
