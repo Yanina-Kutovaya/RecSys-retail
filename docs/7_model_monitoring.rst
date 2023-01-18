@@ -43,6 +43,8 @@ Prometheus Python Client provides instruments for collection of different metric
 - Info: any non-numeric information
 
 Current application monitors the number new customers and the number of recommendations made.
+All the recommendations made are stored in Yandex Object Storage for further analysis and monitoring of the quality of model performance.
+
 The list of monitored model metrics could be extended and the other metrics could be added, e.g:
 
 - distribution of input features
