@@ -3,7 +3,7 @@ import logging
 import lightgbm as lgb
 import joblib
 
-from src.recsys_retail.models.save_artifacts import save_to_YC_s3
+from .save_artifacts import save_to_YC_s3
 
 
 logger = logging.getLogger()
@@ -25,7 +25,10 @@ def store(model_lgb, filename: str, path: str = "default"):
     logging.info("Saving model in Model registry in Yandex Object Storage...")
 
     save_to_YC_s3(
-        MODEL_REGISTRY, path, file_name=filename + ".joblib", s3_path="current_model/"
+        MODEL_REGISTRY,
+        path + "/",
+        file_name=filename + ".joblib",
+        s3_path="current_model/",
     )
 
 
