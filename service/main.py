@@ -20,6 +20,7 @@ from pydantic import BaseModel
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.models.inference_tools import preprocess
 from src.recsys_retail.metrics import get_recommendations
+from src.recsys_retail.models.save_artifacts import save_to_YC_s3
 
 
 logger = logging.getLogger()
@@ -34,6 +35,13 @@ MODEL = os.getenv("MODEL", default="baseline_v1")
 
 RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
+N_RECOMMENDATIONS_IN_FILE = 100
+MODEL_OUTPUT_FOLDER = "data/06_model_output/"
+MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
+
+ext = 1
+recommendations = []
+n_recs = 0
 
 
 class Model:
@@ -75,6 +83,27 @@ def predict(user_id: int, user: User):
         recs_dict = {id_: recs}
         RECOMMENDATIONS_COUNTER.inc()
         logging.info(f"User {id_}: {recs}")
+
+        if n_recs < N_RECOMMENDATIONS_IN_FILE:
+            recommendations.append([id_, recs])
+            n_recs += 1
+        else:
+            logging.info(
+                f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
+            )
+
+            recs_to_save = pd.DataFrame(
+                recommendations, columns=["user_id", "recommendations"]
+            )
+            path = MODEL_OUTPUT_FOLDER
+            file_name = f"recommendations_{ext}.parquet.gzip"
+            recs_to_save.to_parquet(path + file_name, compression="gzip")
+            save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, path, file_name=file_name)
+
+            ext += 1
+            recommendations = [[id_, recs]]
+            n_recs = 1
+
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -101,6 +130,27 @@ def predict_user_list(batch_id: int, users: Users):
             recs = recs_[id].tolist()
             recs_dict[id] = recs
             logging.info(f"User {id}: {recs}")
+
+            if n_recs < N_RECOMMENDATIONS_IN_FILE:
+                recommendations.append([id, recs])
+                n_recs += 1
+            else:
+                logging.info(
+                    f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
+                )
+
+                recs_to_save = pd.DataFrame(
+                    recommendations, columns=["user_id", "recommendations"]
+                )
+                path = MODEL_OUTPUT_FOLDER
+                file_name = f"recommendations_{ext}.parquet.gzip"
+                recs_to_save.to_parquet(path + file_name, compression="gzip")
+                save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, path, file_name=file_name)
+
+                ext += 1
+                recommendations = [[id, recs]]
+                n_recs = 1
+
         RECOMMENDATIONS_COUNTER.inc(len(ids_))
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
