@@ -2,6 +2,7 @@ import logging
 import joblib
 import pandas as pd
 from typing import Optional
+import boto3
 
 __all__ = ["save_artifacts"]
 

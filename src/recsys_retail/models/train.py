@@ -9,7 +9,6 @@ import numpy as np
 import pandas as pd
 from pickle import dump
 from typing import Optional
-import boto3
 
 from data.make_dataset import load_data
 from features.data_time_split import time_split_2
