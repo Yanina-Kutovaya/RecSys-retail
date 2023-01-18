@@ -4,9 +4,10 @@ import boto3
 import lightgbm as lgb
 import joblib
 
-__all__ = ["store", "load"]
 
 logger = logging.getLogger()
+
+__all__ = ["store", "load"]
 
 
 def store(model_lgb, filename: str, path: str = "default"):
@@ -17,12 +18,16 @@ def store(model_lgb, filename: str, path: str = "default"):
     logger.info(f"Dumpung model into {filepath}")
     joblib.dump(model_lgb, filepath)
 
+    logging.info("Saving model in Model registry in Yandex Object Storage...")
+
     session = boto3.session.Session()
     s3 = session.client(
         service_name="s3", endpoint_url="https://storage.yandexcloud.net"
     )
     s3.upload_file(
-        filepath, "recsys-retail-model-registry", "current_model/" + filename
+        filepath,
+        "recsys-retail-model-registry",
+        "current_model/" + filename + ".joblib",
     )
 
 
