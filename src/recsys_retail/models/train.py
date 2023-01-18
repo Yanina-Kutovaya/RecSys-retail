@@ -31,6 +31,7 @@ from .save_artifacts import (
     save_candidates,
     save_user_item_features,
     save_train_dataset_lvl_2,
+    save_to_YC_s3,
 )
 
 logger = logging.getLogger(__name__)
@@ -129,18 +130,8 @@ def data_preprocessing_pipeline(
         save_user_item_features(user_item_features)
         save_train_dataset_lvl_2(train_dataset_lvl_2)
 
-        save_to_YC_s3()
+        logging.info("Saving artifacts in Feature store in Yandex Object Storage...")
+
+        save_to_YC_s3(FEATURE_STORE, PATH, folders=FOLDERS)
 
     return train_dataset_lvl_2
-
-
-def save_to_YC_s3():
-    session = boto3.session.Session()
-    s3 = session.client(
-        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
-    )
-    for folder in FOLDERS:
-        files = os.listdir(PATH + folder)
-        for f in files:
-            if f != ".gitkeep":
-                s3.upload_file(PATH + folder + f, FEATURE_STORE, folder + f)
