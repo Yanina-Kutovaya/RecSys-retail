@@ -1,18 +1,22 @@
 import os
 import logging
-import boto3
 import lightgbm as lgb
 import joblib
+
+from src.recsys_retail.models.save_artifacts import save_to_YC_s3
 
 
 logger = logging.getLogger()
 
 __all__ = ["store", "load"]
 
+MODEL_REGISTRY = "recsys-retail-model-registry"
+
 
 def store(model_lgb, filename: str, path: str = "default"):
     if path == "default":
         path = models_path()
+
     filepath = os.path.join(path, filename + ".joblib")
 
     logger.info(f"Dumpung model into {filepath}")
@@ -20,14 +24,8 @@ def store(model_lgb, filename: str, path: str = "default"):
 
     logging.info("Saving model in Model registry in Yandex Object Storage...")
 
-    session = boto3.session.Session()
-    s3 = session.client(
-        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
-    )
-    s3.upload_file(
-        filepath,
-        "recsys-retail-model-registry",
-        "current_model/" + filename + ".joblib",
+    save_to_YC_s3(
+        MODEL_REGISTRY, path, file_name=filename + ".joblib", s3_path="current_model/"
     )
 
 

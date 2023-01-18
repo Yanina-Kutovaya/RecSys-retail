@@ -39,10 +39,6 @@ N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
-ext = 1
-recommendations = []
-n_recs = 0
-
 
 class Model:
     classifier = None
@@ -84,6 +80,10 @@ def predict(user_id: int, user: User):
         RECOMMENDATIONS_COUNTER.inc()
         logging.info(f"User {id_}: {recs}")
 
+        n_recs = 0
+        recommendations = []
+        ext = 1
+
         if n_recs < N_RECOMMENDATIONS_IN_FILE:
             recommendations.append([id_, recs])
             n_recs += 1
@@ -96,7 +96,7 @@ def predict(user_id: int, user: User):
                 recommendations, columns=["user_id", "recommendations"]
             )
             path = MODEL_OUTPUT_FOLDER
-            file_name = f"recommendations_{ext}.parquet.gzip"
+            file_name = f"batch_recommendations_{ext}.parquet.gzip"
             recs_to_save.to_parquet(path + file_name, compression="gzip")
             save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, path, file_name=file_name)
 
@@ -126,6 +126,11 @@ def predict_user_list(batch_id: int, users: Users):
         results = get_recommendations(df, predictions).set_index("user_id")
         recs_ = results.loc[:, "recommendations"]
         recs_dict = {}
+
+        n_recs = 0
+        recommendations = []
+        ext = 1
+
         for id in ids_:
             recs = recs_[id].tolist()
             recs_dict[id] = recs
