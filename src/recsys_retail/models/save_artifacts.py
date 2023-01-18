@@ -18,7 +18,6 @@ TRAIN_DATA_LEVEL_1_PATH = FOLDER_2 + "data_train.parquet.gzip"
 VALID_DATA_LEVEL_2_PATH = FOLDER_2 + "data_test.parquet.gzip"
 
 FOLDER_3 = "data/03_primary/"
-DATA_TRAIN_LVL_1_PATH = FOLDER_3 + "data_train_lvl_1_preprocessed.parquet.gzip"
 CANDIDATES_PATH = FOLDER_3 + "candidates_lvl_2.parquet.gzip"
 
 FOLDER_4 = "data/04_feature/"
@@ -93,6 +92,36 @@ def save_time_split(
         data_val_lvl_2.to_parquet(valid_data_level_2_path, compression="gzip")
 
 
+def save_recommender(
+    recommender, path: Optional[str] = None, recommender_path: Optional[str] = None
+):
+
+    logging.info("Saving recommender...")
+
+    if path is None:
+        path = PATH
+
+    if recommender_path is None:
+        recommender_path = path + RECOMMENDER_PATH
+    joblib.dump(recommender, recommender_path, 3)
+
+
+def save_candidates(
+    users_lvl_2: pd.DataFrame,
+    path: Optional[str] = None,
+    candidates_path: Optional[str] = None,
+):
+
+    logging.info("Saving candidates for level 2 model...")
+
+    if path is None:
+        path = PATH
+
+    if candidates_path is None:
+        candidates_path = path + CANDIDATES_PATH
+    users_lvl_2.to_parquet(candidates_path, compression="gzip")
+
+
 def save_item_featutes(
     item_features_transformed: pd.DataFrame,
     path: Optional[str] = None,
@@ -127,52 +156,6 @@ def save_user_features(
     user_features_transformed.to_parquet(
         user_features_transformed_path, compression="gzip"
     )
-
-
-def save_preprocessed_lvl_1_train_dataset(
-    data_train_lvl_1: pd.DataFrame,
-    path: Optional[str] = None,
-    data_train_lvl_1_path: Optional[str] = None,
-):
-
-    logging.info("Saving preprocessed level 1 train dataset...")
-
-    if path is None:
-        path = PATH
-
-    if data_train_lvl_1_path is None:
-        data_train_lvl_1_path = path + DATA_TRAIN_LVL_1_PATH
-    data_train_lvl_1.to_parquet(data_train_lvl_1_path, compression="gzip")
-
-
-def save_recommender(
-    recommender, path: Optional[str] = None, recommender_path: Optional[str] = None
-):
-
-    logging.info("Saving recommender...")
-
-    if path is None:
-        path = PATH
-
-    if recommender_path is None:
-        recommender_path = path + RECOMMENDER_PATH
-    joblib.dump(recommender, recommender_path, 3)
-
-
-def save_candidates(
-    users_lvl_2: pd.DataFrame,
-    path: Optional[str] = None,
-    candidates_path: Optional[str] = None,
-):
-
-    logging.info("Saving candidates for level 2 model...")
-
-    if path is None:
-        path = PATH
-
-    if candidates_path is None:
-        candidates_path = path + CANDIDATES_PATH
-    users_lvl_2.to_parquet(candidates_path, compression="gzip")
 
 
 def save_user_item_features(
