@@ -94,7 +94,7 @@ def encode_item_descriptions(
         max_features=300,
     )
     X = vectorizer.fit_transform(item_features["curr_size_of_product"])
-    size_of_product_stop_words = vectorizer.get_feature_names()
+    size_of_product_stop_words = set(vectorizer.get_feature_names_out())
     my_stop_words = list(set(text.ENGLISH_STOP_WORDS).union(size_of_product_stop_words))
 
     vectorizer = TfidfVectorizer(
