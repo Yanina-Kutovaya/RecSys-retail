@@ -1,8 +1,7 @@
 import logging
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import OrdinalEncoder, OneHotEncoder
-from sklearn.compose import make_column_transformer
+import category_encoders as ce
 from pickle import dump, load
 from typing import Optional
 
@@ -12,15 +11,13 @@ logger = logging.getLogger(__name__)
 __all__ = ["transform_user_features"]
 
 
+OH_FEATURES = ["marital_status_code", "hh_comp_desc", "homeowner_desc"]
 ORDINAL_FEATURES = [
     "age_desc",
     "income_desc",
-    "homeowner_desc",
     "household_size_desc",
     "kid_category_desc",
 ]
-ONEHOT_FEATURES = ["marital_status_code", "hh_comp_desc"]
-
 AGE = ["19-24", "25-34", "35-44", "45-54", "55-64", "65+"]
 INCOME = [
     "Under 15K",
@@ -36,65 +33,95 @@ INCOME = [
     "200-249K",
     "250K+",
 ]
-HOMEOWNER = ["Homeowner"]
 HOUSEHOLD_SIZE = ["1", "2", "3", "4", "5+"]
 KID_CATEGORY = ["None/Unknown", "1", "2", "3+"]
 
-MARITAL_STATUS = ["A", "B", "U"]
-HH_COMP = [
-    "Single Male",
-    "Single Female",
-    "2 Adults No Kids",
-    "1 Adult Kids",
-    "2 Adults Kids",
-]
-
-ORD_CATEGORIES = [AGE, INCOME, HOMEOWNER, HOUSEHOLD_SIZE, KID_CATEGORY]
-OH_CATEGORIES = [MARITAL_STATUS, HH_COMP]
+FEATRURE_CATEGORY_MAPPING = {
+    "age_desc": AGE,
+    "income_desc": INCOME,
+    "household_size_desc": HOUSEHOLD_SIZE,
+    "kid_category_desc": KID_CATEGORY,
+}
 
 
 def fit_transform_user_features(
     user_features: pd.DataFrame,
-    ordinal_features=None,
     onehot_features=None,
-    ord_categories=None,
-    oh_categories=None,
+    ordinal_features=None,
 ) -> pd.DataFrame:
 
     """
-    Encodes categorical features with OrdinalEncoder and OneHotEncoder.
+    Encodes categorical features with OneHotEncoder, OrdinalEncoder and HelmertEncoder.
 
     """
 
     logging.info("Transforming user_features...")
 
+    if onehot_features is None:
+        onehot_features = OH_FEATURES
+
     if ordinal_features is None:
         ordinal_features = ORDINAL_FEATURES
-        ord_categories = ORD_CATEGORIES
 
-    if onehot_features is None:
-        onehot_features = ONEHOT_FEATURES
-        oh_categories = OH_CATEGORIES
+    user_features.set_index("user_id", inplace=True)
 
-    ord_encoder = OrdinalEncoder(
-        categories=ord_categories, handle_unknown="use_encoded_value", unknown_value=-1
+    encoder_oh = ce.OneHotEncoder(
+        cols=onehot_features,
+        drop_invariant=True,
+        return_df=True,
+        handle_missing="return_nan",
+        handle_unknown=-1,
+        use_cat_names=True,
     )
-    oh_encoder = OneHotEncoder(
-        categories=oh_categories, handle_unknown="ignore", sparse=False
+    col_encodings = get_ordinal_encodings()
+    encoder_ord = ce.OrdinalEncoder(
+        mapping=col_encodings,
+        cols=ordinal_features,
+        drop_invariant=True,
+        handle_unknown=-1,
+        handle_missing=-2,
     )
-    user_transformer = make_column_transformer(
-        (ord_encoder, ordinal_features), (oh_encoder, onehot_features)
+    encoder_helmert = ce.HelmertEncoder(
+        mapping=col_encodings,
+        cols=ordinal_features,
+        drop_invariant=True,
+        return_df=True,
+        handle_unknown=-1,
+        handle_missing=-2,
     )
-    X = user_transformer.fit_transform(user_features)
 
-    user_id = user_features["user_id"]
-    cols = ordinal_features.copy()
-    for i, col in enumerate(onehot_features):
-        prefix = col + " "
-        cols += [prefix + cat for cat in oh_categories[i]]
+    df1 = encoder_oh.fit_transform(user_features)
+    cols1 = [i for i in encoder_oh.feature_names if not i in ordinal_features]
 
-    user_features_transformed = pd.DataFrame(
-        X, index=user_id, columns=cols
+    df2 = encoder_ord.fit_transform(user_features)
+    cols2 = [i for i in encoder_ord.feature_names if not i in onehot_features]
+
+    df3 = encoder_helmert.fit_transform(user_features)
+    cols3 = [i for i in encoder_helmert.feature_names if not i in onehot_features]
+
+    user_features_transformed = pd.concat(
+        [df1[cols1], df2[cols2], df3[cols3]], axis=1
     ).reset_index()
 
     return user_features_transformed
+
+
+def get_ordinal_encodings(feature_category_mapping=None):
+    """
+    Generates feature-category mapping for OrdinalEncoder and HelmertEncoder
+
+    """
+    if feature_category_mapping is None:
+        feature_category_mapping = FEATRURE_CATEGORY_MAPPING
+
+    col_encodings = []
+    for col in feature_category_mapping.keys():
+        col_encoding = {}
+        col_encoding["col"] = col
+        map_dict = {}
+        for i, item in enumerate(feature_category_mapping[col]):
+            map_dict[item] = i
+            col_encoding["mapping"] = map_dict
+            col_encodings.append(col_encoding)
+
+    return col_encodings
