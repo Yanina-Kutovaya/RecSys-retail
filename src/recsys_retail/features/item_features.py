@@ -22,19 +22,6 @@ FEATURES_FOR_COUNT_ENCODER = [
     "curr_size_of_product",
 ]
 FEATURE_FOR_HASHING_ENCODER = "manufacturer"
-
-ADD_STOP_WORDS = [
-    "10",
-    "100",
-    "100 pure",
-    "12",
-    "12 18",
-    "15pk",
-    "15pk can",
-    "18",
-    "18 15pk",
-    "50",
-]
 CONCAT_LIST = ["commodity_desc", "sub_commodity_desc"]
 
 
@@ -91,7 +78,6 @@ def fit_transform_item_features(
 
 def encode_item_descriptions(
     item_features: pd.DataFrame,
-    add_stop_words=None,
     concat_list=None,
 ) -> pd.DataFrame:
     """
@@ -101,10 +87,16 @@ def encode_item_descriptions(
 
     if concat_list is None:
         concat_list = CONCAT_LIST
-    if add_stop_words is None:
-        add_stop_words = ADD_STOP_WORDS
 
-    my_stop_words = text.ENGLISH_STOP_WORDS.union(add_stop_words)
+    vectorizer = TfidfVectorizer(
+        analyzer="word",
+        lowercase=True,
+        max_features=300,
+    )
+    X = vectorizer.fit_transform(item_features["curr_size_of_product"])
+    size_of_product_stop_words = vectorizer.get_feature_names()
+    my_stop_words = list(set(text.ENGLISH_STOP_WORDS).union(size_of_product_stop_words))
+
     vectorizer = TfidfVectorizer(
         ngram_range=(1, 2),
         analyzer="word",
