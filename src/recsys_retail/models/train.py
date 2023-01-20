@@ -22,6 +22,7 @@ from features.targets import get_targets_lvl_2
 from .save_artifacts import (
     save_time_split,
     save_prefiltered_data,
+    save_prefiltered_item_list,
     save_current_user_list,
     save_recommender,
     save_candidates,
@@ -65,8 +66,7 @@ def data_preprocessing_pipeline(
 
     logging.info("Prefiltering transactions data...")
     data = prefilter_items(data, item_features)
-
-    logging.info("Generating current user list...")
+    prefiltered_item_list = data["item_id"].unique().tolist()
     current_user_list = data["user_id"].unique().tolist()
 
     logging.info("Splitting data on train and validation datasets...")
@@ -111,6 +111,7 @@ def data_preprocessing_pipeline(
 
     if save_artifacts:
         save_prefiltered_data(data)
+        save_prefiltered_item_list(prefiltered_item_list)
         save_current_user_list(current_user_list)
         save_time_split(data_train, data_valid)
         save_recommender(recommender)

@@ -1,6 +1,9 @@
 import numpy as np
 import pandas as pd
 
+FOLDER = "data/04_feature/"
+PREFILTERED_ITEM_LIST_PATH = FOLDER + "prefiltered_item_list.joblib"
+
 
 def get_recommendations(
     train_dataset_lvl_2: pd.DataFrame, raw_predictions, k: int = 5
@@ -27,6 +30,7 @@ def get_results(
     data_val_lvl_2: pd.DataFrame,
     train_dataset_lvl_2: pd.DataFrame,
     raw_predictions,
+    prefiltered_items_path: Optional[str] = None,
     k: int = 5,
 ) -> pd.DataFrame:
     """
@@ -41,14 +45,18 @@ def get_results(
     k: the number of items for calculation of precision@k
     """
 
+    if prefiltered_item_list_path is None:
+        prefiltered_item_list_path = PREFILTERED_ITEM_LIST_PATH
+
     recomendations = get_recommendations(train_dataset_lvl_2, raw_predictions, k)
 
     actuals = data_val_lvl_2.groupby("user_id")["item_id"].unique().reset_index()
     actuals.columns = ["user_id", "actual"]
 
     test_list = data_val_lvl_2["item_id"].unique()
-    rec_list = train_dataset_lvl_2["item_id"].unique()
-    rec_used = list(set(test_list) & set(rec_list))
+
+    prefiltered_item_list = joblib.load(prefiltered_item_list_path)
+    rec_used = list(set(test_list) & set(prefiltered_item_list))
 
     actuals_adj = (
         data_val_lvl_2[data_val_lvl_2["item_id"].isin(rec_used)]

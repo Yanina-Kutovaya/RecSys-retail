@@ -21,6 +21,7 @@ FOLDER_3 = "data/03_primary/"
 CANDIDATES_PATH = FOLDER_3 + "candidates_lvl_2.parquet.gzip"
 
 FOLDER_4 = "data/04_feature/"
+PREFILTERED_ITEM_LIST_PATH = FOLDER_4 + "prefiltered_item_list.joblib"
 CURRENT_USER_LIST_PATH = FOLDER_4 + "current_user_list.joblib"
 VALID_DATA_LEVEL_1_PATH = FOLDER_4 + "data_valid.parquet.gzip"
 RECOMMENDER_PATH = FOLDER_4 + "recommender_v1.joblib"
@@ -35,7 +36,7 @@ TRAIN_DATASET_LVL_2_PATH = FOLDER_5 + "train_dataset_lvl_2.parquet.gzip"
 def save_prefiltered_data(
     data: pd.DataFrame,
     path: Optional[str] = None,
-    prefilted_data_path: Optional[str] = None,
+    prefiltered_data_path: Optional[str] = None,
 ):
 
     logging.info("Saving prefiltered data...")
@@ -43,9 +44,25 @@ def save_prefiltered_data(
     if path is None:
         path = PATH
 
-    if prefilted_data_path is None:
-        prefilted_data_path = path + PREFILTERED_DATA_PATH
-    data.to_parquet(prefilted_data_path, compression="gzip")
+    if prefiltered_data_path is None:
+        prefiltered_data_path = path + PREFILTERED_DATA_PATH
+    data.to_parquet(prefiltered_data_path, compression="gzip")
+
+
+def save_prefiltered_item_list(
+    prefiltered_item_list: list,
+    path: Optional[str] = None,
+    prefiltered_item_list_path: Optional[str] = None,
+):
+
+    logging.info("Saving prefiltered item list...")
+
+    if path is None:
+        path = PATH
+
+    if prefiltered_item_list_path is None:
+        prefiltered_item_list_path = path + PREFILTERED_ITEM_LIST_PATH
+    joblib.dump(prefiltered_item_list, prefiltered_item_list_path)
 
 
 def save_current_user_list(
