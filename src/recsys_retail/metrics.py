@@ -30,7 +30,7 @@ def get_results(
     data_val_lvl_2: pd.DataFrame,
     train_dataset_lvl_2: pd.DataFrame,
     raw_predictions,
-    prefiltered_items_path: Optional[str] = None,
+    prefiltered_item_list_path: Optional[str] = None,
     k: int = 5,
 ) -> pd.DataFrame:
     """
