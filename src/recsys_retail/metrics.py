@@ -1,5 +1,7 @@
+import joblib
 import numpy as np
 import pandas as pd
+from typing import Optional
 
 FOLDER = "data/04_feature/"
 PREFILTERED_ITEM_LIST_PATH = FOLDER + "prefiltered_item_list.joblib"
