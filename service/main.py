@@ -10,6 +10,7 @@ import logging
 import pandas as pd
 import numpy as np
 from typing import Optional
+import boto3
 
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -38,6 +39,9 @@ NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
+
+session = boto3.session.Session()
+s3 = session.client(service_name="s3", endpoint_url="https://storage.yandexcloud.net")
 
 
 class Model:
@@ -95,10 +99,11 @@ def predict(user_id: int, user: User):
             recs_to_save = pd.DataFrame(
                 recommendations, columns=["user_id", "recommendations"]
             )
-            path = MODEL_OUTPUT_FOLDER
             file_name = f"batch_recommendations_{ext}.parquet.gzip"
-            recs_to_save.to_parquet(path + file_name, compression="gzip")
-            save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, path, file_name=file_name)
+            recs_to_save.to_parquet(MODEL_OUTPUT_FOLDER + file_name, compression="gzip")
+            s3.upload_file(
+                MODEL_OUTPUT_FOLDER + file_name, MODEL_OUTPUT_S3_BACKET, file_name
+            )
 
             ext += 1
             recommendations = [[id_, recs]]
@@ -147,10 +152,13 @@ def predict_user_list(batch_id: int, users: Users):
                 recs_to_save = pd.DataFrame(
                     recommendations, columns=["user_id", "recommendations"]
                 )
-                path = MODEL_OUTPUT_FOLDER
                 file_name = f"recommendations_{ext}.parquet.gzip"
-                recs_to_save.to_parquet(path + file_name, compression="gzip")
-                save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, path, file_name=file_name)
+                recs_to_save.to_parquet(
+                    MODEL_OUTPUT_FOLDER + file_name, compression="gzip"
+                )
+                s3.upload_file(
+                    MODEL_OUTPUT_FOLDER + file_name, MODEL_OUTPUT_S3_BACKET, file_name
+                )
 
                 ext += 1
                 recommendations = [[id, recs]]
