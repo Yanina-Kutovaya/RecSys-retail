@@ -61,6 +61,7 @@ k8s manifests: https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/k8s
     - recsys-retail-train-job.yml
 
 - to deploy a microservice in k8s in namespace recsys:
+    - secret.yml
     - recsys-retail-deployment.yml 
     - recsys-retail-service.yml
     - recsys-retail-ingress.yml 
