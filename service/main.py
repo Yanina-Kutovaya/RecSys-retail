@@ -37,7 +37,7 @@ NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
-
+session = boto3.session.Session()
 s3 = session.client(service_name="s3", endpoint_url="https://storage.yandexcloud.net")
 
 
