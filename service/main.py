@@ -38,6 +38,16 @@ N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
 
+session = boto3.session.Session()
+s3 = session.client(
+    service_name="s3",
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name="eu-west-1",
+    endpoint_url="https://storage.yandexcloud.net",
+)
+
+
 class Model:
     classifier = None
 
@@ -95,10 +105,6 @@ def predict(user_id: int, user: User):
             )
             file_name = f"batch_recommendations_{ext}.parquet.gzip"
             recs_to_save.to_parquet(file_name, compression="gzip")
-            session = boto3.session.Session()
-            s3 = session.client(
-                service_name="s3", endpoint_url="https://storage.yandexcloud.net"
-            )
             s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
 
             ext += 1
@@ -150,10 +156,6 @@ def predict_user_list(batch_id: int, users: Users):
                 )
                 file_name = f"recommendations_{ext}.parquet.gzip"
                 recs_to_save.to_parquet(file_name, compression="gzip")
-                session = boto3.session.Session()
-                s3 = session.client(
-                    service_name="s3", endpoint_url="https://storage.yandexcloud.net"
-                )
                 s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
 
                 ext += 1

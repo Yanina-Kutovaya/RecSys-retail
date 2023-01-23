@@ -30,11 +30,7 @@ spec:
                 secretKeyRef:
                   name: aws-s3-secret
                   key: aws_secret_access_key
-            - name: AWS_DEFAULT_REGION
-              valueFrom:
-                secretKeyRef:
-                  name: aws-s3-secret
-                  key: region
+            
             
 
             
