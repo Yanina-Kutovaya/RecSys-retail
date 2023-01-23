@@ -15,3 +15,5 @@ docker-compose.prod.yml
 docker/recsys_retail_train
 docker/traefik
 scripts/inference_demo.py
+
+k8s\secret.yml

@@ -7,6 +7,8 @@
 /models/
 /include/
 
+k8s\secret.yml
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
