@@ -11,7 +11,6 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 import boto3
-from configparser import ConfigParser
 
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -36,25 +35,10 @@ MODEL = os.getenv("MODEL", default="baseline_v1")
 RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
-MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
 
-config = ConfigParser()
-config.read(os.getenv("HOME") + "/.aws/credentials")
-config.read(os.getenv("HOME") + "/.aws/config")
-
-AWS_ACCESS_KEY_ID = config.get("default", "aws_access_key_id")
-AWS_SECRET_ACCESS_KEY = config.get("default", "aws_secret_access_key")
-AWS_DEFAULT_REGION = config.get("default", "region")
-
-s3 = boto3.client(
-    service_name="s3",
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    region_name=AWS_DEFAULT_REGION,
-    endpoint_url="https://storage.yandexcloud.net",
-)
+s3 = session.client(service_name="s3", endpoint_url="https://storage.yandexcloud.net")
 
 
 class Model:
@@ -113,10 +97,8 @@ def predict(user_id: int, user: User):
                 recommendations, columns=["user_id", "recommendations"]
             )
             file_name = f"batch_recommendations_{ext}.parquet.gzip"
-            recs_to_save.to_parquet(MODEL_OUTPUT_FOLDER + file_name, compression="gzip")
-            s3.upload_file(
-                MODEL_OUTPUT_FOLDER + file_name, MODEL_OUTPUT_S3_BACKET, file_name
-            )
+            recs_to_save.to_parquet(file_name, compression="gzip")
+            s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
 
             ext += 1
             recommendations = [[id_, recs]]
@@ -166,12 +148,8 @@ def predict_user_list(batch_id: int, users: Users):
                     recommendations, columns=["user_id", "recommendations"]
                 )
                 file_name = f"recommendations_{ext}.parquet.gzip"
-                recs_to_save.to_parquet(
-                    MODEL_OUTPUT_FOLDER + file_name, compression="gzip"
-                )
-                s3.upload_file(
-                    MODEL_OUTPUT_FOLDER + file_name, MODEL_OUTPUT_S3_BACKET, file_name
-                )
+                recs_to_save.to_parquet(file_name, compression="gzip")
+                s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
 
                 ext += 1
                 recommendations = [[id, recs]]
