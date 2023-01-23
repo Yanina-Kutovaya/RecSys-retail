@@ -11,6 +11,7 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 import boto3
+from configparser import ConfigParser
 
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -21,8 +22,6 @@ from pydantic import BaseModel
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.models.inference_tools import preprocess
 from src.recsys_retail.metrics import get_recommendations
-from src.recsys_retail.models.save_artifacts import save_to_YC_s3
-
 
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -40,8 +39,22 @@ N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
-session = boto3.session.Session()
-s3 = session.client(service_name="s3", endpoint_url="https://storage.yandexcloud.net")
+
+config = ConfigParser()
+config.read(os.getenv("HOME") + "/.aws/credentials")
+config.read(os.getenv("HOME") + "/.aws/config")
+
+AWS_ACCESS_KEY_ID = config.get("default", "aws_access_key_id")
+AWS_SECRET_ACCESS_KEY = config.get("default", "aws_secret_access_key")
+AWS_DEFAULT_REGION = config.get("default", "region")
+
+s3 = boto3.client(
+    service_name="s3",
+    aws_access_key_id=AWS_ACCESS_KEY_ID,
+    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+    region_name=AWS_DEFAULT_REGION,
+    endpoint_url="https://storage.yandexcloud.net",
+)
 
 
 class Model:
