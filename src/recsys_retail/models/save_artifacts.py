@@ -210,7 +210,9 @@ def save_train_dataset_lvl_2(
     train_dataset_lvl_2.to_parquet(train_dataset_lvl_2_path, compression="gzip")
 
 
-def save_to_YC_s3(backet, path, file_name=None, folders=None, s3_path=""):
+def save_to_YC_s3(
+    backet, path="", file_name=None, put_object=None, folders=None, s3_path=""
+):
     session = boto3.session.Session()
     if (AWS_ACCESS_KEY_ID is None) | (AWS_SECRET_ACCESS_KEY is None):
         s3 = session.client(
@@ -225,7 +227,10 @@ def save_to_YC_s3(backet, path, file_name=None, folders=None, s3_path=""):
             endpoint_url="https://storage.yandexcloud.net",
         )
     if file_name:
-        s3.upload_file(path + file_name, backet, s3_path + file_name)
+        if put_object:
+            s3.put_object(backet, file_name, put_object)
+        else:
+            s3.upload_file(path + file_name, backet, s3_path + file_name)
 
     if folders:
         if type(folders) != list:

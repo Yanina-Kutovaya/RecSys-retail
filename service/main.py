@@ -35,7 +35,6 @@ MODEL = os.getenv("MODEL", default="baseline_v1")
 RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
-MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
 
@@ -93,9 +92,11 @@ def predict(user_id: int, user: User):
             recs_to_save = pd.DataFrame(
                 recommendations, columns=["user_id", "recommendations"]
             )
-            file_name = f"recommendations_{ext}.parquet.gzip"
-            recs_to_save.to_parquet(MODEL_OUTPUT_FOLDER + file_name, compression="gzip")
-            save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, MODEL_OUTPUT_FOLDER, file_name)
+            save_to_YC_s3(
+                MODEL_OUTPUT_S3_BACKET,
+                file_name=f"recommendations_{ext}",
+                put_object=recs_to_save,
+            )
 
             ext += 1
             recommendations = [[id_, recs]]
@@ -143,11 +144,11 @@ def predict_user_list(batch_id: int, users: Users):
                 recs_to_save = pd.DataFrame(
                     recommendations, columns=["user_id", "recommendations"]
                 )
-                file_name = f"batch_recommendations_{ext}.parquet.gzip"
-                recs_to_save.to_parquet(
-                    MODEL_OUTPUT_FOLDER + file_name, compression="gzip"
+                save_to_YC_s3(
+                    MODEL_OUTPUT_S3_BACKET,
+                    file_name=f"batch_recommendations_{ext}",
+                    put_object=recs_to_save,
                 )
-                save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, MODEL_OUTPUT_FOLDER, file_name)
 
                 ext += 1
                 recommendations = [[id, recs]]
