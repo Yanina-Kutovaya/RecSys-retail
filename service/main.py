@@ -40,11 +40,9 @@ MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
 config = ConfigParser()
 config.read(os.getenv("HOME") + "/.aws/credentials")
-config.read(os.getenv("HOME") + "/.aws/config")
 
 AWS_ACCESS_KEY_ID = config.get("default", "aws_access_key_id")
 AWS_SECRET_ACCESS_KEY = config.get("default", "aws_secret_access_key")
-AWS_DEFAULT_REGION = config.get("default", "region")
 
 session = boto3.session.Session()
 s3 = session.client(
