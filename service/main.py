@@ -11,7 +11,6 @@ import pandas as pd
 import numpy as np
 from typing import Optional
 import boto3
-from configparser import ConfigParser
 
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -38,11 +37,8 @@ NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
 
-config = ConfigParser()
-config.read(os.getenv("HOME") + "/.aws/credentials")
-
-AWS_ACCESS_KEY_ID = config.get("default", "aws_access_key_id")
-AWS_SECRET_ACCESS_KEY = config.get("default", "aws_secret_access_key")
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
 session = boto3.session.Session()
 s3 = session.client(
