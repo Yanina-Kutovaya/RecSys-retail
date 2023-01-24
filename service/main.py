@@ -10,7 +10,6 @@ import logging
 import pandas as pd
 import numpy as np
 from typing import Optional
-import boto3
 
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
@@ -21,6 +20,7 @@ from pydantic import BaseModel
 from src.recsys_retail.models.serialize import load
 from src.recsys_retail.models.inference_tools import preprocess
 from src.recsys_retail.metrics import get_recommendations
+from src.recsys_retail.models.save_artifacts import save_to_YC_s3
 
 logger = logging.getLogger()
 logging.basicConfig(level=logging.INFO)
@@ -35,10 +35,8 @@ MODEL = os.getenv("MODEL", default="baseline_v1")
 RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
+MODEL_OUTPUT_FOLDER = "data/06_model_output/"
 MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
-
-AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
 
 
 class Model:
@@ -92,21 +90,12 @@ def predict(user_id: int, user: User):
             logging.info(
                 f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
             )
-
             recs_to_save = pd.DataFrame(
                 recommendations, columns=["user_id", "recommendations"]
             )
-            file_name = f"batch_recommendations_{ext}.parquet.gzip"
-            recs_to_save.to_parquet(file_name, compression="gzip")
-            session = boto3.session.Session()
-            s3 = session.client(
-                service_name="s3",
-                aws_access_key_id=AWS_ACCESS_KEY_ID,
-                aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                region_name="eu-west-1",
-                endpoint_url="https://storage.yandexcloud.net",
-            )
-            s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
+            file_name = f"recommendations_{ext}.parquet.gzip"
+            recs_to_save.to_parquet(MODEL_OUTPUT_FOLDER + file_name, compression="gzip")
+            save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, MODEL_OUTPUT_FOLDER, file_name)
 
             ext += 1
             recommendations = [[id_, recs]]
@@ -151,20 +140,14 @@ def predict_user_list(batch_id: int, users: Users):
                 logging.info(
                     f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
                 )
-
                 recs_to_save = pd.DataFrame(
                     recommendations, columns=["user_id", "recommendations"]
                 )
-                file_name = f"recommendations_{ext}.parquet.gzip"
-                recs_to_save.to_parquet(file_name, compression="gzip")
-                s3 = session.client(
-                    service_name="s3",
-                    aws_access_key_id=AWS_ACCESS_KEY_ID,
-                    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-                    region_name="eu-west-1",
-                    endpoint_url="https://storage.yandexcloud.net",
+                file_name = f"batch_recommendations_{ext}.parquet.gzip"
+                recs_to_save.to_parquet(
+                    MODEL_OUTPUT_FOLDER + file_name, compression="gzip"
                 )
-                s3.upload_file(file_name, MODEL_OUTPUT_S3_BACKET, file_name)
+                save_to_YC_s3(MODEL_OUTPUT_S3_BACKET, MODEL_OUTPUT_FOLDER, file_name)
 
                 ext += 1
                 recommendations = [[id, recs]]
