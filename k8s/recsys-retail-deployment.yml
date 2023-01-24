@@ -19,17 +19,9 @@ spec:
           image: kutovaiayp/recsys-retail:service_v1        
           ports:
             - containerPort: 8000
-          env:
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: aws-s3-secret
-                  key: aws_access_key_id
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: aws-s3-secret
-                  key: aws_secret_access_key
+          envFrom:
+            - secretRef:
+                name: aws-s3-secret
             
             
 
