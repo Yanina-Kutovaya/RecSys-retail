@@ -32,6 +32,9 @@ USER_ITEM_FEATURES_PATH = FOLDER_4 + "user_item_features.parquet.gzip"
 FOLDER_5 = "data/05_model_input/"
 TRAIN_DATASET_LVL_2_PATH = FOLDER_5 + "train_dataset_lvl_2.parquet.gzip"
 
+AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
 
 def save_prefiltered_data(
     data: pd.DataFrame,
@@ -209,9 +212,18 @@ def save_train_dataset_lvl_2(
 
 def save_to_YC_s3(backet, path, file_name=None, folders=None, s3_path=""):
     session = boto3.session.Session()
-    s3 = session.client(
-        service_name="s3", endpoint_url="https://storage.yandexcloud.net"
-    )
+    if (AWS_ACCESS_KEY_ID is None) | (AWS_SECRET_ACCESS_KEY is None):
+        s3 = session.client(
+            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+        )
+    else:
+        s3 = session.client(
+            service_name="s3",
+            aws_access_key_id=AWS_ACCESS_KEY_ID,
+            aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+            region_name="eu-west-1",
+            endpoint_url="https://storage.yandexcloud.net",
+        )
     if file_name:
         s3.upload_file(path + file_name, backet, s3_path + file_name)
 
