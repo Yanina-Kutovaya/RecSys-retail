@@ -39,7 +39,7 @@ Here is a link to time_split function: https://github.com/Yanina-Kutovaya/RecSys
 **MainRecommender** https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/recommenders.py
 
 On the First stage, we utilize -- old purchases -- to build MainRecommender using Alternating Least Square (ALS) matrix factorization in collaborative filtering. 
-The input for ALS model is user-item matrix with the number of "quantity" as values.
+The input of ALS model is user-item matrix with the number of "quantity" as values.
 
 Later, MainRecommender selects top N (100-200) items for each user.
 
