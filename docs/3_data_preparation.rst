@@ -45,15 +45,13 @@ For new users MainRecommender proposes N items from overall top purchases.
 On the Second stage, we work with -- 6 weeks-- | -- 3 weeks -- data as train - valid datasets.
 
 
-- get_user_item_features function generates new features and adds to them users and items embeddings from MainRecommender: 
-https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/new_item_user_features.py
+Feature engineering:
 
-- fit_transform_user_features function applies OrdinalEncoder and HelmertEncoder to the ordinal features and OneHotEncoder
- to the rest of categorical features: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/user_features.py
+- get_user_item_features function generates new features and adds to them users and items embeddings from MainRecommender: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/new_item_user_features.py
 
-- fit_transform_item_features function applies CountEncoder to categorical features, "manufacturer" is encoded with HashingEncoder,
-commodity and sub-commodity description is encoded with TF-IDF vectorizer, and then HashingEncoder is applied to reduce the number of columns from 300 to 32: 
-https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/item_features.py 
+- fit_transform_user_features function applies OrdinalEncoder and HelmertEncoder to the ordinal features and OneHotEncoder to the rest of categorical features: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/user_features.py
+
+- fit_transform_item_features function applies CountEncoder to categorical features, "manufacturer" is encoded with HashingEncoder, commodity and sub-commodity description is encoded with TF-IDF vectorizer, and then HashingEncoder is applied to reduce the number of columns from 300 to 32: https://github.com/Yanina-Kutovaya/RecSys-retail/blob/main/src/recsys_retail/features/item_features.py 
 
 
 Function get_targets_lvl_2 generates dataset for the Second stage binary classification model based on selected users, 
