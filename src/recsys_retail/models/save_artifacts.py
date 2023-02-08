@@ -211,12 +211,13 @@ def save_train_dataset_lvl_2(
 
 
 def save_to_YC_s3(
-    backet, path="", file_name=None, put_object=None, folders=None, s3_path=""
+    bucket, path="", file_name=None, put_object=None, folders=None, s3_path=""
 ):
     session = boto3.session.Session()
     if (AWS_ACCESS_KEY_ID is None) | (AWS_SECRET_ACCESS_KEY is None):
         s3 = session.client(
-            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
+            service_name="s3", 
+            endpoint_url="https://storage.yandexcloud.net"
         )
     else:
         s3 = session.client(
@@ -228,9 +229,9 @@ def save_to_YC_s3(
         )
     if file_name:
         if put_object:
-            s3.put_object(backet, file_name, put_object)
+            s3.put_object(Body=put_object, Bucket=bucket, Key=file_name)
         else:
-            s3.upload_file(path + file_name, backet, s3_path + file_name)
+            s3.upload_file(path + file_name, bucket, s3_path + file_name)
 
     if folders:
         if type(folders) != list:
@@ -239,4 +240,4 @@ def save_to_YC_s3(
             files = os.listdir(path + folder)
             for f in files:
                 if f != ".gitkeep":
-                    s3.upload_file(path + folder + f, backet, s3_path + folder + f)
+                    s3.upload_file(path + folder + f, bucket, s3_path + folder + f)

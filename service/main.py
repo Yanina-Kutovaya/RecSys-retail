@@ -35,7 +35,7 @@ MODEL = os.getenv("MODEL", default="baseline_v1")
 RECOMMENDATIONS_COUNTER = Counter("recommendations", "Number of recommendations made")
 NEW_CLIENTS_COUNTER = Counter("new_clients", "Number of new clients")
 N_RECOMMENDATIONS_IN_FILE = 100
-MODEL_OUTPUT_S3_BACKET = "recsys-retail-model-output"
+MODEL_OUTPUT_S3_BUCKET = "recsys-retail-model-output"
 
 
 class Model:
@@ -89,15 +89,11 @@ def predict(user_id: int, user: User):
             logging.info(
                 f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
             )
-            recs_to_save = pd.DataFrame(
-                recommendations, columns=["user_id", "recommendations"]
-            )
             save_to_YC_s3(
-                MODEL_OUTPUT_S3_BACKET,
-                file_name=f"recommendations_{ext}",
-                put_object=recs_to_save,
+                MODEL_OUTPUT_S3_BUCKET,
+                file_name=f"recommendations_{ext}",  
+                put_object=str(recommendations),
             )
-
             ext += 1
             recommendations = [[id_, recs]]
             n_recs = 1
@@ -141,15 +137,11 @@ def predict_user_list(batch_id: int, users: Users):
                 logging.info(
                     f"Saving the last {N_RECOMMENDATIONS_IN_FILE} recommendations ..."
                 )
-                recs_to_save = pd.DataFrame(
-                    recommendations, columns=["user_id", "recommendations"]
-                )
                 save_to_YC_s3(
-                    MODEL_OUTPUT_S3_BACKET,
-                    file_name=f"batch_recommendations_{ext}",
-                    put_object=recs_to_save,
+                    MODEL_OUTPUT_S3_BUCKET,
+                    file_name=f"batch_recommendations_{ext}", 
+                    put_object=str(recommendations),
                 )
-
                 ext += 1
                 recommendations = [[id, recs]]
                 n_recs = 1
