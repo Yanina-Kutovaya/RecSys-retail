@@ -216,8 +216,7 @@ def save_to_YC_s3(
     session = boto3.session.Session()
     if (AWS_ACCESS_KEY_ID is None) | (AWS_SECRET_ACCESS_KEY is None):
         s3 = session.client(
-            service_name="s3", 
-            endpoint_url="https://storage.yandexcloud.net"
+            service_name="s3", endpoint_url="https://storage.yandexcloud.net"
         )
     else:
         s3 = session.client(

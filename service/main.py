@@ -91,7 +91,7 @@ def predict(user_id: int, user: User):
             )
             save_to_YC_s3(
                 MODEL_OUTPUT_S3_BUCKET,
-                file_name=f"recommendations_{ext}",  
+                file_name=f"recommendations_{ext}",
                 put_object=str(recommendations),
             )
             ext += 1
@@ -139,7 +139,7 @@ def predict_user_list(batch_id: int, users: Users):
                 )
                 save_to_YC_s3(
                     MODEL_OUTPUT_S3_BUCKET,
-                    file_name=f"batch_recommendations_{ext}", 
+                    file_name=f"batch_recommendations_{ext}",
                     put_object=str(recommendations),
                 )
                 ext += 1
