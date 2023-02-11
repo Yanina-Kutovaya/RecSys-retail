@@ -57,13 +57,13 @@ Prerequisites:
 
 - install airflow bitnami/airflow with git syncronization to read DAGs from git repository
     - helm install airflow bitnami/airflow \
-        --set git.dags.enabled=true \
-        --set git.dags.repositories[0].repository=https://github.com/Yanina-Kutovaya/RecSys-retail.git \
-        --set git.dags.repositories[0].branch=main \
-        --set git.dags.repositories[0].name=my_dags \
-        --set git.dags.repositories[0].path=dags/ \
-        --set airflow.baseUrl=http://127.0.0.1:8080 \
-        -n airflow
+        - --set git.dags.enabled=true \
+        - --set git.dags.repositories[0].repository=https://github.com/Yanina-Kutovaya/RecSys-retail.git \
+        - --set git.dags.repositories[0].branch=main \
+        - --set git.dags.repositories[0].name=my_dags \
+        - --set git.dags.repositories[0].path=dags/ \
+        - --set airflow.baseUrl=http://127.0.0.1:8080 \
+        - -n airflow
 
 
 k8s manifests: https://github.com/Yanina-Kutovaya/RecSys-retail/tree/main/k8s
